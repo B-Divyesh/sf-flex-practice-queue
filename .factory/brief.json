@@ -1,0 +1,31 @@
+{
+  "slug": "flex-practice-queue",
+  "title": "Flex Practice Queue",
+  "summary": "Build short practice rounds without changing your card schedule.",
+  "territory": "utilities",
+  "user": "Learners whose available study time arrives in short, irregular windows and who need to choose useful practice without breaking a formal scheduler.",
+  "evidence": [
+    {
+      "url": "https://hn.algolia.com/api/v1/items/44118333",
+      "date": "2025-05-28",
+      "quote_or_summary": "Ask HN participants distinguish acquiring skill from remembering it and seek learning approaches beyond spaced repetition."
+    },
+    {
+      "url": "https://discuss.logseq.com/t/flashcards-review-cannot-be-repeated-per-day/32374",
+      "date": "2025-05-25",
+      "quote_or_summary": "A Logseq learner explicitly wants to practice flashcards more than once per day but is blocked by the review workflow."
+    }
+  ],
+  "recurrence": "Two independent 2025 threads show that a single daily SRS queue does not fit deliberate rehearsal, warm-up, or opportunistic five-minute study.",
+  "current_workaround": "Reset cards, make duplicate decks, ignore a scheduler, or choose practice at random.",
+  "incumbents_and_gap": "Anki and Logseq prioritize due reviews; generic to-do apps ignore retrieval. The gap is a separate, non-destructive practice queue that can mix weak items and voluntary drills.",
+  "smallest_useful_product": "Offline queue builder that imports a CSV of prompts, lets users tag 'warm-up', 'weak', and 'today', runs timed mixed rounds, and never changes source-card scheduling.",
+  "success_measure": "Thirty percent of activated users run eight optional practice rounds in 21 days without modifying their primary card system.",
+  "artifact_class": "pwa-offline",
+  "monetization": "one-time — import/export and local use are the core value.",
+  "constraints": "CSV/Anki import must be read-only unless explicitly exported; retain no educational data remotely.",
+  "est_build_effort": "S",
+  "why_distinct": "It adds an intentional rehearsal lane alongside scheduling rather than competing to be another flashcard scheduler.",
+  "confidence": 4,
+  "state": "RESEARCHED"
+}
