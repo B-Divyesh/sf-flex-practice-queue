@@ -1,0 +1,63 @@
+[
+  {
+    "route": "/",
+    "status": 200,
+    "title": "Flex Practice Queue — Build short practice rounds",
+    "h1": 1,
+    "main": 1,
+    "scrollWidth": 390,
+    "serious": 0,
+    "errors": []
+  },
+  {
+    "route": "/?demo=1",
+    "status": 200,
+    "title": "Demo — Flex Practice Queue",
+    "h1": 1,
+    "main": 1,
+    "scrollWidth": 390,
+    "sampleVisible": true,
+    "serious": 0,
+    "errors": []
+  },
+  {
+    "route": "/demo",
+    "status": 200,
+    "title": "Demo — Flex Practice Queue",
+    "h1": 1,
+    "main": 1,
+    "scrollWidth": 390,
+    "serious": 0,
+    "errors": []
+  },
+  {
+    "route": "/privacy",
+    "status": 200,
+    "title": "Privacy — Flex Practice Queue",
+    "h1": 1,
+    "main": 1,
+    "scrollWidth": 390,
+    "serious": 0,
+    "errors": []
+  },
+  {
+    "route": "/terms",
+    "status": 200,
+    "title": "Terms — Flex Practice Queue",
+    "h1": 1,
+    "main": 1,
+    "scrollWidth": 390,
+    "serious": 0,
+    "errors": []
+  },
+  {
+    "route": "/missing-sheet",
+    "status": 404,
+    "title": "Page not found — Flex Practice Queue",
+    "h1": 1,
+    "main": 1,
+    "scrollWidth": 390,
+    "serious": 0,
+    "errors": []
+  }
+]

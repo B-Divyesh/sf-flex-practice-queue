@@ -1,20 +1,58 @@
-# Flex Practice Queue handoff
+# Flex Practice Queue handoff — polish round 1
 
-## Adversarial first-read review 1 — 2026-08-28
+Repaired and deployed the candidate from `c0e65c8184ba074f5ae1f6d747c96a9852c945ea`.
+The deployable repair is commit `9aa5de010310c2d412a9608eb6ca3c1770e46ecc`
+(`fix: close adversarial polish findings`), pushed to `origin/main` and deployed
+as Azure Static Web Apps deployment `f5fe82b6-116d-46aa-91dc-b0331e66c375`.
 
-Reviewer-only work order `flex-practice-queue-review-1`. No product code was changed. Added `.factory/review-1.md` and re-ran public-site and local QA checks.
+## What changed
 
-### Verified
+- Added the one-click isolated `?demo=1` path, an above-the-fold real sample
+  round, reset/start-for-real banner controls, and a 390×844 regression test.
+- Added a real styled static `404.html`, explicit known-route rewrites, and an
+  HTTP 404 response override for unknown paths.
+- Added `source-schedule-untouched` and `license-data-minimization` to the
+  claims contract with observable Playwright tests.
+- Removed untestable merchant/refund promises, added explicit in-app `.apkg`
+  export guidance, and standardized copy on **flashcard schedule**.
+- Updated metadata, manifest, README, demo documentation, copy audit, catalog
+  description, and review-to-evidence mapping in `.factory/polish-1.md`.
 
-- Fresh live mobile (390×844) and desktop (1440×1000) landing reads clearly: purpose, learner, and **Try it with sample data** action are visible before scrolling.
-- The live demo banner, reset behaviour, separate `demo:` storage, route focus/back behaviour, internal links, hosted checkout redirect, and real storage isolation were checked directly.
-- From a clean `npm ci`, all 12 exact `claims.json` commands passed. `npm test` passed 15/15 and `npm run build` passed with `dist/` output.
+## Verification
 
-### Review result and remaining work
+An actual fresh clone at `/tmp/fpq-clean.yfqvyH` ran `npm ci`, every exact
+command in `.factory/claims.json` (14/14), `npm test` (18/18), and
+`npm run build`. Its Playwright result is `passed` with no failed tests and
+its build produced `dist/index.html`.
 
-The review verdict is **FAIL** with seven findings, documented in `.factory/review-1.md`. Release blockers are: the first mobile demo viewport does not display real sample data, and unknown routes return HTTP 200 instead of 404. Other required repairs are claim coverage for scheduler, merchant/refund, and license-data-minimization promises; an Anki-package input decision; and consistent scheduler terminology.
+The current product build is small:
 
-How to verify after repair:
+| Asset | Gzip size |
+| --- | ---: |
+| Initial JavaScript | 10.03 KB |
+| Initial CSS | 4.71 KB |
+| HTML | 0.56 KB |
+
+Live cold checks at `https://flex-practice-queue.sociobot.in` passed:
+
+- `verify-url.sh` reported HTTP 200, correct title/lang, one h1, main,
+  zero missing image alts, zero unlabeled buttons, and zero browser errors.
+- `/?demo=1` renders the sample prompt above the fold at 390 px, has no
+  horizontal overflow, starts the three-prompt sample round, and resets to
+  eight prompts. Screenshot: `.factory/evidence/polish-1-live/demo-mobile-cold.png`.
+- `/missing-sheet` returns HTTP 404 with the designed return-home page.
+  Evidence: `.factory/evidence/polish-1-live/404.headers` and
+  `.factory/evidence/polish-1-live/404-mobile-cold.png`.
+- Axe scans of `/`, `/?demo=1`, `/demo`, `/privacy`, `/terms`, and
+  `/missing-sheet` found zero serious or critical violations. Full route data:
+  `.factory/evidence/polish-1-live/routes-a11y.json`.
+
+The local Lighthouse CLI could not attach to Chromium in this disposable
+container even with Playwright’s executable path. This is an environment
+launcher limitation, not a product error; browser/aXe checks and current
+bundle-budget measurements are recorded above.
+
+## Run locally
 
 ```sh
 npm ci
@@ -22,119 +60,6 @@ npm test
 npm run build
 ```
 
-Then check `/demo` in a fresh 390×844 context without scrolling, curl an unknown route for an HTTP 404 status, run every exact test listed in `.factory/claims.json`, and repeat the public first-read review.
-
-## Repair result — 2026-08-28
-
-Repaired every release blocker from independent verification report
-`.factory/verification.md` for candidate `80bef8dbdc459e7f464e4a4cc60ae5c2db1caa30`.
-The product remains a Vite + TypeScript local-first PWA deployed as a static
-site.
-
-## Repairs
-
-- Registered `flex-practice-queue` in the production Sociobot/Dodo factory
-  catalog as **Flex Practice Queue License**, USD 9.00 one-time. Its production
-  return URL is `https://flex-practice-queue.sociobot.in/`.
-- Confirmed the public checkout endpoint now returns HTTP `303` to a hosted
-  `checkout.dodopayments.com/session/...` URL. No purchase was completed.
-- Replaced the former paid-price href-only assertion with an integration claim
-  that reads the visible CTA, calls its Sociobot checkout endpoint without
-  payment, and requires a 3xx HTTPS hosted-checkout redirect. The existing
-  returned-license claim continues to cover local capture, URL cleanup, and
-  once-daily verification using a recorded response.
-- Added the `anki-csv-import` claim, a realistic shipped
-  `front,back,tags` fixture, and a demo-only regression test that verifies
-  front→prompt, back→answer, retained tags, imported rows, and unchanged source
-  fixture bytes.
-- Added route-specific Static Web Apps cache policy: hashed `/assets/*` files
-  receive `Cache-Control: public, max-age=31536000, immutable`; the service
-  worker remains `no-cache` so updates are discoverable. A regression test
-  asserts both policies from the shipped configuration.
-
-## Verification
-
-Clean install and full browser suite:
-
-```text
-npm ci       passed; 25 packages audited, 0 vulnerabilities
-npm test     passed; 15/15 Playwright tests
-npm run build passed; tsc --noEmit + Vite + service-worker injection
-```
-
-All 12 exact commands in `.factory/claims.json` passed independently from fresh
-Playwright contexts, including the new Anki and hosted-checkout claims. The
-full suite covers desktop and 390×844 mobile rendering, keyboard round controls
-and skip link, serious/critical Axe checks on every route, reduced-motion/mobile
-layout, console errors, demo isolation, local-only study-data traffic, CSV
-read-only import/export, service-worker offline reload, and returned-license
-daily caching. Type checking is part of `npm run build`; this repository has no
-separate lint or publishable package/consumer surface.
-
-Production build output is `dist/index.html`. Measured budgets:
-
-| Asset | Result |
-| --- | ---: |
-| Initial JavaScript (gzip) | 9,873 B |
-| Initial CSS (gzip) | 4,440 B |
-| Hero WebP | 105,772 B |
-
-All remain inside the PWA budgets. No AI feature is added because the researched
-job is a local, non-destructive practice queue and does not require model use.
-
-## Deployment and live recheck
-
-Committed and pushed repair `b385dad` to `origin/main`, then deployed the exact
-`dist/` artifact with:
-
-```sh
-/opt/fleet/lib/deploy-static.sh flex-practice-queue /work/repo/dist
-```
-
-Azure Static Web Apps deployment `d86f19ce-a4cf-4a5f-aeb8-f55a8bcaef8c`
-succeeded in the existing Central US app. Live checks at
-`https://flex-practice-queue.sociobot.in` passed:
-
-- `/assets/index-DeTBZAMd.js`: `Cache-Control: public, max-age=31536000, immutable`.
-- `/sw.js`: `Cache-Control: no-cache`.
-- Public checkout: HTTP `303` to a hosted Dodo session.
-- Response policy: CSP permits only same-origin resources plus the documented
-  Sociobot billing API; `nosniff`, HSTS, Referrer-Policy, and
-  Permissions-Policy are present.
-- `verify-url.sh`: HTTP 200, correct title and `lang="en"`, one h1, main,
-  zero missing image alts, zero unlabeled buttons, and zero console/page errors.
-- Live Axe scans of `/`, `/demo`, `/privacy`, `/terms`, and `/missing-sheet`:
-  zero serious or critical violations.
-- Live 390×844 reduced-motion demo: width exactly 390 px, first Tab reaches the
-  skip link, and an installed service-worker reload offline retained all eight
-  sample prompts.
-
-## Known gaps
-
-- Direct `.apkg` parsing is not included. Anki users export a `front,back,tags`
-  CSV, which is now covered by the shipped claim test.
-- Data has no account sync by design; export CSV before clearing browser data.
-
-## Independent QA verdict — 2026-08-28
-
-**PASS** for candidate `c0e65c8184ba074f5ae1f6d747c96a9852c945ea` at
-`https://flex-practice-queue.sociobot.in`. Full evidence is in
-`.factory/verification-2.md`.
-
-The verifier ran `npm ci`, every one of the 12 exact claim commands,
-`npm test` (15/15 passing), and the exact `npm run build` from a clean
-checkout. Live JS, CSS, and service-worker SHA-256 values match that build.
-The live `/demo` completed a keyboard-controlled mixed round, survived an
-offline reload with its eight samples, recovered from invalid CSV input, and
-made no off-origin study-data requests. Live Axe scans found zero serious or
-critical issues across `/`, `/demo`, `/privacy`, `/terms`, and the 404 route;
-390 px mobile, visible keyboard focus, reduced motion, security headers, and
-cache policies passed.
-
-The previously reported production checkout defect is fixed: the live Sociobot
-checkout endpoint returns HTTP 303 to hosted Dodo checkout. The invalid-license
-rate-limit burst began returning HTTP 429 after 30 accepted concurrent
-requests, with `Retry-After: 4`. No critical, high, medium, or low defects
-were found. The only measurement limitation was a local Lighthouse CLI Chrome
-startup failure in the disposable verifier container; direct browser and
-bundle-budget evidence is recorded in the verification report.
+Open `http://127.0.0.1:4173/?demo=1` for the isolated sample. Deploy `dist/`
+as the static artifact. No known product gaps remain from the cumulative
+review findings.
