@@ -1,0 +1,79 @@
+[
+  {
+    "id": "demo-sandbox",
+    "claim": "Try it with eight sample prompts without changing real data",
+    "where": "landing action, demo banner, README",
+    "test": "npm test -- --grep @claim:demo-sandbox",
+    "sandbox": "fresh browser context at /demo; assert eight prompts, demo storage prefix, reset, and no real plan key"
+  },
+  {
+    "id": "offline-reload",
+    "claim": "Works offline after the first visit",
+    "where": "landing facts, README",
+    "test": "npm test -- --grep @claim:offline-reload",
+    "sandbox": "fresh browser context at /demo; install the service worker, set the context offline, reload, and assert all sample prompts"
+  },
+  {
+    "id": "local-privacy",
+    "claim": "Study data stays in this browser",
+    "where": "landing facts, privacy page, README",
+    "test": "npm test -- --grep @claim:local-privacy",
+    "sandbox": "fresh browser context at /demo; record the full practice flow network log and assert every request is same-origin"
+  },
+  {
+    "id": "csv-readonly",
+    "claim": "Imports prompt CSV files without changing the selected source file",
+    "where": "workbench, how it works, privacy page, README",
+    "test": "npm test -- --grep @claim:csv-readonly",
+    "sandbox": "demo data plus a shipped CSV fixture; compare fixture bytes before and after import and assert imported rows"
+  },
+  {
+    "id": "csv-export",
+    "claim": "Exports every prompt as CSV",
+    "where": "workbench, privacy page, README",
+    "test": "npm test -- --grep @claim:csv-export",
+    "sandbox": "fresh /demo data; download CSV and assert its heading, filename, row count, and a sample prompt"
+  },
+  {
+    "id": "mixed-round",
+    "claim": "Runs timed mixed rounds with keyboard controls",
+    "where": "landing, demo, how it works, README",
+    "test": "npm test -- --grep @claim:mixed-round",
+    "sandbox": "fresh /demo data; select weak prompts, start a three-item round, assert timer, reveal and rate by keyboard, then assert result"
+  },
+  {
+    "id": "saved-plans",
+    "claim": "The paid tool saves and reloads named round plans",
+    "where": "paid tier, README",
+    "test": "npm test -- --grep @claim:saved-plans",
+    "sandbox": "fresh /demo data where paid plan behavior is enabled without checkout; save a named configuration, change it, reload it, and assert every setting"
+  },
+  {
+    "id": "data-delete",
+    "claim": "Deletes prompts, round notes, and saved plans from this device",
+    "where": "workbench, privacy page",
+    "test": "npm test -- --grep @claim:data-delete",
+    "sandbox": "fresh /demo data; confirm deletion, assert the empty state, reload, and assert the data remains absent"
+  },
+  {
+    "id": "free-core",
+    "claim": "Import, tagging, practice, and CSV export need no license",
+    "where": "landing facts, paid tier, README",
+    "test": "npm test -- --grep @claim:free-core",
+    "sandbox": "fresh browser with no license; import the shipped fixture and assert tag, practice, and export controls remain enabled"
+  },
+  {
+    "id": "paid-price",
+    "claim": "Named round plans cost $9 once",
+    "where": "landing facts, paid tier, terms, README",
+    "test": "npm test -- --grep @claim:paid-price",
+    "sandbox": "fresh landing page; assert the stated price and hosted Sociobot checkout URL"
+  },
+  {
+    "id": "license-check",
+    "claim": "A returned license is stored locally and checked at most once each day",
+    "where": "privacy page, README",
+    "test": "npm test -- --grep @claim:license-check",
+    "sandbox": "fresh /demo URL with a fixture license response; assert token capture, URL cleanup, unlocked control, reload, and one verification request"
+  }
+]

@@ -1,0 +1,3 @@
+prompt,answer,tags
+"Why does a compass point north?","Its needle aligns with Earth’s magnetic field.",weak;today
+"Define a closure.","A function bundled with its surrounding lexical state.",warm-up
