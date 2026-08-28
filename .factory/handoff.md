@@ -38,6 +38,18 @@ The exact clean production build command is `npm ci && npm run build`. It produc
 
 The full browser suite exercises every claim in `.factory/claims.json`, including the isolated demo, CSV import/export, privacy network boundary, keyboard-only round controls, mobile 390 px layout, offline reload after service-worker installation, license caching, and the paid plan path. It checks every route plus the designed 404 view for one `h1`, `main`, `lang="en"`, title, console errors, and Axe serious/critical violations. The service worker’s cache-backed offline reload passed in the fresh demo context.
 
+## Deployment
+
+Deployed the built `dist/` artifact with the work-order static configuration on 28 August 2026:
+
+```text
+/opt/fleet/lib/deploy-static.sh flex-practice-queue dist
+```
+
+The factory provisioned `sf-flex-practice-queue` in Central US, uploaded the production bundle, added the `flex-practice-queue.sociobot.in` CNAME, and completed custom-domain/TLS registration (`Ready`). The live URL is https://flex-practice-queue.sociobot.in/.
+
+The final live browser check reported the expected title, `lang="en"`, one `main`, one `h1` (`Build a useful practice round`), no console errors, and no Axe serious or critical violations. The served JavaScript contains the repaired `License verified. Saved round plans are ready.` notification text.
+
 ## Original builder verification
 
 Clean dependency install and production checks passed on 28 August 2026:
