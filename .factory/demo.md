@@ -1,6 +1,6 @@
 # Demo sandbox
 
-- URL: `https://flex-practice-queue.sociobot.in/demo` or local `http://127.0.0.1:4173/demo`.
+- URL: `https://flex-practice-queue.sociobot.in/?demo=1` or `https://flex-practice-queue.sociobot.in/demo` (local: `http://127.0.0.1:4173/?demo=1`). Both open the same isolated workspace.
 - Sample: eight prompts across science, language, maths, civics, economics, and programming. They use the `warm-up`, `weak`, and `today` tags.
 - Try: filter by a tag, choose a prompt count and timer, run a round, import or export CSV, and save a named round plan.
 - Reset: choose **Reset demo** in the persistent banner. **Start for real** deletes demo data before opening the real workspace.

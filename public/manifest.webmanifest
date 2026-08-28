@@ -1,7 +1,7 @@
 {
   "name": "Flex Practice Queue",
   "short_name": "Practice Queue",
-  "description": "Build short practice rounds without changing a source-card schedule.",
+  "description": "Build short practice rounds without changing your flashcard schedule.",
   "start_url": "/?v=1.0.0",
   "scope": "/",
   "display": "standalone",

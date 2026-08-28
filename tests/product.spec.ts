@@ -8,9 +8,12 @@ const ankiFixturePath = fileURLToPath(new URL('./fixtures/anki-front-back-tags.c
 const staticConfigPath = fileURLToPath(new URL('../public/staticwebapp.config.json', import.meta.url));
 const checkoutUrl = 'https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout';
 
-test('static deployment keeps hashed assets immutable and the service worker updateable', async () => {
-  const config = JSON.parse(await readFile(staticConfigPath, 'utf8')) as { routes: Array<{ route: string; headers?: Record<string, string> }> };
+test('static deployment keeps known app routes, a real 404, immutable assets, and an updateable service worker', async () => {
+  const config = JSON.parse(await readFile(staticConfigPath, 'utf8')) as { navigationFallback?: unknown; responseOverrides?: Record<string, { rewrite?: string }>; routes: Array<{ route: string; rewrite?: string; headers?: Record<string, string> }> };
   const routeHeaders = (route: string) => config.routes.find(entry => entry.route === route)?.headers;
+  expect(config.navigationFallback).toBeUndefined();
+  expect(config.responseOverrides?.['404']?.rewrite).toBe('/404.html');
+  for (const route of ['/demo', '/privacy', '/terms']) expect(config.routes.find(entry => entry.route === route)?.rewrite).toBe('/index.html');
   expect(routeHeaders('/assets/*')?.['Cache-Control']).toBe('public, max-age=31536000, immutable');
   expect(routeHeaders('/sw.js')?.['Cache-Control']).toBe('no-cache');
 });
@@ -28,6 +31,21 @@ test('@claim:demo-sandbox opens eight useful prompts in isolated demo storage', 
   await page.getByRole('button', { name: 'Reset demo' }).click();
   await expect(page.locator('.prompt-list > li')).toHaveCount(8);
   await expect(page.getByText('Five-minute weak set')).toHaveCount(0);
+});
+
+test('demo shows a real sample prompt in the first 390px viewport and starts it in one click', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  await expect(page).toHaveURL(/\?demo=1$/);
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  const preview = page.getByRole('heading', { name: 'Explain why seasons occur.' });
+  await expect(preview).toBeVisible();
+  const box = await preview.boundingBox();
+  expect(box?.y).toBeLessThan(844);
+  await page.getByRole('button', { name: 'Start this sample round' }).click();
+  await expect(page.getByRole('heading', { name: 'Recall the answer' })).toBeVisible();
+  await expect(page.getByText('Live round · 1 of 3')).toBeVisible();
 });
 
 test('@claim:offline-reload works offline after the first visit', async ({ page, context }) => {
@@ -61,6 +79,29 @@ test('@claim:csv-readonly imports CSV and leaves the selected file unchanged', a
   await expect(page.getByText('2 prompts imported. The source file was not changed.')).toBeVisible();
   await expect(page.locator('.prompt-list > li')).toHaveCount(10);
   expect(await readFile(fixturePath, 'utf8')).toBe(before);
+});
+
+test('@claim:source-schedule-untouched imports, tags, practices, and exports without contacting a flashcard schedule', async ({ page }) => {
+  const before = await readFile(fixturePath, 'utf8');
+  const offOriginRequests: string[] = [];
+  page.on('request', request => {
+    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173') offOriginRequests.push(request.url());
+  });
+  await page.goto('/demo');
+  await page.locator('#csv-file').setInputFiles(fixturePath);
+  await page.getByLabel('weak', { exact: true }).first().check();
+  await page.getByRole('button', { name: 'weak', exact: true }).click();
+  await page.getByLabel('Prompt count').selectOption('3');
+  await page.getByRole('button', { name: 'Start mixed round' }).click();
+  await page.getByRole('button', { name: /Reveal answer/ }).click();
+  await page.getByRole('button', { name: /Got it/ }).click();
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Stop round' }).click();
+  await page.getByRole('button', { name: 'Build another round' }).click();
+  await page.getByRole('button', { name: 'Export CSV' }).click();
+  await downloadPromise;
+  expect(await readFile(fixturePath, 'utf8')).toBe(before);
+  expect(offOriginRequests).toEqual([]);
 });
 
 test('@claim:anki-csv-import imports front/back/tags and leaves the selected file unchanged', async ({ page }) => {
@@ -189,6 +230,27 @@ test('@claim:license-check stores and checks a returned license at most daily', 
   await page.reload();
   await expect(page.getByRole('button', { name: 'Save round plan' })).toBeVisible();
   expect(checks).toBe(1);
+});
+
+test('@claim:license-data-minimization sends only the license token during verification', async ({ page }) => {
+  const calls: Array<{ method: string; url: string; body: string | null }> = [];
+  await page.route('https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=only-this-token', async route => {
+    calls.push({ method: route.request().method(), url: route.request().url(), body: route.request().postData() });
+    await route.fulfill({ json: { valid: true, reason: 'ok', expires_at: null } });
+  });
+  await page.goto('/demo');
+  await page.evaluate(() => {
+    localStorage.setItem('demo:fpq:plans', JSON.stringify([{ name: 'private plan' }]));
+    localStorage.setItem('sb_license:flex-practice-queue', 'only-this-token');
+    localStorage.removeItem('sb_license:flex-practice-queue:verdict');
+  });
+  await page.reload();
+  await expect.poll(() => calls).toHaveLength(1);
+  expect(calls[0]).toEqual({
+    method: 'GET',
+    url: 'https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=only-this-token',
+    body: null
+  });
 });
 
 test('a pasted license enables saved plans without a reload', async ({ page }) => {

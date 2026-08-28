@@ -28,6 +28,13 @@
     "sandbox": "demo data plus a shipped CSV fixture; compare fixture bytes before and after import and assert imported rows"
   },
   {
+    "id": "source-schedule-untouched",
+    "claim": "Practice never changes your flashcard schedule",
+    "where": "landing scope boundary, round result, privacy page, README",
+    "test": "npm test -- --grep @claim:source-schedule-untouched",
+    "sandbox": "fresh /demo data plus a shipped CSV fixture; import, tag, practice, stop, and export while recording requests; assert source bytes are unchanged and every request remains same-origin"
+  },
+  {
     "id": "anki-csv-import",
     "claim": "Imports Anki front/back CSV files without changing the selected source file",
     "where": "workbench, README",
@@ -82,5 +89,12 @@
     "where": "privacy page, README",
     "test": "npm test -- --grep @claim:license-check",
     "sandbox": "fresh /demo URL with a fixture license response; assert token capture, URL cleanup, unlocked control, reload, and one verification request"
+  },
+  {
+    "id": "license-data-minimization",
+    "claim": "License checks send only the license token to Sociobot",
+    "where": "privacy page, README",
+    "test": "npm test -- --grep @claim:license-data-minimization",
+    "sandbox": "fresh /demo data with a recorded verification response; seed a plan and license, reload, and assert exactly one GET to the documented verify URL with only the encoded license query and no body"
   }
 ]

@@ -1,6 +1,6 @@
 # Flex Practice Queue
 
-Build short practice rounds without changing your card schedule.
+Build short practice rounds without changing your flashcard schedule.
 
 Flex Practice Queue is for learners whose study time comes in short, irregular windows. It creates a separate lane for warm-ups and weak items.
 
@@ -8,14 +8,16 @@ Try the isolated sample at [https://flex-practice-queue.sociobot.in/demo](https:
 
 ## What it does
 
-- Imports `prompt,answer,tags` CSV files and common Anki `front,back,tags` exports.
+- Imports `prompt,answer,tags` CSV files and Anki `front,back,tags` CSV exports.
 - Tags prompts as `warm-up`, `weak`, or `today`.
 - Runs timed mixed rounds with Space and arrow-key controls.
 - Exports every prompt as CSV.
 - Works offline after the first visit.
 - Keeps study data in local browser storage.
 
-The app never writes to the selected CSV or a source-card scheduler. Import, tagging, practice, and CSV export need no license.
+The app never writes to the selected CSV or your flashcard schedule. Import, tagging, practice, and CSV export need no license.
+
+Anki `.apkg` packages are not read. Export a `front,back,tags` CSV from Anki first.
 
 A $9 one-time license adds named round plans. Checkout and license checks use the Sociobot billing API.
 
@@ -47,7 +49,7 @@ Prompts and round history use IndexedDB. Named plans and a purchased license use
 
 Demo data uses separate `demo:` storage. Resetting or leaving the demo deletes that sample workspace.
 
-The license token is the only stored value sent off-site. It is checked with Sociobot at most once each day.
+License checks send only the license token to Sociobot. They run at most once each day.
 
 See the in-app [privacy policy](https://flex-practice-queue.sociobot.in/privacy) and [terms](https://flex-practice-queue.sociobot.in/terms).
 

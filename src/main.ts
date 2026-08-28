@@ -23,7 +23,7 @@ function shell(content: string, demo = false): string {
     ${demo ? `<aside class="demo-banner" aria-label="Demo mode"><span><strong>Demo</strong> — sample data, nothing is saved</span><span><button class="text-button" id="reset-demo">Reset demo</button><button class="text-button" id="leave-demo">Start for real</button></span></aside>` : ''}
     <header class="site-header"><a class="wordmark route-link" href="/" aria-label="Flex Practice Queue home"><svg aria-hidden="true" viewBox="0 0 40 40"><path d="M5 5h30v30H5zM11 20h18M20 11v18"/></svg><span>Flex Practice<br><b>Queue</b></span></a><nav aria-label="Main navigation"><a class="route-link" href="/demo">Demo</a><a href="${location.pathname === '/' ? '#how' : '/#how'}">How it works</a><a class="route-link" href="/privacy">Privacy</a></nav></header>
     <main id="main" tabindex="-1">${content}</main>
-    <footer><p><strong>Flex Practice Queue</strong> — optional practice beside your scheduler.</p><nav aria-label="Footer navigation"><a class="route-link" href="/privacy">Privacy</a><a class="route-link" href="/terms">Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="visually-hidden">(external site)</span></a></nav><p>${buildId} · Original generated artwork</p></footer>
+    <footer><p><strong>Flex Practice Queue</strong> — optional practice beside your flashcard schedule.</p><nav aria-label="Footer navigation"><a class="route-link" href="/privacy">Privacy</a><a class="route-link" href="/terms">Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="visually-hidden">(external site)</span></a></nav><p>${buildId} · Original generated artwork</p></footer>
     <div class="route-status visually-hidden" aria-live="polite"></div>
     <div id="toast" class="toast" role="status" aria-label="Application updates" aria-live="polite" aria-atomic="true" hidden></div>`;
 }
@@ -31,27 +31,27 @@ function shell(content: string, demo = false): string {
 function landing(): string {
   return shell(`
     <section class="hero blueprint-grid">
-      <div class="hero-copy"><p class="drawing-label">Drawing 01 · optional rehearsal lane</p><h1>Build a useful practice round</h1><p class="lede">For learners with spare minutes who want extra practice without changing a formal card schedule.</p>
-        <div class="hero-action"><a class="button primary route-link" href="/demo">Try it with sample data</a><span>Loads 8 prompts in a separate demo.</span></div>
+      <div class="hero-copy"><p class="drawing-label">Drawing 01 · optional rehearsal lane</p><h1>Build a useful practice round</h1><p class="lede">For learners with spare minutes who want extra practice without changing their flashcard schedule.</p>
+        <div class="hero-action"><a class="button primary route-link" href="/?demo=1">Try it with sample data</a><span>Loads 8 prompts in a separate demo.</span></div>
         <ul class="plain-facts" aria-label="Product facts"><li>Works offline after the first visit.</li><li>Your study data stays in this browser.</li><li>Core tools are free. Saved round plans cost $9 once.</li></ul>
       </div>
       <figure class="hero-art"><img src="/art/blueprint-practice.webp" width="1536" height="1024" alt="Prompt cards arranged around a practice timer on blueprint paper." fetchpriority="high" decoding="async"><figcaption>Pull a small rehearsal lane from the cards you already use.</figcaption></figure>
     </section>
     <section class="workbench" aria-labelledby="workspace-heading"><div class="section-heading"><p class="drawing-label">Drawing 02 · your local workbench</p><h2 id="workspace-heading">Build a round from your prompts</h2><p>Import a CSV or add one prompt. Your imported file is only read.</p></div><div id="practice-app" class="practice-app" aria-live="polite"><p class="loading-state">Opening your local queue…</p></div></section>
-    <section id="how" class="how-section blueprint-grid" aria-labelledby="how-heading"><p class="drawing-label">Assembly notes</p><h2 id="how-heading">How optional practice works</h2><ol><li><b>Import prompts.</b><span>Use a CSV from your card tool. Nothing writes back.</span></li><li><b>Mark your intent.</b><span>Tag warm-up, weak, or today. Pick any mix.</span></li><li><b>Run the round.</b><span>Reveal answers at your pace. Stop when your window closes.</span></li></ol></section>
-    <section class="boundary-section" aria-labelledby="boundary-heading"><div><p class="drawing-label">Scope boundary</p><h2 id="boundary-heading">Keeps your scheduler out of it</h2></div><div><p>This queue does not calculate due dates or rate source cards. It stores prompts and round notes in this browser.</p><p>Export your prompts whenever you want. Delete them from this device when needed.</p></div></section>
+    <section id="how" class="how-section blueprint-grid" aria-labelledby="how-heading"><p class="drawing-label">Assembly notes</p><h2 id="how-heading">How optional practice works</h2><ol><li><b>Import prompts.</b><span>Use a CSV from your flashcard schedule. Nothing writes back.</span></li><li><b>Mark your intent.</b><span>Tag warm-up, weak, or today. Pick any mix.</span></li><li><b>Run the round.</b><span>Reveal answers at your pace. Stop when your window closes.</span></li></ol></section>
+    <section class="boundary-section" aria-labelledby="boundary-heading"><div><p class="drawing-label">Scope boundary</p><h2 id="boundary-heading">Leaves your flashcard schedule alone</h2></div><div><p>This queue does not calculate due dates or rate cards in your flashcard schedule. It stores prompts and round notes in this browser.</p><p>Export your prompts whenever you want. Delete them from this device when needed.</p></div></section>
     ${pricingSection()}
   `);
 }
 
 function pricingSection(): string {
-  return `<section class="price-section" aria-labelledby="price-heading"><div><p class="drawing-label">Optional paid tool</p><h2 id="price-heading">Save round plans for $9 once</h2><p>Import, tag, practice, and export stay free. A license adds named round plans for repeated routines.</p><a class="button primary" href="${checkoutUrl}">Buy a $9 license</a><p class="fine-print">Sociobot/Dodo is the merchant of record. Refunds are handled there.</p></div><form id="license-form" class="license-form"><label for="license-token">Have a license? Paste it</label><div><input id="license-token" name="license" autocomplete="off" required><button class="button secondary" type="submit">Verify license</button></div><p id="license-status" class="form-status" role="status" aria-label="License verification status" aria-live="polite" aria-atomic="true">${hasLicense() ? 'License active.' : 'No license is saved.'}</p></form></section>`;
+  return `<section class="price-section" aria-labelledby="price-heading"><div><p class="drawing-label">Optional paid tool</p><h2 id="price-heading">Save round plans for $9 once</h2><p>Import, tag, practice, and export stay free. A license adds named round plans for repeated routines.</p><a class="button primary" href="${checkoutUrl}">Buy a $9 license</a><p class="fine-print">Checkout opens on Sociobot after you choose to buy.</p></div><form id="license-form" class="license-form"><label for="license-token">Have a license? Paste it</label><div><input id="license-token" name="license" autocomplete="off" required><button class="button secondary" type="submit">Verify license</button></div><p id="license-status" class="form-status" role="status" aria-label="License verification status" aria-live="polite" aria-atomic="true">${hasLicense() ? 'License active.' : 'No license is saved.'}</p></form></section>`;
 }
 
 function legalPage(kind: 'privacy' | 'terms'): string {
   const privacy = kind === 'privacy';
   return shell(`<article class="legal blueprint-grid"><p class="drawing-label">Policy sheet · updated 28 August 2026</p><h1>${privacy ? 'Your practice data stays local' : 'Terms for using this practice tool'}</h1>
-  ${privacy ? `<h2>Data on your device</h2><p>Prompts, tags, rounds, plans, and your license token stay in browser storage on this device. Flex Practice Queue has no account system or analytics.</p><h2>CSV files</h2><p>The app reads the CSV you choose. It does not change that file or contact your card tool.</p><h2>License checks</h2><p>If you save a paid license, the app sends that token to the Sociobot billing API at most once each day. No prompt content is sent.</p><h2>Delete or export</h2><p>Use the workbench to export prompts or erase local practice data. Clearing browser storage also removes it.</p>` : `<h2>Use of the app</h2><p>You may use the app for personal or commercial study. Keep an exported copy of prompts you cannot replace.</p><h2>One-time license</h2><p>The $9 license adds named round plans. Sociobot/Dodo processes payment as merchant of record. A refund revokes the license.</p><h2>No learning guarantee</h2><p>The app helps you choose optional practice. It does not promise a test score or replace your source-card scheduler.</p><h2>Changes and support</h2><p>We may improve these terms with a new date above. Contact <a href="mailto:support@sociobot.in">support@sociobot.in</a> for billing or product help.</p>`}</article>`);
+  ${privacy ? `<h2>Data on your device</h2><p>Prompts, tags, rounds, plans, and your license token stay in browser storage on this device.</p><h2>CSV files</h2><p>The app reads the CSV you choose. It does not change that file or contact your flashcard schedule.</p><h2>License checks</h2><p>If you save a paid license, the app sends only that token to the Sociobot billing API at most once each day. No prompt content is sent.</p><h2>Delete or export</h2><p>Use the workbench to export prompts or erase local practice data. Clearing browser storage also removes it.</p>` : `<h2>Use of the app</h2><p>You may use the app for personal or commercial study. Keep an exported copy of prompts you cannot replace.</p><h2>One-time license</h2><p>The $9 license adds named round plans. Checkout opens on Sociobot after you choose to buy.</p><h2>No learning guarantee</h2><p>The app helps you choose optional practice. It does not promise a test score or replace your flashcard schedule.</p><h2>Changes and support</h2><p>We may improve these terms with a new date above. Contact <a href="mailto:support@sociobot.in">support@sociobot.in</a> for billing or product help.</p>`}</article>`);
 }
 
 function notFound(): string {
@@ -59,7 +59,8 @@ function notFound(): string {
 }
 
 function demoPage(): string {
-  return shell(`<section class="demo-head blueprint-grid"><p class="drawing-label">Demo drawing · isolated workspace</p><h1>Try a mixed practice round</h1><p>Eight sample prompts are ready. Pick a tag, start a round, and reveal an answer.</p></section><section class="workbench demo-workbench" aria-label="Sample practice queue"><div id="practice-app" class="practice-app"><p class="loading-state">Loading sample prompts…</p></div></section>`, true);
+  const sample = samplePrompts()[0];
+  return shell(`<section class="demo-head blueprint-grid"><p class="drawing-label">Demo drawing · isolated workspace</p><h1>Try a mixed practice round</h1><p>Eight sample prompts are ready. Start with this three-prompt round.</p></section><section class="demo-preview blueprint-grid" aria-labelledby="sample-preview-heading"><div><p class="drawing-label">Sample round · 1 of 3</p><h2 id="sample-preview-heading">${escapeHtml(sample.prompt)}</h2><p class="sample-tags">${sample.tags.map(tag => `<span>${tag}</span>`).join('')}</p></div><div class="sample-start"><p><b>30</b> seconds</p><button id="start-demo-preview" class="button primary">Start this sample round</button></div></section><section class="workbench demo-workbench" aria-label="Sample practice queue"><div id="practice-app" class="practice-app"><p class="loading-state">Loading sample prompts…</p></div></section>`, true);
 }
 
 function download(name: string, content: string, type = 'text/csv') {
@@ -120,7 +121,7 @@ class PracticeApp {
     const filteredCount = this.filtered().length;
     this.root.innerHTML = `<div class="builder-panel">
       <section class="import-zone" aria-labelledby="import-heading"><div><span class="step-number">01</span><h3 id="import-heading">Add prompts</h3></div>
-        <label class="file-button" for="csv-file">Import CSV</label><input class="visually-hidden" id="csv-file" type="file" accept=".csv,text/csv"><p>Columns: <code>prompt, answer, tags</code>. Anki front/back CSV also works.</p>
+        <label class="file-button" for="csv-file">Import CSV</label><input class="visually-hidden" id="csv-file" type="file" accept=".csv,text/csv"><p>Columns: <code>prompt, answer, tags</code>. For Anki, <a href="https://docs.ankiweb.net/exporting.html" rel="external">export a front, back, tags CSV first <span class="visually-hidden">(external site)</span></a>; .apkg files are not read.</p>
         <details><summary>Add one prompt</summary><form id="prompt-form"><label for="new-prompt">Prompt</label><textarea id="new-prompt" required rows="2"></textarea><label for="new-answer">Answer</label><textarea id="new-answer" rows="2"></textarea><button class="button secondary" type="submit" aria-label="Add prompt">Add prompt</button></form></details><p id="import-status" class="form-status" role="status"></p>
       </section>
       <section class="round-builder" aria-labelledby="round-heading"><div><span class="step-number">02</span><h3 id="round-heading">Choose the mix</h3></div>
@@ -183,6 +184,9 @@ class PracticeApp {
     const choices = this.filtered(); if (!choices.length) return;
     this.queue = shuffle(choices).slice(0, this.count); this.current = 0; this.again = 0; this.startedAt = Date.now(); this.remaining = this.seconds; this.revealed = false; this.renderRound(); this.startTimer();
   }
+  startSampleRound() {
+    this.filter = 'all'; this.count = 3; this.seconds = 30; this.startRound();
+  }
   private startTimer() { clearInterval(this.timer); this.timer = window.setInterval(() => { this.remaining--; const output = this.root.querySelector('#time-left'); if (output) output.textContent = String(Math.max(0, this.remaining)); const dial = this.root.querySelector<HTMLElement>('.timer-dial'); if (dial) dial.style.setProperty('--progress', `${(this.remaining / this.seconds) * 360}deg`); if (this.remaining <= 0) { clearInterval(this.timer); this.revealed = true; this.renderRound(); } }, 1000); }
   private renderRound() {
     const item = this.queue[this.current];
@@ -197,7 +201,7 @@ class PracticeApp {
   private next(markAgain: boolean) { if (markAgain) this.again++; this.current++; if (this.current >= this.queue.length) this.finishRound(); else { this.remaining = this.seconds; this.revealed = false; this.renderRound(); this.startTimer(); } }
   private async finishRound() {
     clearInterval(this.timer); this.root.onkeydown = null; const completed = Math.min(this.current + 1, this.queue.length); const record: RoundRecord = { id: crypto.randomUUID(), finishedAt: Date.now(), count: completed, again: this.again, seconds: Math.round((Date.now() - this.startedAt) / 1000) }; await this.store.saveRound(record); this.rounds.push(record); this.queue = []; this.current = 0;
-    this.root.innerHTML = `<section class="round-result"><p class="drawing-label">Round complete</p><h3>${completed} prompts practiced</h3><div class="result-measure"><span>${this.again}</span><small>marked “try again”</small></div><p>Your imported prompt data and source schedule were not changed.</p><button id="back-builder" class="button primary">Build another round</button></section>`;
+    this.root.innerHTML = `<section class="round-result"><p class="drawing-label">Round complete</p><h3>${completed} prompts practiced</h3><div class="result-measure"><span>${this.again}</span><small>marked “try again”</small></div><p>Your imported prompt data and flashcard schedule were not changed.</p><button id="back-builder" class="button primary">Build another round</button></section>`;
     this.root.querySelector('#back-builder')?.addEventListener('click', () => this.render());
   }
 }
@@ -207,16 +211,18 @@ function toast(message: string) { const node = document.querySelector<HTMLElemen
 async function renderRoute(push = false) {
   activePractice?.destroy(); activePractice = undefined;
   const path = location.pathname.replace(/\/$/, '') || '/';
-  document.title = pathTitle[path] || 'Page not found — Flex Practice Queue';
-  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', `https://flex-practice-queue.sociobot.in${path}`);
-  app.innerHTML = path === '/' ? landing() : path === '/demo' ? demoPage() : path === '/privacy' ? legalPage('privacy') : path === '/terms' ? legalPage('terms') : notFound();
+  const demo = path === '/demo' || new URLSearchParams(location.search).get('demo') === '1';
+  document.title = demo ? pathTitle['/demo'] : pathTitle[path] || 'Page not found — Flex Practice Queue';
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', `https://flex-practice-queue.sociobot.in${demo ? '/demo' : path}`);
+  app.innerHTML = demo ? demoPage() : path === '/' ? landing() : path === '/privacy' ? legalPage('privacy') : path === '/terms' ? legalPage('terms') : notFound();
   bindShell();
   const target = app.querySelector<HTMLElement>('#practice-app');
   if (target) {
-    activePractice = new PracticeApp(target, path === '/demo');
+    activePractice = new PracticeApp(target, demo);
     try { await activePractice.init(); }
     catch { target.innerHTML = `<section class="error-state" role="alert"><h3>Your local queue did not open</h3><p>Browser storage may be blocked. Allow site data, then try again.</p><button class="button secondary" id="retry-store">Try opening the queue</button></section>`; target.querySelector('#retry-store')?.addEventListener('click', () => renderRoute()); }
   }
+  app.querySelector('#start-demo-preview')?.addEventListener('click', () => activePractice?.startSampleRound());
   if (push) { const heading = app.querySelector<HTMLElement>('h1'); heading?.setAttribute('tabindex', '-1'); heading?.focus(); app.querySelector('.route-status')!.textContent = document.title; scrollTo(0, 0); }
 }
 
