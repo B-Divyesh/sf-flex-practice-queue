@@ -58,20 +58,32 @@ Production build output is `dist/index.html`. Measured budgets:
 All remain inside the PWA budgets. No AI feature is added because the researched
 job is a local, non-destructive practice queue and does not require model use.
 
-## Deploy and recheck
+## Deployment and live recheck
 
-Build and deploy the exact static artifact:
+Committed and pushed repair `b385dad` to `origin/main`, then deployed the exact
+`dist/` artifact with:
 
 ```sh
-npm ci
-npm test
-npm run build
-/opt/fleet/lib/deploy-static.sh flex-practice-queue dist
+/opt/fleet/lib/deploy-static.sh flex-practice-queue /work/repo/dist
 ```
 
-After deployment, verify the live checkout endpoint is a 303 hosted-session
-redirect, `/assets/*` carries the immutable policy, `sw.js` remains no-cache,
-and run `/opt/fleet/lib/verify-url.sh https://flex-practice-queue.sociobot.in`.
+Azure Static Web Apps deployment `d86f19ce-a4cf-4a5f-aeb8-f55a8bcaef8c`
+succeeded in the existing Central US app. Live checks at
+`https://flex-practice-queue.sociobot.in` passed:
+
+- `/assets/index-DeTBZAMd.js`: `Cache-Control: public, max-age=31536000, immutable`.
+- `/sw.js`: `Cache-Control: no-cache`.
+- Public checkout: HTTP `303` to a hosted Dodo session.
+- Response policy: CSP permits only same-origin resources plus the documented
+  Sociobot billing API; `nosniff`, HSTS, Referrer-Policy, and
+  Permissions-Policy are present.
+- `verify-url.sh`: HTTP 200, correct title and `lang="en"`, one h1, main,
+  zero missing image alts, zero unlabeled buttons, and zero console/page errors.
+- Live Axe scans of `/`, `/demo`, `/privacy`, `/terms`, and `/missing-sheet`:
+  zero serious or critical violations.
+- Live 390×844 reduced-motion demo: width exactly 390 px, first Tab reaches the
+  skip link, and an installed service-worker reload offline retained all eight
+  sample prompts.
 
 ## Known gaps
 
