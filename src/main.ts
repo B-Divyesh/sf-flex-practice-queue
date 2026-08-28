@@ -258,7 +258,9 @@ addEventListener('offline', () => toast('You are offline. Saved prompts and prac
 addEventListener('online', () => toast('Back online.'));
 
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
-  addEventListener('load', () => navigator.serviceWorker.register('/sw.js').then(registration => {
+  const registerServiceWorker = () => navigator.serviceWorker.register('/sw.js').then(registration => {
     registration.addEventListener('updatefound', () => { const worker = registration.installing; worker?.addEventListener('statechange', () => { if (worker.state === 'installed' && navigator.serviceWorker.controller) toast('An update is ready. Reload to use it.'); }); });
-  }).catch(() => { /* the app remains usable without installation */ }));
+  }).catch(() => { /* the app remains usable without installation */ });
+  if (document.readyState === 'complete') registerServiceWorker();
+  else addEventListener('load', registerServiceWorker, { once: true });
 }
