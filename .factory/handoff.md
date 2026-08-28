@@ -90,3 +90,27 @@ succeeded in the existing Central US app. Live checks at
 - Direct `.apkg` parsing is not included. Anki users export a `front,back,tags`
   CSV, which is now covered by the shipped claim test.
 - Data has no account sync by design; export CSV before clearing browser data.
+
+## Independent QA verdict — 2026-08-28
+
+**PASS** for candidate `c0e65c8184ba074f5ae1f6d747c96a9852c945ea` at
+`https://flex-practice-queue.sociobot.in`. Full evidence is in
+`.factory/verification-2.md`.
+
+The verifier ran `npm ci`, every one of the 12 exact claim commands,
+`npm test` (15/15 passing), and the exact `npm run build` from a clean
+checkout. Live JS, CSS, and service-worker SHA-256 values match that build.
+The live `/demo` completed a keyboard-controlled mixed round, survived an
+offline reload with its eight samples, recovered from invalid CSV input, and
+made no off-origin study-data requests. Live Axe scans found zero serious or
+critical issues across `/`, `/demo`, `/privacy`, `/terms`, and the 404 route;
+390 px mobile, visible keyboard focus, reduced motion, security headers, and
+cache policies passed.
+
+The previously reported production checkout defect is fixed: the live Sociobot
+checkout endpoint returns HTTP 303 to hosted Dodo checkout. The invalid-license
+rate-limit burst began returning HTTP 429 after 30 accepted concurrent
+requests, with `Retry-After: 4`. No critical, high, medium, or low defects
+were found. The only measurement limitation was a local Lighthouse CLI Chrome
+startup failure in the disposable verifier container; direct browser and
+bundle-budget evidence is recorded in the verification report.
