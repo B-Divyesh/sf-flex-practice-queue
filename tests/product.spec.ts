@@ -8,6 +8,7 @@ const ankiFixturePath = fileURLToPath(new URL('./fixtures/anki-front-back-tags.c
 const apkgFixturePath = fileURLToPath(new URL('./fixtures/unsupported-sample.apkg', import.meta.url));
 const staticConfigPath = fileURLToPath(new URL('../public/staticwebapp.config.json', import.meta.url));
 const static404Path = fileURLToPath(new URL('../public/404.html', import.meta.url));
+const builtServiceWorkerPath = fileURLToPath(new URL('../dist/sw.js', import.meta.url));
 const checkoutUrl = 'https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout';
 
 test('static deployment keeps known app routes, a real 404, immutable assets, and an updateable service worker', async () => {
@@ -25,6 +26,7 @@ test('static deployment keeps known app routes, a real 404, immutable assets, an
   expect(page404).toContain('rel="canonical" href="https://flex-practice-queue.sociobot.in/404"');
   expect(page404).toContain('property="og:image"');
   expect(page404).toContain('rel="icon" href="/icons/icon.svg"');
+  expect(await readFile(builtServiceWorkerPath, 'utf8')).not.toContain('"/staticwebapp.config.json"');
 });
 
 test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched through reset and start-for-real', async ({ page }) => {

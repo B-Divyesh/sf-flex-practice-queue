@@ -7,7 +7,7 @@ async function files(dir) {
   const nested = await Promise.all(entries.map(entry => entry.isDirectory() ? files(join(dir, entry.name)) : [join(dir, entry.name)]));
   return nested.flat();
 }
-const all = (await files(root)).map(file => `/${relative(root, file)}`).filter(file => !file.endsWith('sw.js') && !file.endsWith('.map'));
+const all = (await files(root)).map(file => `/${relative(root, file)}`).filter(file => !file.endsWith('sw.js') && !file.endsWith('.map') && file !== '/staticwebapp.config.json');
 const swPath = join(root, 'sw.js');
 const sw = await readFile(swPath, 'utf8');
 await writeFile(swPath, sw.replace('["__PRECACHE__"]', JSON.stringify(all)));
