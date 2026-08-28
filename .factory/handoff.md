@@ -1,5 +1,29 @@
 # Flex Practice Queue handoff
 
+## Adversarial first-read review 1 — 2026-08-28
+
+Reviewer-only work order `flex-practice-queue-review-1`. No product code was changed. Added `.factory/review-1.md` and re-ran public-site and local QA checks.
+
+### Verified
+
+- Fresh live mobile (390×844) and desktop (1440×1000) landing reads clearly: purpose, learner, and **Try it with sample data** action are visible before scrolling.
+- The live demo banner, reset behaviour, separate `demo:` storage, route focus/back behaviour, internal links, hosted checkout redirect, and real storage isolation were checked directly.
+- From a clean `npm ci`, all 12 exact `claims.json` commands passed. `npm test` passed 15/15 and `npm run build` passed with `dist/` output.
+
+### Review result and remaining work
+
+The review verdict is **FAIL** with seven findings, documented in `.factory/review-1.md`. Release blockers are: the first mobile demo viewport does not display real sample data, and unknown routes return HTTP 200 instead of 404. Other required repairs are claim coverage for scheduler, merchant/refund, and license-data-minimization promises; an Anki-package input decision; and consistent scheduler terminology.
+
+How to verify after repair:
+
+```sh
+npm ci
+npm test
+npm run build
+```
+
+Then check `/demo` in a fresh 390×844 context without scrolling, curl an unknown route for an HTTP 404 status, run every exact test listed in `.factory/claims.json`, and repeat the public first-read review.
+
 ## Repair result — 2026-08-28
 
 Repaired every release blocker from independent verification report
