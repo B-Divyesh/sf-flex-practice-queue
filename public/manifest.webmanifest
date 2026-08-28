@@ -1,0 +1,15 @@
+{
+  "name": "Flex Practice Queue",
+  "short_name": "Practice Queue",
+  "description": "Build short practice rounds without changing a source-card schedule.",
+  "start_url": "/?v=1.0.0",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f1f5f0",
+  "theme_color": "#f1f5f0",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
