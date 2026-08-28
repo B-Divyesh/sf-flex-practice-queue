@@ -224,7 +224,16 @@ function bindShell() {
   app.querySelectorAll<HTMLAnchorElement>('a.route-link').forEach(link => link.addEventListener('click', event => { if (link.origin !== location.origin) return; event.preventDefault(); history.pushState({}, '', link.href); renderRoute(true); }));
   app.querySelector('#reset-demo')?.addEventListener('click', async () => { activePractice?.destroy(); await deleteDemo(); renderRoute(); toast('Demo reset to its original 8 prompts.'); });
   app.querySelector('#leave-demo')?.addEventListener('click', async () => { activePractice?.destroy(); await deleteDemo(); history.pushState({}, '', '/'); renderRoute(true); });
-  app.querySelector<HTMLFormElement>('#license-form')?.addEventListener('submit', async event => { event.preventDefault(); const input = app.querySelector<HTMLInputElement>('#license-token')!; saveLicense(input.value); const status = app.querySelector<HTMLElement>('#license-status')!; status.textContent = 'Checking license…'; const verdict = await verifyLicense(true); status.textContent = verdict.message; });
+  app.querySelector<HTMLFormElement>('#license-form')?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const input = app.querySelector<HTMLInputElement>('#license-token')!;
+    saveLicense(input.value);
+    const status = app.querySelector<HTMLElement>('#license-status')!;
+    status.textContent = 'Checking license…';
+    const verdict = await verifyLicense(true);
+    if (verdict.valid) { await renderRoute(); toast('License active. Saved round plans are ready.'); }
+    else status.textContent = verdict.message;
+  });
 }
 
 const receivedLicense = captureLicense();
