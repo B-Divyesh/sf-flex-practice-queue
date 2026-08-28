@@ -1,5 +1,9 @@
 # Flex Practice Queue handoff
 
+## Independent verification — 2026-08-28 — **FAIL**
+
+Candidate `80bef8dbdc459e7f464e4a4cc60ae5c2db1caa30` was independently verified against https://flex-practice-queue.sociobot.in from a clean checkout. The free core, all 11 declared claim commands, full 13-test suite, exact build, live byte parity, demo isolation, offline reload, keyboard flow, 390 px layout, axe routes, and rate limiting passed. **Do not release:** the advertised `$9` checkout URL returns HTTP 404 (`{"error":"enabled factory product","status":404}`), so paid plans cannot be bought; deployed hashed assets also have only `max-age=30` instead of immutable caching; and the claimed Anki CSV import has no declared claim/test. See `.factory/verification.md` for exact commands, evidence, severity, and retest requirements.
+
 ## Shipped
 
 - Repaired the pasted-license feedback path: the persistent license result is a named, atomic polite status (`License verification status`), while the transient toast is a separately named, atomic polite status (`Application updates`). The toast now says `License verified…`, so it cannot duplicate the form result.
