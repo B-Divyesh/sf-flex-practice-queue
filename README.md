@@ -17,7 +17,7 @@ Try the isolated sample at [https://flex-practice-queue.sociobot.in/demo](https:
 
 The app never writes to the selected CSV or your flashcard schedule. Import, tagging, practice, and CSV export need no license.
 
-Anki `.apkg` packages are not read. Export a `front,back,tags` CSV from Anki first.
+Anki `.apkg` packages are not imported. Export a `front,back,tags` CSV from Anki first.
 
 A $9 one-time license adds named round plans. Checkout and license checks use the Sociobot billing API.
 

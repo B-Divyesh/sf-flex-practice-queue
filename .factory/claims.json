@@ -4,7 +4,7 @@
     "claim": "Try it with eight sample prompts without changing real data",
     "where": "landing action, demo banner, README",
     "test": "npm test -- --grep @claim:demo-sandbox",
-    "sandbox": "fresh browser context at /demo; assert eight prompts, demo storage prefix, reset, and no real plan key"
+    "sandbox": "fresh browser context; seed a real prompt, round, and fpq:plans value, enter /demo, mutate and reset it, select Start for real, then assert exact real IndexedDB and plans values remain, sample data is absent, and demo storage is deleted"
   },
   {
     "id": "offline-reload",
@@ -40,6 +40,13 @@
     "where": "workbench, README",
     "test": "npm test -- --grep @claim:anki-csv-import",
     "sandbox": "fresh /demo data plus a shipped front,back,tags fixture; compare fixture bytes before and after import and assert front maps to prompt, back to answer, and tags are kept"
+  },
+  {
+    "id": "anki-apkg-not-supported",
+    "claim": "Does not import Anki .apkg packages and tells you to export CSV first",
+    "where": "import help, README",
+    "test": "npm test -- --grep @claim:anki-apkg-not-supported",
+    "sandbox": "fresh /demo data plus a shipped .apkg-named fixture; select it, assert no prompt is added, and assert the exact CSV export guidance"
   },
   {
     "id": "csv-export",

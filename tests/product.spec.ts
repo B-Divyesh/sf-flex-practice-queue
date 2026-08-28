@@ -5,7 +5,9 @@ import { fileURLToPath } from 'node:url';
 
 const fixturePath = fileURLToPath(new URL('./fixtures/prompts.csv', import.meta.url));
 const ankiFixturePath = fileURLToPath(new URL('./fixtures/anki-front-back-tags.csv', import.meta.url));
+const apkgFixturePath = fileURLToPath(new URL('./fixtures/unsupported-sample.apkg', import.meta.url));
 const staticConfigPath = fileURLToPath(new URL('../public/staticwebapp.config.json', import.meta.url));
+const static404Path = fileURLToPath(new URL('../public/404.html', import.meta.url));
 const checkoutUrl = 'https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout';
 
 test('static deployment keeps known app routes, a real 404, immutable assets, and an updateable service worker', async () => {
@@ -16,21 +18,79 @@ test('static deployment keeps known app routes, a real 404, immutable assets, an
   for (const route of ['/demo', '/privacy', '/terms']) expect(config.routes.find(entry => entry.route === route)?.rewrite).toBe('/index.html');
   expect(routeHeaders('/assets/*')?.['Cache-Control']).toBe('public, max-age=31536000, immutable');
   expect(routeHeaders('/sw.js')?.['Cache-Control']).toBe('no-cache');
+  const page404 = await readFile(static404Path, 'utf8');
+  expect(page404).toContain('<a class="skip-link" href="#main">Skip to main content</a>');
+  expect(page404).toContain('href="/privacy"');
+  expect(page404).toContain('href="/terms"');
+  expect(page404).toContain('rel="canonical" href="https://flex-practice-queue.sociobot.in/404"');
+  expect(page404).toContain('property="og:image"');
+  expect(page404).toContain('rel="icon" href="/icons/icon.svg"');
 });
 
-test('@claim:demo-sandbox opens eight useful prompts in isolated demo storage', async ({ page }) => {
+test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched through reset and start-for-real', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('summary').click();
+  await page.locator('#new-prompt').fill('Real workspace sentinel');
+  await page.locator('#new-answer').fill('This remains outside the demo.');
+  await page.getByRole('button', { name: 'Add prompt' }).click();
+  await page.getByRole('button', { name: 'Start mixed round' }).click();
+  await page.getByRole('button', { name: 'Stop round' }).click();
+  await page.getByRole('button', { name: 'Build another round' }).click();
+  const realPlan = '[{"id":"real-plan","name":"Real plan","filter":"today","count":3,"seconds":30}]';
+  await page.evaluate(value => localStorage.setItem('fpq:plans', value), realPlan);
+  const realSnapshot = await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('flex-practice-queue');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const read = (store: string) => new Promise<unknown[]>((resolve, reject) => {
+      const request = database.transaction(store).objectStore(store).getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const snapshot = JSON.stringify({ prompts: await read('prompts'), rounds: await read('rounds') });
+    database.close();
+    return snapshot;
+  });
   await page.goto('/demo');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   await expect(page.locator('.prompt-list > li')).toHaveCount(8);
+  await page.locator('#csv-file').setInputFiles(fixturePath);
+  await expect(page.locator('.prompt-list > li')).toHaveCount(10);
   await page.getByLabel('Plan name').fill('Five-minute weak set');
   await page.getByRole('button', { name: 'Save round plan' }).click();
   await expect(page.getByText('Five-minute weak set', { exact: true })).toBeVisible();
   const keys = await page.evaluate(() => Object.keys(localStorage));
   expect(keys).toContain('demo:fpq:plans');
-  expect(keys).not.toContain('fpq:plans');
+  expect(await page.evaluate(() => localStorage.getItem('fpq:plans'))).toBe(realPlan);
   await page.getByRole('button', { name: 'Reset demo' }).click();
   await expect(page.locator('.prompt-list > li')).toHaveCount(8);
   await expect(page.getByText('Five-minute weak set')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Start for real' }).click();
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toHaveCount(0);
+  await expect(page.locator('.prompt-list > li')).toHaveCount(1);
+  await expect(page.getByText('Real workspace sentinel', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem('fpq:plans'))).toBe(realPlan);
+  expect(await page.evaluate(() => Object.keys(localStorage).filter(key => key.startsWith('demo:')))).toEqual([]);
+  const afterSnapshot = await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('flex-practice-queue');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const read = (store: string) => new Promise<unknown[]>((resolve, reject) => {
+      const request = database.transaction(store).objectStore(store).getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const snapshot = JSON.stringify({ prompts: await read('prompts'), rounds: await read('rounds') });
+    database.close();
+    return snapshot;
+  });
+  expect(afterSnapshot).toBe(realSnapshot);
+  const databaseNames = await page.evaluate(async () => (await indexedDB.databases()).map(database => database.name));
+  expect(databaseNames).not.toContain('demo:flex-practice-queue');
 });
 
 test('demo shows a real sample prompt in the first 390px viewport and starts it in one click', async ({ page }) => {
@@ -67,7 +127,7 @@ test('@claim:local-privacy sends no study data off-site', async ({ page }) => {
   await page.goto('/demo');
   await page.getByRole('button', { name: 'Start mixed round' }).click();
   await page.getByRole('button', { name: /Reveal answer/ }).click();
-  await page.getByRole('button', { name: /Got it/ }).click();
+  await page.getByRole('button', { name: /Mark as got it/ }).click();
   expect(crossOrigin).toEqual([]);
 });
 
@@ -90,11 +150,11 @@ test('@claim:source-schedule-untouched imports, tags, practices, and exports wit
   await page.goto('/demo');
   await page.locator('#csv-file').setInputFiles(fixturePath);
   await page.getByLabel('weak', { exact: true }).first().check();
-  await page.getByRole('button', { name: 'weak', exact: true }).click();
+  await page.getByRole('button', { name: 'Show weak prompts', exact: true }).click();
   await page.getByLabel('Prompt count').selectOption('3');
   await page.getByRole('button', { name: 'Start mixed round' }).click();
   await page.getByRole('button', { name: /Reveal answer/ }).click();
-  await page.getByRole('button', { name: /Got it/ }).click();
+  await page.getByRole('button', { name: /Mark as got it/ }).click();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Stop round' }).click();
   await page.getByRole('button', { name: 'Build another round' }).click();
@@ -117,6 +177,13 @@ test('@claim:anki-csv-import imports front/back/tags and leaves the selected fil
   expect(await readFile(ankiFixturePath, 'utf8')).toBe(before);
 });
 
+test('@claim:anki-apkg-not-supported keeps packages out and gives CSV export guidance', async ({ page }) => {
+  await page.goto('/demo');
+  await page.locator('#csv-file').setInputFiles(apkgFixturePath);
+  await expect(page.getByRole('status')).toContainText('This app cannot read .apkg packages. Export a front, back, tags CSV from Anki first.');
+  await expect(page.locator('.prompt-list > li')).toHaveCount(8);
+});
+
 test('@claim:csv-export exports every prompt with CSV headings', async ({ page }) => {
   await page.goto('/demo');
   const downloadPromise = page.waitForEvent('download');
@@ -134,7 +201,7 @@ test('@claim:csv-export exports every prompt with CSV headings', async ({ page }
 
 test('@claim:mixed-round runs a timed round with keyboard controls', async ({ page }) => {
   await page.goto('/demo');
-  await page.getByRole('button', { name: 'weak' }).click();
+  await page.getByRole('button', { name: 'Show weak prompts' }).click();
   await page.getByLabel('Prompt count').selectOption('3');
   await page.getByLabel('Seconds each').selectOption('15');
   await page.getByRole('button', { name: 'Start mixed round' }).click();
@@ -150,15 +217,15 @@ test('@claim:mixed-round runs a timed round with keyboard controls', async ({ pa
 
 test('@claim:saved-plans saves and reloads a named round plan in demo', async ({ page }) => {
   await page.goto('/demo');
-  await page.getByRole('button', { name: 'weak' }).click();
+  await page.getByRole('button', { name: 'Show weak prompts' }).click();
   await page.getByLabel('Prompt count').selectOption('3');
   await page.getByLabel('Seconds each').selectOption('60');
   await page.getByLabel('Plan name').fill('Weak sixty');
   await page.getByRole('button', { name: 'Save round plan' }).click();
-  await page.getByRole('button', { name: 'Any tag' }).click();
+  await page.getByRole('button', { name: 'Show all prompts' }).click();
   await page.getByLabel('Prompt count').selectOption('8');
   await page.getByRole('button', { name: 'Use plan' }).click();
-  await expect(page.getByRole('button', { name: 'weak', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'Show weak prompts', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByLabel('Prompt count')).toHaveValue('3');
   await expect(page.getByLabel('Seconds each')).toHaveValue('60');
 });
@@ -198,7 +265,7 @@ test('@claim:paid-price starts a hosted Sociobot checkout for the one-time price
 test('routes, mobile layout, metadata, and accessibility pass', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
-  for (const route of ['/', '/demo', '/privacy', '/terms', '/missing-sheet']) {
+  for (const route of ['/', '/demo', '/privacy', '/terms', '/404.html']) {
     await page.goto(route);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('main')).toHaveCount(1);
@@ -207,6 +274,10 @@ test('routes, mobile layout, metadata, and accessibility pass', async ({ page })
     const results = await new AxeBuilder({ page: page as never }).analyze();
     expect(results.violations.filter(item => ['serious', 'critical'].includes(item.impact || ''))).toEqual([]);
   }
+  await page.goto('/404.html');
+  await expect(page.getByRole('link', { name: 'Flex Practice Queue home' })).toHaveAttribute('href', '/');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' })).toContainText('Demo');
+  await expect(page.getByRole('navigation', { name: 'Footer navigation' })).toContainText('Privacy');
   expect(consoleErrors).toEqual([]);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/demo');

@@ -37,7 +37,10 @@ The landing copy was checked after the polish changes. No sentence exceeds 22 wo
 | Sample round · 1 of 3 | 6 | Pass |
 | Explain why seasons occur. | 5 | Pass |
 | Start this sample round | 5 | Pass |
-| Export a front, back, tags CSV first; .apkg files are not read. | 12 | Pass |
+| This app cannot read .apkg packages. | 7 | Pass |
+| Export a front, back, tags CSV first. | 7 | Pass |
+| Show all prompts / Show warm-up prompts / Show weak prompts / Show today’s prompts | 3 / 3 / 3 / 3 | Pass |
+| Mark as got it | 4 | Pass |
 
 ## Terminology
 
@@ -49,4 +52,4 @@ The landing copy was checked after the polish changes. No sentence exceeds 22 wo
 | Reusable configuration | round plan |
 | Paid credential | license |
 
-Catalog description: “Build short practice rounds without changing your flashcard schedule.” It starts with a verb and is 68 characters.
+Catalog description: “Practice spare minutes without changing your flashcard schedule.” It starts with a verb and is 64 characters.

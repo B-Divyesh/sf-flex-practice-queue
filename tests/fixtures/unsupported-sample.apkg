@@ -1,0 +1,1 @@
+This deliberately tiny fixture has an .apkg filename. The app must not parse or store it.
