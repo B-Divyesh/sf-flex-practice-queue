@@ -2,6 +2,8 @@
 
 ## Shipped
 
+- Repaired the pasted-license feedback path: the persistent license result is a named, atomic polite status (`License verification status`), while the transient toast is a separately named, atomic polite status (`Application updates`). The toast now says `License verified…`, so it cannot duplicate the form result.
+- Added regression coverage that locates both live regions by accessible role and name, verifies their distinct observable messages, and asserts that the exact `License active.` form result has one match.
 - Built the full local-first queue with CSV and Anki-style CSV import.
 - Added manual prompts and `warm-up`, `weak`, and `today` tags.
 - Added mixed rounds with timers, reveal controls, keyboard ratings, and round results.
@@ -13,7 +15,30 @@
 - Added the manifest, icons, service worker, offline fallback, metadata, sitemap, and security headers.
 - Added original blueprint artwork and recorded its prompt and provenance in `.factory/design.md`.
 
-## Verification
+## Repair verification
+
+The candidate failure was reproduced after a clean install on 28 August 2026:
+
+```text
+npm ci       passed (0 vulnerabilities)
+npm test     failed: tests/product.spec.ts:170 strict-mode violation
+             getByText("License active.") resolved the license form status
+             and the live application toast
+```
+
+After the repair:
+
+```text
+npm test -- --grep 'a pasted license enables saved plans without a reload'  1 passed
+npm test                                                                  13 passed
+npm ci && npm run build                                                   passed
+```
+
+The exact clean production build command is `npm ci && npm run build`. It produced `dist/index.html`, with 9.86 KB gzip JavaScript and 4.42 KB gzip CSS. The production build retains the PWA manifest, service worker, offline page, and Static Web Apps configuration.
+
+The full browser suite exercises every claim in `.factory/claims.json`, including the isolated demo, CSV import/export, privacy network boundary, keyboard-only round controls, mobile 390 px layout, offline reload after service-worker installation, license caching, and the paid plan path. It checks every route plus the designed 404 view for one `h1`, `main`, `lang="en"`, title, console errors, and Axe serious/critical violations. The service worker’s cache-backed offline reload passed in the fresh demo context.
+
+## Original builder verification
 
 Clean dependency install and production checks passed on 28 August 2026:
 
@@ -52,7 +77,7 @@ npm test
 npm run build
 ```
 
-Deploy the generated `dist/` directory as the static site root. The exact build command is `npm run build`.
+Deploy the generated `dist/` directory as the static site root. For a clean deployment build, use `npm ci && npm run build`.
 
 ## Known gaps and next steps
 

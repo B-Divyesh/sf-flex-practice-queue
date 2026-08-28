@@ -25,7 +25,7 @@ function shell(content: string, demo = false): string {
     <main id="main" tabindex="-1">${content}</main>
     <footer><p><strong>Flex Practice Queue</strong> — optional practice beside your scheduler.</p><nav aria-label="Footer navigation"><a class="route-link" href="/privacy">Privacy</a><a class="route-link" href="/terms">Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="visually-hidden">(external site)</span></a></nav><p>${buildId} · Original generated artwork</p></footer>
     <div class="route-status visually-hidden" aria-live="polite"></div>
-    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>`;
+    <div id="toast" class="toast" role="status" aria-label="Application updates" aria-live="polite" aria-atomic="true" hidden></div>`;
 }
 
 function landing(): string {
@@ -45,7 +45,7 @@ function landing(): string {
 }
 
 function pricingSection(): string {
-  return `<section class="price-section" aria-labelledby="price-heading"><div><p class="drawing-label">Optional paid tool</p><h2 id="price-heading">Save round plans for $9 once</h2><p>Import, tag, practice, and export stay free. A license adds named round plans for repeated routines.</p><a class="button primary" href="${checkoutUrl}">Buy a $9 license</a><p class="fine-print">Sociobot/Dodo is the merchant of record. Refunds are handled there.</p></div><form id="license-form" class="license-form"><label for="license-token">Have a license? Paste it</label><div><input id="license-token" name="license" autocomplete="off" required><button class="button secondary" type="submit">Verify license</button></div><p id="license-status" class="form-status" role="status">${hasLicense() ? 'License active.' : 'No license is saved.'}</p></form></section>`;
+  return `<section class="price-section" aria-labelledby="price-heading"><div><p class="drawing-label">Optional paid tool</p><h2 id="price-heading">Save round plans for $9 once</h2><p>Import, tag, practice, and export stay free. A license adds named round plans for repeated routines.</p><a class="button primary" href="${checkoutUrl}">Buy a $9 license</a><p class="fine-print">Sociobot/Dodo is the merchant of record. Refunds are handled there.</p></div><form id="license-form" class="license-form"><label for="license-token">Have a license? Paste it</label><div><input id="license-token" name="license" autocomplete="off" required><button class="button secondary" type="submit">Verify license</button></div><p id="license-status" class="form-status" role="status" aria-label="License verification status" aria-live="polite" aria-atomic="true">${hasLicense() ? 'License active.' : 'No license is saved.'}</p></form></section>`;
 }
 
 function legalPage(kind: 'privacy' | 'terms'): string {
@@ -231,7 +231,7 @@ function bindShell() {
     const status = app.querySelector<HTMLElement>('#license-status')!;
     status.textContent = 'Checking license…';
     const verdict = await verifyLicense(true);
-    if (verdict.valid) { await renderRoute(); toast('License active. Saved round plans are ready.'); }
+    if (verdict.valid) { await renderRoute(); toast('License verified. Saved round plans are ready.'); }
     else status.textContent = verdict.message;
   });
 }
@@ -240,7 +240,7 @@ const receivedLicense = captureLicense();
 renderRoute().then(async () => {
   if (!receivedLicense && !hasSavedLicense()) return;
   const verdict = await verifyLicense(receivedLicense);
-  if (verdict.valid) { await renderRoute(); toast('License active. Saved round plans are ready.'); }
+  if (verdict.valid) { await renderRoute(); toast('License verified. Saved round plans are ready.'); }
 });
 addEventListener('popstate', () => renderRoute(true));
 addEventListener('offline', () => toast('You are offline. Saved prompts and practice still work.'));

@@ -167,6 +167,8 @@ test('a pasted license enables saved plans without a reload', async ({ page }) =
   await page.goto('/');
   await page.getByLabel('Have a license? Paste it').fill('pasted-license');
   await page.getByRole('button', { name: 'Verify license' }).click();
-  await expect(page.getByText('License active.')).toBeVisible();
+  await expect(page.getByRole('status', { name: 'License verification status' })).toHaveText('License active.');
+  await expect(page.getByRole('status', { name: 'Application updates' })).toHaveText('License verified. Saved round plans are ready.');
+  await expect(page.getByText('License active.', { exact: true })).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Save round plan' })).toBeVisible();
 });
