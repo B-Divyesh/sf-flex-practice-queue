@@ -4,6 +4,16 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const fixturePath = fileURLToPath(new URL('./fixtures/prompts.csv', import.meta.url));
+const ankiFixturePath = fileURLToPath(new URL('./fixtures/anki-front-back-tags.csv', import.meta.url));
+const staticConfigPath = fileURLToPath(new URL('../public/staticwebapp.config.json', import.meta.url));
+const checkoutUrl = 'https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout';
+
+test('static deployment keeps hashed assets immutable and the service worker updateable', async () => {
+  const config = JSON.parse(await readFile(staticConfigPath, 'utf8')) as { routes: Array<{ route: string; headers?: Record<string, string> }> };
+  const routeHeaders = (route: string) => config.routes.find(entry => entry.route === route)?.headers;
+  expect(routeHeaders('/assets/*')?.['Cache-Control']).toBe('public, max-age=31536000, immutable');
+  expect(routeHeaders('/sw.js')?.['Cache-Control']).toBe('no-cache');
+});
 
 test('@claim:demo-sandbox opens eight useful prompts in isolated demo storage', async ({ page }) => {
   await page.goto('/demo');
@@ -51,6 +61,19 @@ test('@claim:csv-readonly imports CSV and leaves the selected file unchanged', a
   await expect(page.getByText('2 prompts imported. The source file was not changed.')).toBeVisible();
   await expect(page.locator('.prompt-list > li')).toHaveCount(10);
   expect(await readFile(fixturePath, 'utf8')).toBe(before);
+});
+
+test('@claim:anki-csv-import imports front/back/tags and leaves the selected file unchanged', async ({ page }) => {
+  const before = await readFile(ankiFixturePath, 'utf8');
+  await page.goto('/demo');
+  await page.locator('#csv-file').setInputFiles(ankiFixturePath);
+  await expect(page.getByText('3 prompts imported. The source file was not changed.')).toBeVisible();
+  await expect(page.locator('.prompt-list > li')).toHaveCount(11);
+  const imported = page.locator('.prompt-list > li').filter({ hasText: 'What causes the northern lights?' });
+  await expect(imported).toContainText('Charged particles excite gases high in Earth’s atmosphere.');
+  await expect(imported.getByLabel('weak')).toBeChecked();
+  await expect(imported.getByLabel('today')).toBeChecked();
+  expect(await readFile(ankiFixturePath, 'utf8')).toBe(before);
 });
 
 test('@claim:csv-export exports every prompt with CSV headings', async ({ page }) => {
@@ -118,11 +141,17 @@ test('@claim:free-core keeps import, tagging, practice, and export free', async 
   await expect(page.getByRole('button', { name: 'Save plan · paid' })).toBeVisible();
 });
 
-test('@claim:paid-price shows the one-time price and hosted checkout', async ({ page }) => {
+test('@claim:paid-price starts a hosted Sociobot checkout for the one-time price', async ({ page, request }) => {
   await page.goto('/');
   const buy = page.getByRole('link', { name: 'Buy a $9 license' });
   await expect(page.getByRole('heading', { name: 'Save round plans for $9 once' })).toBeVisible();
-  await expect(buy).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout');
+  await expect(buy).toHaveAttribute('href', checkoutUrl);
+  const checkout = await request.get(checkoutUrl, { maxRedirects: 0 });
+  expect(checkout.status()).toBeGreaterThanOrEqual(300);
+  expect(checkout.status()).toBeLessThan(400);
+  const destination = checkout.headers().location;
+  expect(destination).toBeTruthy();
+  expect(new URL(destination!).protocol).toBe('https:');
 });
 
 test('routes, mobile layout, metadata, and accessibility pass', async ({ page }) => {

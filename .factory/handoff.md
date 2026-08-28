@@ -1,103 +1,80 @@
 # Flex Practice Queue handoff
 
-## Independent verification — 2026-08-28 — **FAIL**
+## Repair result — 2026-08-28
 
-Candidate `80bef8dbdc459e7f464e4a4cc60ae5c2db1caa30` was independently verified against https://flex-practice-queue.sociobot.in from a clean checkout. The free core, all 11 declared claim commands, full 13-test suite, exact build, live byte parity, demo isolation, offline reload, keyboard flow, 390 px layout, axe routes, and rate limiting passed. **Do not release:** the advertised `$9` checkout URL returns HTTP 404 (`{"error":"enabled factory product","status":404}`), so paid plans cannot be bought; deployed hashed assets also have only `max-age=30` instead of immutable caching; and the claimed Anki CSV import has no declared claim/test. See `.factory/verification.md` for exact commands, evidence, severity, and retest requirements.
+Repaired every release blocker from independent verification report
+`.factory/verification.md` for candidate `80bef8dbdc459e7f464e4a4cc60ae5c2db1caa30`.
+The product remains a Vite + TypeScript local-first PWA deployed as a static
+site.
 
-## Shipped
+## Repairs
 
-- Repaired the pasted-license feedback path: the persistent license result is a named, atomic polite status (`License verification status`), while the transient toast is a separately named, atomic polite status (`Application updates`). The toast now says `License verified…`, so it cannot duplicate the form result.
-- Added regression coverage that locates both live regions by accessible role and name, verifies their distinct observable messages, and asserts that the exact `License active.` form result has one match.
-- Built the full local-first queue with CSV and Anki-style CSV import.
-- Added manual prompts and `warm-up`, `weak`, and `today` tags.
-- Added mixed rounds with timers, reveal controls, keyboard ratings, and round results.
-- Added CSV export, local deletion, empty states, import errors, and offline notices.
-- Added an isolated eight-prompt demo at `/demo`, with reset and exit controls.
-- Added named round plans behind the $9 one-time Sociobot license.
-- Added checkout, returned-license capture, daily verification caching, and pasted-license restore.
-- Added `/privacy`, `/terms`, and a designed fallback route.
-- Added the manifest, icons, service worker, offline fallback, metadata, sitemap, and security headers.
-- Added original blueprint artwork and recorded its prompt and provenance in `.factory/design.md`.
+- Registered `flex-practice-queue` in the production Sociobot/Dodo factory
+  catalog as **Flex Practice Queue License**, USD 9.00 one-time. Its production
+  return URL is `https://flex-practice-queue.sociobot.in/`.
+- Confirmed the public checkout endpoint now returns HTTP `303` to a hosted
+  `checkout.dodopayments.com/session/...` URL. No purchase was completed.
+- Replaced the former paid-price href-only assertion with an integration claim
+  that reads the visible CTA, calls its Sociobot checkout endpoint without
+  payment, and requires a 3xx HTTPS hosted-checkout redirect. The existing
+  returned-license claim continues to cover local capture, URL cleanup, and
+  once-daily verification using a recorded response.
+- Added the `anki-csv-import` claim, a realistic shipped
+  `front,back,tags` fixture, and a demo-only regression test that verifies
+  front→prompt, back→answer, retained tags, imported rows, and unchanged source
+  fixture bytes.
+- Added route-specific Static Web Apps cache policy: hashed `/assets/*` files
+  receive `Cache-Control: public, max-age=31536000, immutable`; the service
+  worker remains `no-cache` so updates are discoverable. A regression test
+  asserts both policies from the shipped configuration.
 
-## Repair verification
+## Verification
 
-The candidate failure was reproduced after a clean install on 28 August 2026:
-
-```text
-npm ci       passed (0 vulnerabilities)
-npm test     failed: tests/product.spec.ts:170 strict-mode violation
-             getByText("License active.") resolved the license form status
-             and the live application toast
-```
-
-After the repair:
-
-```text
-npm test -- --grep 'a pasted license enables saved plans without a reload'  1 passed
-npm test                                                                  13 passed
-npm ci && npm run build                                                   passed
-```
-
-The exact clean production build command is `npm ci && npm run build`. It produced `dist/index.html`, with 9.86 KB gzip JavaScript and 4.42 KB gzip CSS. The production build retains the PWA manifest, service worker, offline page, and Static Web Apps configuration.
-
-The full browser suite exercises every claim in `.factory/claims.json`, including the isolated demo, CSV import/export, privacy network boundary, keyboard-only round controls, mobile 390 px layout, offline reload after service-worker installation, license caching, and the paid plan path. It checks every route plus the designed 404 view for one `h1`, `main`, `lang="en"`, title, console errors, and Axe serious/critical violations. The service worker’s cache-backed offline reload passed in the fresh demo context.
-
-## Deployment
-
-Deployed the built `dist/` artifact with the work-order static configuration on 28 August 2026:
+Clean install and full browser suite:
 
 ```text
-/opt/fleet/lib/deploy-static.sh flex-practice-queue dist
+npm ci       passed; 25 packages audited, 0 vulnerabilities
+npm test     passed; 15/15 Playwright tests
+npm run build passed; tsc --noEmit + Vite + service-worker injection
 ```
 
-The factory provisioned `sf-flex-practice-queue` in Central US, uploaded the production bundle, added the `flex-practice-queue.sociobot.in` CNAME, and completed custom-domain/TLS registration (`Ready`). The live URL is https://flex-practice-queue.sociobot.in/.
+All 12 exact commands in `.factory/claims.json` passed independently from fresh
+Playwright contexts, including the new Anki and hosted-checkout claims. The
+full suite covers desktop and 390×844 mobile rendering, keyboard round controls
+and skip link, serious/critical Axe checks on every route, reduced-motion/mobile
+layout, console errors, demo isolation, local-only study-data traffic, CSV
+read-only import/export, service-worker offline reload, and returned-license
+daily caching. Type checking is part of `npm run build`; this repository has no
+separate lint or publishable package/consumer surface.
 
-The final live browser check reported the expected title, `lang="en"`, one `main`, one `h1` (`Build a useful practice round`), no console errors, and no Axe serious or critical violations. The served JavaScript contains the repaired `License verified. Saved round plans are ready.` notification text.
+Production build output is `dist/index.html`. Measured budgets:
 
-## Original builder verification
-
-Clean dependency install and production checks passed on 28 August 2026:
-
-```text
-npm ci       passed
-npm test     13 passed
-npm run build passed; dist/index.html exists
-npm audit    0 vulnerabilities
-```
-
-The test suite covers every entry in `.factory/claims.json`. It also checks all routes, the 404 view, keyboard use, 390 px layout, console errors, and axe serious or critical findings.
-
-Offline reload passed in a fresh browser context after service-worker installation. The demo retained all eight bundled prompts with the network disabled.
-
-The worker URL verifier reported one title, `lang="en"`, one main landmark, one h1, no missing alt text, no unlabeled buttons, and no console errors. Evidence is in `.factory/evidence/verify.json` and the two screenshots beside it.
-
-Mobile Lighthouse results from the local production build:
-
-| Measure | Result |
+| Asset | Result |
 | --- | ---: |
-| Performance | 99 |
-| Accessibility | 100 |
-| Best practices | 100 |
-| SEO | 100 |
-| LCP | 2.0 s |
-| Total blocking time | 0 ms |
-| CLS | 0 |
+| Initial JavaScript (gzip) | 9,873 B |
+| Initial CSS (gzip) | 4,440 B |
+| Hero WebP | 105,772 B |
 
-The production JavaScript is 9.83 KB gzip. CSS is 4.42 KB gzip, and the hero WebP is 105,772 bytes.
+All remain inside the PWA budgets. No AI feature is added because the researched
+job is a local, non-destructive practice queue and does not require model use.
 
-## Run and deploy
+## Deploy and recheck
+
+Build and deploy the exact static artifact:
 
 ```sh
 npm ci
 npm test
 npm run build
+/opt/fleet/lib/deploy-static.sh flex-practice-queue dist
 ```
 
-Deploy the generated `dist/` directory as the static site root. For a clean deployment build, use `npm ci && npm run build`.
+After deployment, verify the live checkout endpoint is a 303 hosted-session
+redirect, `/assets/*` carries the immutable policy, `sw.js` remains no-cache,
+and run `/opt/fleet/lib/verify-url.sh https://flex-practice-queue.sociobot.in`.
 
-## Known gaps and next steps
+## Known gaps
 
-- The factory must register the paid product before the production checkout URL can sell licenses.
-- Direct `.apkg` parsing is not included. Anki users export a front/back CSV instead.
-- Data has no sync or account backup by design. Users should export CSV before clearing browser storage.
-- Lighthouse was measured locally against the production preview. Deployment latency may change LCP.
+- Direct `.apkg` parsing is not included. Anki users export a `front,back,tags`
+  CSV, which is now covered by the shipped claim test.
+- Data has no account sync by design; export CSV before clearing browser data.

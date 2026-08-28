@@ -28,6 +28,13 @@
     "sandbox": "demo data plus a shipped CSV fixture; compare fixture bytes before and after import and assert imported rows"
   },
   {
+    "id": "anki-csv-import",
+    "claim": "Imports Anki front/back CSV files without changing the selected source file",
+    "where": "workbench, README",
+    "test": "npm test -- --grep @claim:anki-csv-import",
+    "sandbox": "fresh /demo data plus a shipped front,back,tags fixture; compare fixture bytes before and after import and assert front maps to prompt, back to answer, and tags are kept"
+  },
+  {
     "id": "csv-export",
     "claim": "Exports every prompt as CSV",
     "where": "workbench, privacy page, README",
@@ -64,10 +71,10 @@
   },
   {
     "id": "paid-price",
-    "claim": "Named round plans cost $9 once",
+    "claim": "Named round plans cost $9 once through Sociobot checkout",
     "where": "landing facts, paid tier, terms, README",
     "test": "npm test -- --grep @claim:paid-price",
-    "sandbox": "fresh landing page; assert the stated price and hosted Sociobot checkout URL"
+    "sandbox": "fresh landing page; assert the stated price, follow the displayed checkout endpoint without payment, and assert it begins a hosted checkout redirect"
   },
   {
     "id": "license-check",
