@@ -1,56 +1,83 @@
-# Flex Practice Queue handoff — adversarial review 5
+# Flex Practice Queue handoff — polish round 5
 
-**FAIL — one blocking demo finding remains.**
+**PASS — every cumulative finding is closed.**
 
-Review 5 tested the live product on 2026-08-29 in fresh 390 × 844 and
-1440 × 1000 Chromium contexts and tested commit `5a6ed097037e486f3b5a4973ff14fd6e51a33961`
-from the clean clone `/tmp/fpq-review5.ZDNL0y/repo`. No product code was
-modified.
+Candidate `5a6ed097037e486f3b5a4973ff14fd6e51a33961` and review commit
+`4418926b7952316933b6680045a6300cc47875d5` were repaired in product commit
+`30a64aa65b6ba4954b92bf5811a417db1a9944e2`. The static deployment completed as
+Azure deployment `459834d6-de86-41b4-95e2-0f3e089ded7e` and is live at
+`https://flex-practice-queue.sociobot.in`.
 
-## Finding
+## What changed
 
-- **F-5-1:** `/demo` presents **“Explain why seasons occur.”** as **“Sample
-  round · 1 of 3”** beside **Start this sample round**, but the action shuffles
-  all prompts and starts with a different item. Two fresh live runs opened with
-  **“What does a pure function avoid?”** and **“Differentiate x² sin x.”** Fix
-  the sample queue order or rename the preview/action, then assert exact prompt
-  identity after the click.
+- Fixed F-5-1 at its source. The preview action now starts a fixed three-prompt
+  queue instead of delegating to the shuffled mixed-round path.
+- Added a 390 px regression that reads the preview prompt, starts the round,
+  asserts the same first prompt, and verifies all three fixed prompts in order.
+- Strengthened the route regression with exact per-route titles, canonicals,
+  descriptions, social-image metadata, footer legal links, focus restoration,
+  browser Back behavior, mobile width, reduced motion, and Axe scans.
+- Updated the demo record, copy audit, and the 70-character verb-first catalog
+  description.
+- Rechecked every F-1, F-2, and F-4 repair. Demo isolation, claims, copy,
+  import limits, true 404 behavior, legal links, privacy, and offline support
+  remain intact. The complete mapping is in `.factory/polish-5.md`.
 
-Full evidence, copy counts, claim results, route checks, and earlier-finding
-verification are in `.factory/review-5.md`.
+## How it was verified
 
-## Verification completed
-
-- Every exact command in `.factory/claims.json`: 15/15 passed independently.
-- `npm test`: 20/20 passed.
-- `npm run build`: passed; `dist/index.html` exists; initial JavaScript is
-  10.10 kB gzip and CSS is 4.71 kB gzip.
-- Live cold read: the job, audience, and first action are visible before
-  scrolling at phone and desktop widths.
-- Live demo: eight realistic prompts, banner, reset 9 → 8, offline reload, and
-  real/demo storage isolation all passed.
-- Live traffic: the full demo request log was same-origin.
-- Routes: `/`, `/demo`, `/privacy`, and `/terms` return 200; an unknown route
-  returns the designed 404. Titles, one h1/main, metadata, deep links,
-  route-change focus, browser Back focus, link crawl, and consistent shell pass.
-- Accessibility: the suite's Axe serious/critical scan, skip link, mobile
-  width, reduced-motion, and console checks pass.
-- History: F-1-1 through F-1-7, F-2-1 through F-2-5, and F-4-1 through F-4-7
-  remain fixed in live behaviour and code.
-
-## Reproduce
+Clean clone: `/tmp/fpq-polish5.MGWKag/repo` at `30a64aa`.
 
 ```sh
 npm ci
+# each of the 15 exact commands in .factory/claims.json
 npm test
 npm run build
 ```
 
-For F-5-1, open `https://flex-practice-queue.sociobot.in/demo`, note the
-preview prompt, select **Start this sample round**, and compare it with the
-first live prompt. Because selection is random, repeat from a fresh context if
-the preview prompt happens to be selected first.
+- `npm ci`: passed with 0 vulnerabilities.
+- Claims: 15/15 passed independently.
+- Full Playwright unit/integration/browser suite: 20/20 passed in the clean
+  clone and again through the work order build command.
+- Build: passed with `dist/index.html`; initial JS 29.34 kB raw / 10.12 kB
+  gzip, CSS 18.33 kB raw / 4.71 kB gzip, and hero artwork 105.77 kB.
+- Accessibility: exact landmarks/titles/metadata, keyboard skip link,
+  route-change focus, Back focus, 390 px layout, reduced motion, and zero
+  serious/critical Axe findings on all routes and the static 404.
+- Privacy: the cold live demo flow made only same-origin requests. The
+  license-minimization fixture sent one bodyless GET containing only the token.
+- Isolation: cold live reset restored `9 → 8`; Start for real preserved the
+  seeded real prompt, round, and exact plan value, then removed all demo keys
+  and the demo database.
+- Offline: a service-worker-controlled cold `/demo` reload succeeded offline
+  with all eight sample prompts.
+- Routing: `/`, `/demo`, `/privacy`, and `/terms` returned 200 with exact
+  titles/canonicals and legal links. `/missing-sheet-round-5` returned HTTP 404
+  with the designed shell and recovery action.
+- Factory verifier: [verify.json](evidence/polish-5-live/verify.json) records a
+  954 ms load, no console errors, one h1/main, English language, alt text, and
+  labelled buttons.
+- Mobile Lighthouse: [report](evidence/polish-5-live/lighthouse-mobile.json)
+  scored 100 performance, 100 accessibility, 100 best practices, and 100 SEO;
+  FCP 0.9 s, LCP 1.5 s, CLS 0, TBT 20 ms.
 
-## Known gaps
+Visual evidence: [cold demo preview](evidence/polish-5-live/demo-preview-mobile-cold.png),
+[matching first live prompt](evidence/polish-5-live/demo-started-mobile-cold.png),
+and [true 404](evidence/polish-5-live/404-mobile-cold.png).
 
-F-5-1 is the only open review finding.
+## Deploy
+
+The work order command was run exactly:
+
+```sh
+npm ci && npm test && npm run build
+/opt/fleet/lib/deploy-static.sh flex-practice-queue dist
+```
+
+The deployment reused the existing `sf-flex-practice-queue` Static Web App in
+`centralus`, uploaded the 401,303-byte artifact, reported `Succeeded`, and
+served the custom HTTPS domain with status 200.
+
+## Known gaps and next steps
+
+None. There are no unresolved review findings, test failures, accessibility
+issues, privacy exceptions, deployment defects, or deferred minor items.
