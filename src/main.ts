@@ -51,7 +51,7 @@ function pricingSection(): string {
 function legalPage(kind: 'privacy' | 'terms'): string {
   const privacy = kind === 'privacy';
   return shell(`<article class="legal blueprint-grid"><p class="drawing-label">${privacy ? 'Privacy policy' : 'Terms'} · updated 28 August 2026</p><h1>${privacy ? 'Your practice data stays local' : 'Terms for using this practice tool'}</h1>
-  ${privacy ? `<h2>Data on your device</h2><p>Prompts, tags, rounds, plans, and your license token stay in browser storage on this device.</p><h2>CSV files</h2><p>The app reads the CSV you choose. It does not change that file or contact your flashcard schedule.</p><h2>License checks</h2><p>If you save a paid license, the app sends only that token to the Sociobot billing API at most once each day. No prompt content is sent.</p><h2>Delete or export</h2><p>Use the practice queue to export prompts or erase local practice data. Clearing browser storage also removes it.</p>` : `<h2>Use of the app</h2><p>You may use the app for personal or commercial study. Keep an exported copy of prompts you cannot replace.</p><h2>One-time license</h2><p>The $9 license adds named round plans. Checkout opens on Sociobot after you choose to buy.</p><h2>No learning guarantee</h2><p>The app helps you choose optional practice. It does not promise a test score or replace your flashcard schedule.</p><h2>Changes and support</h2><p>We may improve these terms with a new date above. Contact <a href="mailto:support@sociobot.in">support@sociobot.in</a> for billing or product help.</p>`}</article>`);
+  ${privacy ? `<h2>Data on your device</h2><p>Prompts, tags, rounds, plans, and your license token stay in browser storage on this device.</p><h2>CSV files</h2><p>The app reads the CSV you choose. It does not change that file or contact your flashcard schedule.</p><h2>License checks</h2><p>If you save a paid license, the app sends only that token to the Sociobot billing API at most once each day. No prompt content is sent.</p><h2>Delete or export</h2><p>Use the practice queue to export prompts or erase local practice data. Clearing browser storage also removes it.</p>` : `<h2>Use of the app</h2><p>You may use the app for personal or commercial study. Keep an exported copy of prompts you cannot replace.</p><h2>One-time license</h2><p>The $9 license adds named round plans. Checkout opens on Sociobot after you choose to buy.</p><h2>No learning guarantee</h2><p>The app helps you choose optional practice. It does not promise a test score or replace your flashcard schedule.</p><h2>Changes and support</h2><p>We may improve these terms with a new date above. Contact <a class="touch-link support-link" href="mailto:support@sociobot.in">support@sociobot.in</a> for billing or product help.</p>`}</article>`);
 }
 
 function notFound(): string {
@@ -121,8 +121,8 @@ class PracticeApp {
     const filteredCount = this.filtered().length;
     this.root.innerHTML = `<div class="builder-panel">
       <section class="import-zone" aria-labelledby="import-heading"><div><span class="step-number">01</span><h3 id="import-heading">Add prompts</h3></div>
-        <label class="file-button" for="csv-file">Import CSV</label><input class="visually-hidden" id="csv-file" type="file" accept=".csv,text/csv,.apkg,application/apkg"><p>Columns: <code>prompt, answer, tags</code>. For Anki, <a href="https://docs.ankiweb.net/exporting.html" rel="external">export a front, back, tags CSV first <span class="visually-hidden">(external site)</span></a>. This app cannot read .apkg packages.</p>
-        <details><summary>Add one prompt</summary><form id="prompt-form"><label for="new-prompt">Prompt</label><textarea id="new-prompt" required rows="2"></textarea><label for="new-answer">Answer</label><textarea id="new-answer" rows="2"></textarea><button class="button secondary" type="submit" aria-label="Add prompt">Add prompt</button></form></details><p id="import-status" class="form-status" role="status"></p>
+        <label class="file-button" for="csv-file">Import CSV</label><input class="visually-hidden" id="csv-file" type="file" accept=".csv,text/csv,.apkg,application/apkg"><p>Columns: <code>prompt, answer, tags</code>. For Anki, <a class="touch-link anki-help-link" href="https://docs.ankiweb.net/exporting.html" rel="external">export a front, back, tags CSV first <span class="visually-hidden">(external site)</span></a>. This app cannot read .apkg packages.</p>
+        <details><summary>Add one prompt</summary><form id="prompt-form"><label for="new-prompt">Prompt</label><textarea id="new-prompt" required rows="2"></textarea><label for="new-answer">Answer</label><textarea id="new-answer" rows="2"></textarea><button class="button secondary" type="submit" aria-label="Add prompt">Add prompt</button></form></details><p id="import-status" class="form-status" role="status" aria-live="polite" aria-atomic="true"></p>
       </section>
       <section class="round-builder" aria-labelledby="round-heading"><div><span class="step-number">02</span><h3 id="round-heading">Choose the mix</h3></div>
         <fieldset><legend>Use prompts tagged</legend><div class="segmented">${(['all', ...tags] as const).map(tag => `<button type="button" data-filter="${tag}" aria-pressed="${this.filter === tag}">${tag === 'all' ? 'Show all prompts' : `Show ${tag === 'today' ? 'today’s' : tag} prompts`}</button>`).join('')}</div></fieldset>
@@ -152,10 +152,14 @@ class PracticeApp {
       catch (error) { this.status(error instanceof Error ? error.message : 'The CSV could not be read. Check it and try again.', true); }
     });
     this.root.querySelector<HTMLFormElement>('#prompt-form')?.addEventListener('submit', async event => {
-      event.preventDefault(); const prompt = this.root.querySelector<HTMLTextAreaElement>('#new-prompt')!.value.trim(); const answer = this.root.querySelector<HTMLTextAreaElement>('#new-answer')!.value.trim();
-      if (!prompt) return;
+      event.preventDefault(); const promptInput = this.root.querySelector<HTMLTextAreaElement>('#new-prompt')!; const prompt = promptInput.value.trim(); const answer = this.root.querySelector<HTMLTextAreaElement>('#new-answer')!.value.trim();
+      if (!prompt) { promptInput.value = ''; promptInput.setAttribute('aria-invalid', 'true'); promptInput.setAttribute('aria-describedby', 'import-status'); this.status('Enter a prompt before adding it.', true); promptInput.focus(); return; }
       const item: PromptItem = { id: crypto.randomUUID(), prompt, answer, tags: ['today'], source: 'manual', createdAt: Date.now() };
       await this.store.savePrompts([item]); this.items.push(item); this.render(); this.status('Prompt added and marked today.');
+    });
+    this.root.querySelector<HTMLTextAreaElement>('#new-prompt')?.addEventListener('input', event => {
+      const input = event.currentTarget as HTMLTextAreaElement;
+      input.removeAttribute('aria-invalid'); input.removeAttribute('aria-describedby');
     });
     this.root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(button => button.addEventListener('click', () => { this.filter = button.dataset.filter as Tag | 'all'; this.render(); }));
     this.root.querySelector<HTMLSelectElement>('#round-count')?.addEventListener('change', event => { this.count = Number((event.target as HTMLSelectElement).value); });

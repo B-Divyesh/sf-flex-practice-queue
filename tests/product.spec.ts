@@ -199,6 +199,61 @@ test('mobile interactive targets meet the 44px touch baseline', async ({ page })
   assertTargets(await targetBoxes());
 });
 
+test('200% text size reflows the landing and demo controls within a 390px viewport', async ({ page }) => {
+  const expectWithinViewport = async (selector: string) => {
+    const box = await page.locator(selector).boundingBox();
+    expect(box, `${selector} box`).not.toBeNull();
+    expect(box!.x, `${selector} left edge`).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width, `${selector} right edge`).toBeLessThanOrEqual(390);
+  };
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.waitForFunction(() => !document.querySelector('#practice-app')?.textContent?.includes('Opening'));
+  await page.evaluate(() => { document.documentElement.style.fontSize = '32px'; });
+  expect(await page.locator('html').evaluate(node => node.scrollWidth)).toBe(390);
+  await expectWithinViewport('.hero h1');
+  await expectWithinViewport('#license-token');
+  await expectWithinViewport('#license-form button');
+
+  await page.goto('/demo');
+  await page.waitForFunction(() => !document.querySelector('#practice-app')?.textContent?.includes('Loading'));
+  await page.evaluate(() => { document.documentElement.style.fontSize = '32px'; });
+  expect(await page.locator('html').evaluate(node => node.scrollWidth)).toBe(390);
+  await expectWithinViewport('#new-prompt');
+  await expectWithinViewport('#plan-name');
+  await expectWithinViewport('#start-round');
+});
+
+test('a manual prompt that is empty after trimming announces a recovery error', async ({ page }) => {
+  await page.goto('/demo');
+  await page.locator('#csv-file').setInputFiles(fixturePath);
+  await expect(page.locator('#import-status')).toHaveText('2 prompts imported. The source file was not changed.');
+  await page.locator('summary').click();
+  await page.locator('#new-prompt').fill('   ');
+  await page.getByRole('button', { name: 'Add prompt' }).click();
+
+  await expect(page.locator('#import-status')).toHaveText('Enter a prompt before adding it.');
+  await expect(page.locator('#import-status')).toHaveAttribute('aria-live', 'polite');
+  await expect(page.locator('#new-prompt')).toHaveValue('');
+  await expect(page.locator('#new-prompt')).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.locator('#new-prompt')).toHaveAttribute('aria-describedby', 'import-status');
+  await expect(page.locator('#new-prompt')).toBeFocused();
+  await expect(page.locator('.prompt-list > li')).toHaveCount(10);
+});
+
+test('inline Anki help and support links meet the 44px touch baseline', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [route, selector] of [['/', '.anki-help-link'], ['/demo', '.anki-help-link'], ['/terms', '.support-link']]) {
+    await page.goto(route);
+    if (route === '/demo') await page.waitForFunction(() => !document.querySelector('#practice-app')?.textContent?.includes('Loading'));
+    const box = await page.locator(selector).boundingBox();
+    expect(box, `${route} ${selector} box`).not.toBeNull();
+    expect(box!.width, `${route} ${selector} width`).toBeGreaterThanOrEqual(44);
+    expect(box!.height, `${route} ${selector} height`).toBeGreaterThanOrEqual(44);
+  }
+});
+
 test('@claim:offline-reload works offline after the first visit', async ({ page, context }) => {
   await page.goto('/demo');
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
