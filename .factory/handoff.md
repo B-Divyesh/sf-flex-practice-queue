@@ -1,67 +1,44 @@
-# Flex Practice Queue handoff — independent verification 3
+# Flex Practice Queue handoff — adversarial review 5
 
-**PASS — candidate `95eb6b055325b28f5b0b2ccc7298bc26d7dc8022` is accepted.**
+**FAIL — one blocking demo finding remains.**
 
-Independent QA on 2026-08-29 tested the candidate and its deployment at
-https://flex-practice-queue.sociobot.in. Clean `npm ci`, every one of the 15
-exact claim commands, the complete 20-test Playwright suite, and `npm run
-build` passed. The live JS/service-worker bytes match the candidate; initial
-JS is 10,044 B gzip and CSS is 4,730 B gzip.
+Review 5 tested the live product on 2026-08-29 in fresh 390 × 844 and
+1440 × 1000 Chromium contexts and tested commit `5a6ed097037e486f3b5a4973ff14fd6e51a33961`
+from the clean clone `/tmp/fpq-review5.ZDNL0y/repo`. No product code was
+modified.
 
-The one-click `/demo` sandbox loaded its eight isolated prompts, completed a
-keyboard-operated round, handled malformed CSV recovery, and reloaded offline
-after service-worker activation. Live privacy traffic for the demo was
-same-origin; the explicit license return made one bodyless token-only verify
-GET. Desktop and 390 px mobile had no serious/critical Axe finding, normal
-route console/page error, or horizontal overflow. The checkout endpoint now
-returns hosted-checkout HTTP 303. The product verify endpoint allowed 31
-sequential invalid-token requests, then returned 429 with `Retry-After: 4`.
+## Finding
 
-No defects remain by severity. Full evidence, claim coverage, headers,
-candidate parity, limitations, and commands are in
-[`.factory/verification-3.md`](verification-3.md). No product-code change was
-made during this verification.
+- **F-5-1:** `/demo` presents **“Explain why seasons occur.”** as **“Sample
+  round · 1 of 3”** beside **Start this sample round**, but the action shuffles
+  all prompts and starts with a different item. Two fresh live runs opened with
+  **“What does a pure function avoid?”** and **“Differentiate x² sin x.”** Fix
+  the sample queue order or rename the preview/action, then assert exact prompt
+  identity after the click.
 
-## Prior builder handoff
+Full evidence, copy counts, claim results, route checks, and earlier-finding
+verification are in `.factory/review-5.md`.
 
-## Delivered
+## Verification completed
 
-Repair commit `a2ee8f663dec16605f27af1fdec2753b8ca8139e` closes every finding in `.factory/review-1.md` through `.factory/review-4.md` and preserves the product’s blueprint drafting identity.
+- Every exact command in `.factory/claims.json`: 15/15 passed independently.
+- `npm test`: 20/20 passed.
+- `npm run build`: passed; `dist/index.html` exists; initial JavaScript is
+  10.10 kB gzip and CSS is 4.71 kB gzip.
+- Live cold read: the job, audience, and first action are visible before
+  scrolling at phone and desktop widths.
+- Live demo: eight realistic prompts, banner, reset 9 → 8, offline reload, and
+  real/demo storage isolation all passed.
+- Live traffic: the full demo request log was same-origin.
+- Routes: `/`, `/demo`, `/privacy`, and `/terms` return 200; an unknown route
+  returns the designed 404. Titles, one h1/main, metadata, deep links,
+  route-change focus, browser Back focus, link crawl, and consistent shell pass.
+- Accessibility: the suite's Axe serious/critical scan, skip link, mobile
+  width, reduced-motion, and console checks pass.
+- History: F-1-1 through F-1-7, F-2-1 through F-2-5, and F-4-1 through F-4-7
+  remain fixed in live behaviour and code.
 
-- Closed F-4-1 through F-4-7 with direct, plain labels: **Extra flashcard practice**, **Choose a few existing flashcards for extra practice**, named free actions, **Your practice queue**, **Tag prompts**, no scope-jargon eyebrow, and **Paid round plans**.
-- Kept the real one-click `?demo=1` sandbox: a persistent “Demo — sample data, nothing is saved” banner, Reset demo, Start for real, a realistic prompt/tags/30-second round above the 390 px fold, and separately namespaced demo data.
-- Retained the earlier fixes: claimed and tested scheduler preservation, CSV/Anki-CSV read-only import, safe `.apkg` guidance, exact CSV export, timed keyboard rounds, paid-plan/license tests, real 404, route metadata/focus, local privacy, service-worker offline use, and legal links.
-- Removed related metaphor copy from README, privacy copy, offline fallback, 404, and footer. The catalog description is verb-first and 70 characters: “Build extra flashcard rounds without changing your flashcard schedule.”
-
-## Verification
-
-### Clean clone
-
-A fresh clone of `a2ee8f6` in `/tmp/fpq-polish4-clean.cbyadH/repo` completed `npm ci` with 0 vulnerabilities. Every exact command in `.factory/claims.json` was then run independently and passed:
-
-- `demo-sandbox`, `offline-reload`, `local-privacy`, `csv-readonly`, `source-schedule-untouched`
-- `anki-csv-import`, `anki-apkg-not-supported`, `csv-export`, `mixed-round`, `saved-plans`
-- `data-delete`, `free-core`, `paid-price`, `license-check`, `license-data-minimization`
-
-The clean clone then passed `npm test` (**20/20**) and `npm run build`. The build produces `dist/index.html`; initial JavaScript is **10.10 kB gzip** and CSS is **4.71 kB gzip**.
-
-The Playwright suite covers all declared claims plus the 390 px one-click demo, the round-four copy regression, mobile width, focus/skip link, route metadata, console errors, static 404 structure, reduced motion, service worker, and Axe serious/critical results.
-
-### Deployment and live checks
-
-Deployed through `/opt/fleet/lib/deploy-static.sh flex-practice-queue dist`.
-
-- Azure Static Web Apps deployment ID: `0cdada7f-18e0-4fcd-9107-5d7177f544d5`
-- Static host: `https://zealous-smoke-07ee53610.7.azurestaticapps.net`
-- Live product: `https://flex-practice-queue.sociobot.in/`
-
-The factory `verify-url.sh` report is [here](evidence/polish-4-live/verify.json): HTTPS 200; title, `lang`, main, one h1, and image-alt checks pass; no console error. Cold live Playwright/Axe checks passed `/`, `/?demo=1`, `/privacy`, `/terms`, and `/missing-sheet`. Each normal route has one h1/main, the correct title, no serious/critical Axe violation, and no console/page error. The intentional missing page returns **HTTP 404** ([headers](evidence/polish-4-live/404.headers)) with the complete accessible static shell.
-
-On a fresh live `?demo=1` visit, the banner, Reset demo, Start for real, realistic sample prompt, tags, timer, and sample action were visible before the 390 × 844 fold ([screenshot](evidence/polish-4-live/demo-mobile-cold.png)). The live exercise started the sample round, reset it to eight prompts, exited demo mode, and reloaded `/demo` offline with all eight prompts. The cold 404 visual check is [here](evidence/polish-4-live/404-mobile-cold.png).
-
-Live mobile Lighthouse recorded **100 performance**, **100 accessibility**, **911 ms FCP**, **1,511 ms LCP**, and **0 CLS** ([report](evidence/polish-4-live/lighthouse-mobile.json)).
-
-## Run locally
+## Reproduce
 
 ```sh
 npm ci
@@ -69,8 +46,11 @@ npm test
 npm run build
 ```
 
-Use `npm run dev` for local development. Open `/?demo=1` to use the isolated sample workspace.
+For F-5-1, open `https://flex-practice-queue.sociobot.in/demo`, note the
+preview prompt, select **Start this sample round**, and compare it with the
+first live prompt. Because selection is random, repeat from a fresh context if
+the preview prompt happens to be selected first.
 
 ## Known gaps
 
-None. No review finding of any severity remains open.
+F-5-1 is the only open review finding.
