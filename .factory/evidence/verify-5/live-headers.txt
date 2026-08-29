@@ -1,5 +1,5 @@
 URL /
-HTTP/2 200 
+HTTP/2 200
 content-type: text/html
 date: Sat, 29 Aug 2026 12:17:45 GMT
 accept-ranges: bytes
@@ -16,7 +16,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /assets/index-DVfgBX4E.js
-HTTP/2 200 
+HTTP/2 200
 content-type: text/javascript
 date: Sat, 29 Aug 2026 12:17:45 GMT
 accept-ranges: bytes
@@ -33,7 +33,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /assets/index-CZ8UhKpB.css
-HTTP/2 200 
+HTTP/2 200
 content-type: text/css
 date: Sat, 29 Aug 2026 12:17:46 GMT
 accept-ranges: bytes
@@ -50,7 +50,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /assets/index-DVfgBX4E.js.map
-HTTP/2 200 
+HTTP/2 200
 content-type: application/octet-stream
 date: Sat, 29 Aug 2026 12:17:46 GMT
 accept-ranges: bytes
@@ -67,7 +67,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /art/blueprint-practice.webp
-HTTP/2 200 
+HTTP/2 200
 content-type: image/webp
 date: Sat, 29 Aug 2026 12:17:46 GMT
 accept-ranges: bytes
@@ -84,7 +84,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /manifest.webmanifest
-HTTP/2 200 
+HTTP/2 200
 content-type: application/manifest+json
 date: Sat, 29 Aug 2026 12:17:46 GMT
 accept-ranges: bytes
@@ -101,7 +101,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /sw.js
-HTTP/2 200 
+HTTP/2 200
 content-type: text/javascript
 date: Sat, 29 Aug 2026 12:17:47 GMT
 accept-ranges: bytes
@@ -118,7 +118,7 @@ content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'
 permissions-policy: camera=(), microphone=(), geolocation=()
 
 URL /verification-5-missing
-HTTP/2 404 
+HTTP/2 404
 content-type: text/html
 date: Sat, 29 Aug 2026 12:17:47 GMT
 cache-control: public, must-revalidate, max-age=30
@@ -132,4 +132,3 @@ x-xss-protection: 1; mode=block
 x-dns-prefetch-control: off
 content-security-policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in
 permissions-policy: camera=(), microphone=(), geolocation=()
-
