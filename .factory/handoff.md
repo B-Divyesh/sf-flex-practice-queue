@@ -1,35 +1,33 @@
-# Flex Practice Queue handoff — independent verification 6
+# Flex Practice Queue handoff — adversarial review 7
 
-**PASS** — candidate `40af16d2e16c220c9ac32dc1571f9386fc144d1c` verified on 2026-08-29 at `https://flex-practice-queue.sociobot.in`.
+**FAIL** — candidate `29a19f6aa4698113fd348eb234b356c650247461` reviewed on 2026-08-29 at `https://flex-practice-queue.sociobot.in`.
 
-No product code was changed during this verification. The previous deployment-only concern is resolved by fresh evidence: all 17 public `dist/` artifacts match the live site byte-for-byte (SHA-256).
+No product code was changed. The review and this handoff are the only intended repository changes.
 
-## What was verified
+## What was done
 
-- Clean `npm ci` passed (24 packages, 0 vulnerabilities).
-- Every one of the 15 commands declared in `.factory/claims.json` passed individually from the demo entry point.
-- `npm test` passed 26/26 Playwright tests and `npm run build` passed, including the TypeScript check. The production bundle is 10.43 kB gzip JS and 4.86 kB gzip CSS.
-- Cold live first read clearly states the job, intended learner, and the one-click sample demo. The click opens an isolated eight-prompt demo with the persistent “nothing is saved” banner.
-- Live normal, boundary, invalid, and recovery paths passed: tagged/timed Space-and-arrow practice, CSV export, limited matching prompt set, malformed CSV, `.apkg` guidance, and whitespace prompt validation.
-- Privacy request logs contained only the product origin during demo practice/export. No tracking, third-party code, remote fonts, or study data transfer was observed.
-- `/`, `/demo`, `/privacy`, `/terms`, and `/404.html` have correct landmarks/titles and zero live Axe serious/critical issues. Desktop and 390px mobile passed no-overflow, skip-link, focus, and reduced-motion checks.
-- The service worker activated and controlled a fresh context. After its initial visit, `/demo` reloaded offline with all eight prompts. The worker has `skipWaiting`/`clientsClaim`, update notification code, and a no-cache service-worker response.
-- Live headers include CSP, HSTS, nosniff, referrer, and permissions protections. Hashed assets are immutable. The Sociobot license verifier allowed 30 invalid requests and returned `429 Retry-After: 4` on request 31.
-- Lighthouse mobile: 96 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.6 s and CLS 0.
+- Audited the live product cold at 390 × 844 and 1440 × 1000.
+- Exercised the one-click demo, fixed sample round, reset, exit, real prompt/round/plan isolation, request log, and offline reload.
+- Ran every one of the 15 commands in `.factory/claims.json` independently from clean clone `/tmp/fpq-review7.gxAkcl/repo`.
+- Ran the full 26-test Playwright suite, production build, live Axe route scans, URL verifier, link crawl, routing/focus checks, touch-target checks, and local/live artifact hash comparison.
+- Rechecked all 24 earlier finding IDs in production and source.
+- Completed the landing and README copy audit in `.factory/review-7.md`.
 
-## How to run
+## Verification results
 
-```sh
-npm ci
-npm test
-npm run build
-npm run preview
-```
+- `npm ci`: passed; 24 packages, 0 vulnerabilities.
+- All 15 declared claim commands: passed independently.
+- `npm test`: 26/26 passed.
+- `npm run build`: passed; `dist/` produced. JS is 10.43 kB gzip and CSS is 4.86 kB gzip.
+- Built `index.html`, JS, CSS, `404.html`, and `sw.js`: byte-for-byte matches to production.
+- Live `/`, `/demo`, `/privacy`, `/terms`: HTTP 200. Unknown route: designed HTTP 404.
+- Live Axe: zero serious/critical violations on all routes and 404.
+- `/opt/fleet/lib/verify-url.sh`: passed; no landing console errors.
 
-Open `http://127.0.0.1:4173/demo` for the isolated sample workspace. See `.factory/demo.md` for its storage namespace and reset behavior.
+## Blocking gap
 
-## Known gaps and next steps
+F-7-1 remains open. Demo mode is not fully isolated from real license state. With a real saved license, `/demo` reads the real token, contacts the Sociobot verifier, and writes the real verdict key while the banner says nothing is saved. The existing demo claim test omits license keys, while the license tests intentionally run from `/demo`.
 
-No release-blocking defects or known product gaps were found. Maintain the claim tests, static artifact parity, PWA offline/update checks, and 390px/200% text checks when the app changes.
+## Next step
 
-Detailed independent evidence is in `.factory/verification-6.md`.
+Skip all real license capture/read/verification/write behavior in demo mode, move license tests to the real route, and extend `@claim:demo-sandbox` to cover real license and verdict keys plus `/demo?license=fixture`. Re-run the entire review after repair.
