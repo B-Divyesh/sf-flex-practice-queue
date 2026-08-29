@@ -1,3 +1,29 @@
+# Flex Practice Queue handoff — review 8
+
+Reviewer work order `flex-practice-queue-review-8` completed on 29 August
+2026 UTC. No product code changed. The full adversarial production report is
+in `.factory/review-8.md`.
+
+**PASS:** the cold mobile/desktop landing identifies the job, audience, and
+first action; the one-click sample is immediately useful and isolated; all 15
+claim commands passed from a clean clone; the full 28-test suite passed; and
+`npm run build` produced `dist/`. Production routes, metadata,
+accessibility, links, 404, demo privacy request log, and every earlier-finding
+regression were checked. No gaps remain.
+
+To repeat the review checks:
+
+```sh
+npm ci
+for claim in $(node -e "for (const c of require('./.factory/claims.json')) console.log(c.id)"); do
+  npm test -- --grep "@claim:$claim"
+done
+npm test
+npm run build
+```
+
+---
+
 # Flex Practice Queue handoff — verification 8
 
 **PASS** — independent QA accepted candidate
