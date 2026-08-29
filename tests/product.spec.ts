@@ -95,7 +95,7 @@ test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched throug
   expect(databaseNames).not.toContain('demo:flex-practice-queue');
 });
 
-test('demo shows a real sample prompt in the first 390px viewport and starts it in one click', async ({ page }) => {
+test('demo shows and starts the same fixed sample round in the first 390px viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await page.getByRole('link', { name: 'Try it with sample data' }).click();
@@ -105,9 +105,17 @@ test('demo shows a real sample prompt in the first 390px viewport and starts it 
   await expect(preview).toBeVisible();
   const box = await preview.boundingBox();
   expect(box?.y).toBeLessThan(844);
+  const previewPrompt = (await preview.textContent())!;
   await page.getByRole('button', { name: 'Start this sample round' }).click();
   await expect(page.getByRole('heading', { name: 'Recall the answer' })).toBeVisible();
   await expect(page.getByText('Live round · 1 of 3')).toBeVisible();
+  await expect(page.locator('.prompt-sheet > p')).toHaveText(previewPrompt);
+
+  for (const nextPrompt of ['What does a pure function avoid?', 'Use “serendipity” in a sentence.']) {
+    await page.getByRole('button', { name: /Reveal answer/ }).click();
+    await page.getByRole('button', { name: /Mark as got it/ }).click();
+    await expect(page.locator('.prompt-sheet > p')).toHaveText(nextPrompt);
+  }
 });
 
 test('landing copy names the job, free tools, and paid feature in plain words', async ({ page }) => {
@@ -280,12 +288,25 @@ test('@claim:paid-price starts a hosted Sociobot checkout for the one-time price
 test('routes, mobile layout, metadata, and accessibility pass', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
-  for (const route of ['/', '/demo', '/privacy', '/terms', '/404.html']) {
-    await page.goto(route);
+  const routes = [
+    { path: '/', title: 'Flex Practice Queue — Build short practice rounds', canonical: '/' },
+    { path: '/demo', title: 'Demo — Flex Practice Queue', canonical: '/demo' },
+    { path: '/privacy', title: 'Privacy — Flex Practice Queue', canonical: '/privacy' },
+    { path: '/terms', title: 'Terms — Flex Practice Queue', canonical: '/terms' },
+    { path: '/404.html', title: 'Page not found — Flex Practice Queue', canonical: '/404' }
+  ];
+  for (const route of routes) {
+    await page.goto(route.path);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
-    await expect(page).toHaveTitle(/Flex Practice Queue/);
+    await expect(page).toHaveTitle(route.title);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://flex-practice-queue.sociobot.in${route.canonical}`);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /\S/);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://flex-practice-queue.sociobot.in/art/social-card.webp');
+    const footer = page.getByRole('navigation', { name: 'Footer navigation' });
+    await expect(footer.getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
+    await expect(footer.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
     const results = await new AxeBuilder({ page: page as never }).analyze();
     expect(results.violations.filter(item => ['serious', 'critical'].includes(item.impact || ''))).toEqual([]);
   }
@@ -294,11 +315,24 @@ test('routes, mobile layout, metadata, and accessibility pass', async ({ page })
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toContainText('Demo');
   await expect(page.getByRole('navigation', { name: 'Footer navigation' })).toContainText('Privacy');
   expect(consoleErrors).toEqual([]);
+
+  await page.goto('/');
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Privacy' }).click();
+  await expect(page).toHaveURL('/privacy');
+  await expect(page.getByRole('heading', { level: 1, name: 'Your practice data stays local' })).toBeFocused();
+  await expect(page.locator('.route-status')).toHaveText('Privacy — Flex Practice Queue');
+  await page.goBack();
+  await expect(page).toHaveURL('/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Build a useful practice round' })).toBeFocused();
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/demo');
   await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 390);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  expect(await page.locator('html').evaluate(node => getComputedStyle(node).scrollBehavior)).toBe('auto');
 });
 
 test('@claim:license-check stores and checks a returned license at most daily', async ({ page }) => {

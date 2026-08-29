@@ -79,4 +79,4 @@ The landing copy was audited after polish round 4. Counts use whitespace-delimit
 | Reusable configuration | round plan |
 | Paid credential | license |
 
-Catalog description: “Build extra flashcard rounds without changing your flashcard schedule.” It is verb-first and 70 characters.
+Catalog description: “Build short flashcard rounds without changing your flashcard schedule.” It is verb-first and 66 characters.

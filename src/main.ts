@@ -187,10 +187,14 @@ class PracticeApp {
   }
   private startRound() {
     const choices = this.filtered(); if (!choices.length) return;
-    this.queue = shuffle(choices).slice(0, this.count); this.current = 0; this.again = 0; this.startedAt = Date.now(); this.remaining = this.seconds; this.revealed = false; this.renderRound(); this.startTimer();
+    this.beginRound(shuffle(choices).slice(0, this.count), this.seconds);
   }
   startSampleRound() {
-    this.filter = 'all'; this.count = 3; this.seconds = 30; this.startRound();
+    this.filter = 'all'; this.count = 3; this.seconds = 30;
+    this.beginRound(samplePrompts().slice(0, 3), this.seconds);
+  }
+  private beginRound(queue: PromptItem[], seconds: number) {
+    this.queue = queue; this.current = 0; this.again = 0; this.startedAt = Date.now(); this.remaining = seconds; this.revealed = false; this.renderRound(); this.startTimer();
   }
   private startTimer() { clearInterval(this.timer); this.timer = window.setInterval(() => { this.remaining--; const output = this.root.querySelector('#time-left'); if (output) output.textContent = String(Math.max(0, this.remaining)); const dial = this.root.querySelector<HTMLElement>('.timer-dial'); if (dial) dial.style.setProperty('--progress', `${(this.remaining / this.seconds) * 360}deg`); if (this.remaining <= 0) { clearInterval(this.timer); this.revealed = true; this.renderRound(); } }, 1000); }
   private renderRound() {
