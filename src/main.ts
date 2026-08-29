@@ -11,7 +11,7 @@ let activePractice: PracticeApp | undefined;
 
 const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]!);
 const pathTitle: Record<string, string> = {
-  '/': 'Flex Practice Queue — Build short practice rounds',
+  '/': 'Flex Practice Queue — Short flashcard practice rounds',
   '/demo': 'Demo — Flex Practice Queue',
   '/privacy': 'Privacy — Flex Practice Queue',
   '/terms': 'Terms — Flex Practice Queue',
@@ -21,7 +21,7 @@ function shell(content: string, demo = false): string {
   return `
     <a class="skip-link" href="#main">Skip to main content</a>
     ${demo ? `<aside class="demo-banner" aria-label="Demo mode"><span><strong>Demo</strong> — sample data, nothing is saved</span><span><button class="text-button" id="reset-demo">Reset demo</button><button class="text-button" id="leave-demo">Start for real</button></span></aside>` : ''}
-    <header class="site-header"><a class="wordmark route-link" href="/" aria-label="Flex Practice Queue home"><svg aria-hidden="true" viewBox="0 0 40 40"><path d="M5 5h30v30H5zM11 20h18M20 11v18"/></svg><span>Flex Practice<br><b>Queue</b></span></a><nav aria-label="Main navigation"><a class="route-link" href="/demo">Demo</a><a href="${location.pathname === '/' ? '#how' : '/#how'}">How it works</a><a class="route-link" href="/privacy">Privacy</a></nav></header>
+    <header class="site-header"><a class="wordmark route-link" href="/" aria-label="Flex Practice Queue home"><svg aria-hidden="true" viewBox="0 0 40 40"><path d="M5 5h30v30H5zM11 20h18M20 11v18"/></svg><span>Flex Practice<br><b>Queue</b></span></a><nav aria-label="Main navigation"><a class="route-link" href="/demo">Demo</a><a class="route-link" href="${location.pathname === '/' ? '#how' : '/#how'}">How it works</a><a class="route-link" href="/privacy">Privacy</a></nav></header>
     <main id="main" tabindex="-1">${content}</main>
     <footer><p><strong>Flex Practice Queue</strong> — extra practice without changing your flashcard schedule.</p><nav aria-label="Footer navigation"><a class="route-link" href="/privacy">Privacy</a><a class="route-link" href="/terms">Terms</a><a href="https://sociobot.in" rel="external">Built by Param Factory <span class="visually-hidden">(external site)</span></a></nav><p>${buildId} · Original generated artwork</p></footer>
     <div class="route-status visually-hidden" aria-live="polite"></div>
@@ -31,7 +31,7 @@ function shell(content: string, demo = false): string {
 function landing(): string {
   return shell(`
     <section class="hero blueprint-grid">
-      <div class="hero-copy"><p class="drawing-label">Extra flashcard practice</p><h1>Build a useful practice round</h1><p class="lede">For learners with spare minutes who want extra practice without changing their flashcard schedule.</p>
+      <div class="hero-copy"><p class="drawing-label">Extra flashcard practice</p><h1>Build a short flashcard practice round</h1><p class="lede">For learners with spare minutes who want extra practice without changing their flashcard schedule.</p>
         <div class="hero-action"><a class="button primary route-link" href="/?demo=1">Try it with sample data</a><span>Loads 8 prompts in a separate demo.</span></div>
         <ul class="plain-facts" aria-label="Product facts"><li>Works offline after the first visit.</li><li>Your study data stays in this browser.</li><li>Import, tag, practice, and export are free. Saved round plans cost $9 once.</li></ul>
       </div>
@@ -129,12 +129,12 @@ class PracticeApp {
         <div class="settings-row"><label>Prompt count<select id="round-count">${[3, 5, 8, 12].map(n => `<option ${this.count === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label><label>Seconds each<select id="round-seconds">${[15, 30, 60, 120].map(n => `<option ${this.seconds === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label></div>
         <p class="selection-note"><b>${filteredCount}</b> ${filteredCount === 1 ? 'prompt' : 'prompts'} fit this mix.</p>
         ${this.canSavePlans ? `<label class="plan-name" for="plan-name">Plan name<input id="plan-name" maxlength="40" placeholder="Morning weak cards"></label>` : ''}
-        <div class="builder-actions"><button id="start-round" class="button primary" ${filteredCount ? '' : 'disabled'}>Start mixed round</button><button id="save-plan" class="button secondary">${this.canSavePlans ? 'Save round plan' : 'Save plan · paid'}</button></div>
+        <div class="builder-actions"><button id="start-round" class="button primary" ${filteredCount ? '' : 'disabled'}>Start mixed round</button>${this.canSavePlans ? '<button id="save-plan" class="button secondary">Save round plan</button>' : '<a class="button secondary" href="#price-heading">View $9 saved plans</a>'}</div>
       </section>
     </div>
     <section class="library" aria-labelledby="library-heading"><div class="library-head"><div><span class="step-number">03</span><h3 id="library-heading">Prompt queue <span>${this.items.length}</span></h3></div><div class="library-actions"><button id="export-csv" class="text-button" ${this.items.length ? '' : 'disabled'}>Export CSV</button><button id="clear-data" class="text-button danger" ${this.items.length ? '' : 'disabled'}>Delete local data</button></div></div>
       ${this.items.length ? `<ol class="prompt-list">${this.items.map(item => `<li data-id="${item.id}"><div class="prompt-copy"><b>${escapeHtml(item.prompt)}</b><span>${escapeHtml(item.answer || 'No answer supplied')}</span></div><fieldset><legend class="visually-hidden">Tags for ${escapeHtml(item.prompt)}</legend>${tags.map(tag => `<label class="tag ${tag}"><input type="checkbox" data-tag="${tag}" ${item.tags.includes(tag) ? 'checked' : ''}><span>${tag}</span></label>`).join('')}</fieldset><button class="icon-button delete-prompt" aria-label="Delete ${escapeHtml(item.prompt)}">×</button></li>`).join('')}</ol>` : `<div class="empty-state"><div class="empty-dial" aria-hidden="true">0</div><div><h4>Your queue is empty</h4><p>Import a CSV or add one prompt. Your tagged prompts will appear here.</p>${!this.demo ? '<a class="route-link" href="/demo">See the sample queue</a>' : ''}</div></div>`}
-      ${this.plans.length ? `<section class="saved-plans" aria-labelledby="plans-heading"><h4 id="plans-heading">Saved round plans</h4><ul>${this.plans.map(plan => `<li data-plan="${plan.id}"><span><b>${escapeHtml(plan.name)}</b><small>${plan.filter === 'all' ? 'Any tag' : plan.filter} · ${plan.count} prompts · ${plan.seconds} seconds</small></span><button class="text-button use-plan">Use plan</button><button class="icon-button delete-plan" aria-label="Delete ${escapeHtml(plan.name)}">×</button></li>`).join('')}</ul></section>` : ''}
+      ${this.plans.length ? `<section class="saved-plans" aria-labelledby="plans-heading"><h4 id="plans-heading">Saved round plans</h4><ul>${this.plans.map(plan => `<li data-plan="${plan.id}"><span><b>${escapeHtml(plan.name)}</b><small>${plan.filter === 'all' ? 'Any tag' : plan.filter} · ${plan.count} prompts · ${plan.seconds} seconds</small></span><button class="text-button use-plan">Load plan settings</button><button class="icon-button delete-plan" aria-label="Delete ${escapeHtml(plan.name)}">×</button></li>`).join('')}</ul></section>` : ''}
       ${this.rounds.length ? `<p class="round-note">Last round: ${this.rounds.at(-1)?.count} prompts · ${this.rounds.at(-1)?.again} marked again</p>` : ''}
     </section>`;
     this.bindBuilder();
@@ -232,7 +232,26 @@ async function renderRoute(push = false) {
     catch { target.innerHTML = `<section class="error-state" role="alert"><h3>Your local queue did not open</h3><p>Browser storage may be blocked. Allow site data, then try again.</p><button class="button secondary" id="retry-store">Try opening the queue</button></section>`; target.querySelector('#retry-store')?.addEventListener('click', () => renderRoute()); }
   }
   app.querySelector('#start-demo-preview')?.addEventListener('click', () => activePractice?.startSampleRound());
+  if (await focusHashDestination()) return;
   if (push) { const heading = app.querySelector<HTMLElement>('h1'); heading?.setAttribute('tabindex', '-1'); heading?.focus(); app.querySelector('.route-status')!.textContent = document.title; scrollTo(0, 0); }
+}
+
+async function focusHashDestination(): Promise<boolean> {
+  if (!location.hash) return false;
+  let id: string;
+  try { id = decodeURIComponent(location.hash.slice(1)); }
+  catch { return false; }
+  const target = document.getElementById(id);
+  if (!target) return false;
+  await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+  target.scrollIntoView({ block: 'start', behavior: 'instant' as ScrollBehavior });
+  const heading = target.matches('h1, h2, h3, h4, h5, h6') ? target : target.querySelector<HTMLElement>('h1, h2, h3, h4, h5, h6');
+  if (heading) {
+    heading.setAttribute('tabindex', '-1');
+    heading.focus({ preventScroll: true });
+    app.querySelector<HTMLElement>('.route-status')!.textContent = heading.textContent?.trim() || document.title;
+  }
+  return true;
 }
 
 function bindShell() {
@@ -258,6 +277,7 @@ renderRoute().then(async () => {
   if (verdict.valid) { await renderRoute(); toast('License verified. Saved round plans are ready.'); }
 });
 addEventListener('popstate', () => renderRoute(true));
+addEventListener('hashchange', () => { void focusHashDestination(); });
 addEventListener('offline', () => toast('You are offline. Saved prompts and practice still work.'));
 addEventListener('online', () => toast('Back online.'));
 

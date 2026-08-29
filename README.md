@@ -1,6 +1,6 @@
 # Flex Practice Queue
 
-Build short practice rounds without changing your flashcard schedule.
+Build short flashcard practice rounds without changing your flashcard schedule.
 
 Flex Practice Queue is for learners whose study time comes in short, irregular windows. It creates separate rounds for warm-ups and weak items.
 

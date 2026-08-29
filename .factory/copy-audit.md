@@ -1,13 +1,13 @@
 # Copy audit — 2026-08-29
 
-The landing copy was audited after polish round 4. Counts use whitespace-delimited visible words. No entry exceeds 22 words or uses a banned marketing term. The drafting identity remains in layout, grid rules, type, and artwork; visitor-facing labels name the task directly.
+The landing copy was audited after polish round 6. Counts use whitespace-delimited visible words. No entry exceeds 22 words or uses a banned marketing term. The drafting identity remains in layout, grid rules, type, and artwork; visitor-facing labels name the task directly.
 
 ## Landing page
 
 | Copy | Words | Result |
 | --- | ---: | --- |
 | Extra flashcard practice | 3 | Pass |
-| Build a useful practice round | 5 | Pass |
+| Build a short flashcard practice round | 6 | Pass |
 | For learners with spare minutes who want extra practice without changing their flashcard schedule. | 14 | Pass |
 | Try it with sample data | 5 | Pass |
 | Loads 8 prompts in a separate demo. | 7 | Pass |
@@ -25,7 +25,8 @@ The landing copy was audited after polish round 4. Counts use whitespace-delimit
 | Choose the mix / Use prompts tagged | 3 / 3 | Pass |
 | Show all prompts / Show warm-up prompts / Show weak prompts / Show today’s prompts | 3 / 3 / 3 / 3 | Pass |
 | Prompt count / Seconds each / Plan name | 2 / 2 / 2 | Pass |
-| Start mixed round / Save plan · paid | 3 / 3 | Pass |
+| Start mixed round / View $9 saved plans | 3 / 5 | Pass |
+| Saved round plans / Load plan settings | 3 / 3 | Pass |
 | Prompt queue / Export CSV / Delete local data | 2 / 2 / 3 | Pass |
 | Your queue is empty / Your tagged prompts will appear here. / See the sample queue | 4 / 6 / 4 | Pass |
 | How optional practice works | 4 | Pass |
@@ -60,7 +61,7 @@ The landing copy was audited after polish round 4. Counts use whitespace-delimit
 
 | Copy | Words | Result |
 | --- | ---: | --- |
-| Build short practice rounds without changing your flashcard schedule. | 9 | Pass |
+| Build short flashcard practice rounds without changing your flashcard schedule. | 10 | Pass |
 | Flex Practice Queue is for learners whose study time comes in short, irregular windows. | 14 | Pass |
 | It creates separate rounds for warm-ups and weak items. | 9 | Pass |
 | The app never writes to the selected CSV or your flashcard schedule. | 12 | Pass |
@@ -79,4 +80,4 @@ The landing copy was audited after polish round 4. Counts use whitespace-delimit
 | Reusable configuration | round plan |
 | Paid credential | license |
 
-Catalog description: “Build short flashcard rounds without changing your flashcard schedule.” It is verb-first and 70 characters.
+Catalog description: “Build short flashcard practice rounds without changing your flashcard schedule.” It is verb-first and 79 characters.

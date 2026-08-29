@@ -121,6 +121,7 @@ test('demo shows and starts the same fixed sample round in the first 390px viewp
 test('landing copy names the job, free tools, and paid feature in plain words', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByText('Extra flashcard practice', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Build a short flashcard practice round' })).toBeVisible();
   await expect(page.getByText('Choose a few existing flashcards for extra practice.', { exact: true })).toBeVisible();
   await expect(page.getByText('Import, tag, practice, and export are free. Saved round plans cost $9 once.', { exact: true })).toBeVisible();
   await expect(page.getByText('Your practice queue', { exact: true })).toBeVisible();
@@ -128,7 +129,74 @@ test('landing copy names the job, free tools, and paid feature in plain words', 
   await expect(page.getByText('Tag prompts.', { exact: true })).toBeVisible();
   await expect(page.getByText('Paid round plans', { exact: true })).toBeVisible();
   const copy = await page.locator('main').innerText();
-  expect(copy).not.toMatch(/Drawing 01|Drawing 02|rehearsal lane|Assembly notes|Mark your intent|Scope boundary|Optional paid tool|Core tools/i);
+  expect(copy).not.toMatch(/Drawing 01|Drawing 02|rehearsal lane|Assembly notes|Mark your intent|Scope boundary|Optional paid tool|Core tools|Build a useful practice round/i);
+});
+
+test('hash routes wait for the local queue before focusing the requested section', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const howHeading = page.getByRole('heading', { name: 'How optional practice works' });
+
+  await page.goto('/#how');
+  await expect(page.locator('#practice-app')).not.toContainText('Opening your local queue…');
+  await expect(howHeading).toBeFocused();
+  await expect(page.locator('.route-status')).toHaveText('How optional practice works');
+  const directBox = await howHeading.boundingBox();
+  expect(directBox?.y).toBeGreaterThanOrEqual(0);
+  expect(directBox?.y).toBeLessThan(844);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/privacy');
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'How it works' }).click();
+  await expect(page).toHaveURL('/#how');
+  await expect(page.locator('#practice-app')).not.toContainText('Opening your local queue…');
+  await expect(howHeading).toBeFocused();
+  const linkedBox = await howHeading.boundingBox();
+  expect(linkedBox?.y).toBeGreaterThanOrEqual(0);
+  expect(linkedBox?.y).toBeLessThan(900);
+
+});
+
+test('plan actions name the result they produce', async ({ page }) => {
+  await page.goto('/');
+  const planOption = page.getByRole('link', { name: 'View $9 saved plans' });
+  await expect(planOption).toHaveAttribute('href', '#price-heading');
+  await planOption.click();
+  await expect(page.getByRole('heading', { name: 'Save round plans for $9 once' })).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Save plan · paid' })).toHaveCount(0);
+
+  await page.goto('/demo');
+  await page.getByLabel('Plan name').fill('Weak sixty');
+  await page.getByRole('button', { name: 'Save round plan' }).click();
+  const load = page.getByRole('button', { name: 'Load plan settings' });
+  await expect(load).toBeVisible();
+  await load.click();
+  await expect(page.getByRole('button', { name: 'Show all prompts', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: 'Use plan' })).toHaveCount(0);
+});
+
+test('mobile interactive targets meet the 44px touch baseline', async ({ page }) => {
+  const targetBoxes = async () => page.locator('.wordmark, footer nav a, .empty-state a, .file-button, .segmented button, .builder-actions .button, .library-actions .text-button, .icon-button').evaluateAll(nodes => nodes.map(node => {
+    const rect = (node as HTMLElement).getBoundingClientRect();
+    return { name: (node as HTMLElement).innerText || (node as HTMLElement).getAttribute('aria-label') || node.tagName, x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+  }));
+  const assertTargets = (boxes: Awaited<ReturnType<typeof targetBoxes>>) => {
+    expect(boxes.length).toBeGreaterThan(0);
+    for (const box of boxes) {
+      expect(box.width, `${box.name} width`).toBeGreaterThanOrEqual(44);
+      expect(box.height, `${box.name} height`).toBeGreaterThanOrEqual(44);
+    }
+    for (let first = 0; first < boxes.length; first++) for (let second = first + 1; second < boxes.length; second++) {
+      const a = boxes[first]; const b = boxes[second];
+      expect(a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height, `${a.name} and ${b.name} overlap`).toBe(false);
+    }
+  };
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  assertTargets(await targetBoxes());
+
+  await page.goto('/404.html');
+  assertTargets(await targetBoxes());
 });
 
 test('@claim:offline-reload works offline after the first visit', async ({ page, context }) => {
@@ -247,7 +315,7 @@ test('@claim:saved-plans saves and reloads a named round plan in demo', async ({
   await page.getByRole('button', { name: 'Save round plan' }).click();
   await page.getByRole('button', { name: 'Show all prompts' }).click();
   await page.getByLabel('Prompt count').selectOption('8');
-  await page.getByRole('button', { name: 'Use plan' }).click();
+  await page.getByRole('button', { name: 'Load plan settings' }).click();
   await expect(page.getByRole('button', { name: 'Show weak prompts', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByLabel('Prompt count')).toHaveValue('3');
   await expect(page.getByLabel('Seconds each')).toHaveValue('60');
@@ -269,7 +337,7 @@ test('@claim:free-core keeps import, tagging, practice, and export free', async 
   await page.getByLabel('weak', { exact: true }).first().check();
   await expect(page.getByRole('button', { name: 'Start mixed round' })).toBeEnabled();
   await expect(page.getByRole('button', { name: 'Export CSV' })).toBeEnabled();
-  await expect(page.getByRole('button', { name: 'Save plan · paid' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'View $9 saved plans' })).toBeVisible();
 });
 
 test('@claim:paid-price starts a hosted Sociobot checkout for the one-time price', async ({ page, request }) => {
@@ -289,7 +357,7 @@ test('routes, mobile layout, metadata, and accessibility pass', async ({ page })
   const consoleErrors: string[] = [];
   page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   const routes = [
-    { path: '/', title: 'Flex Practice Queue — Build short practice rounds', canonical: '/' },
+    { path: '/', title: 'Flex Practice Queue — Short flashcard practice rounds', canonical: '/' },
     { path: '/demo', title: 'Demo — Flex Practice Queue', canonical: '/demo' },
     { path: '/privacy', title: 'Privacy — Flex Practice Queue', canonical: '/privacy' },
     { path: '/terms', title: 'Terms — Flex Practice Queue', canonical: '/terms' },
@@ -323,7 +391,7 @@ test('routes, mobile layout, metadata, and accessibility pass', async ({ page })
   await expect(page.locator('.route-status')).toHaveText('Privacy — Flex Practice Queue');
   await page.goBack();
   await expect(page).toHaveURL('/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Build a useful practice round' })).toBeFocused();
+  await expect(page.getByRole('heading', { level: 1, name: 'Build a short flashcard practice round' })).toBeFocused();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/demo');
