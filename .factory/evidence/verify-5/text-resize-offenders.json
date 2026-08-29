@@ -1,0 +1,309 @@
+{
+  "path": "/",
+  "scrollWidth": 458,
+  "offenders": [
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "text": "Paid round plansSave round plans for $9 onceImport, tag, practice, and export st",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "P",
+      "id": "",
+      "cls": "drawing-label",
+      "text": "Paid round plans",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "H2",
+      "id": "price-heading",
+      "cls": "",
+      "text": "Save round plans for $9 once",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "P",
+      "id": "",
+      "cls": "",
+      "text": "Import, tag, practice, and export stay free. A license adds named round plans fo",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "P",
+      "id": "",
+      "cls": "fine-print",
+      "text": "Checkout opens on Sociobot after you choose to buy.",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "FORM",
+      "id": "license-form",
+      "cls": "license-form",
+      "text": "Have a license? Paste itVerify licenseNo license is saved.",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "LABEL",
+      "id": "",
+      "cls": "",
+      "text": "Have a license? Paste it",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "text": "Verify license",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "INPUT",
+      "id": "license-token",
+      "cls": "",
+      "text": "",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "cls": "button secondary",
+      "text": "Verify license",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "P",
+      "id": "license-status",
+      "cls": "form-status",
+      "text": "No license is saved.",
+      "left": 20,
+      "right": 458,
+      "width": 438
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "hero-copy",
+      "text": "Extra flashcard practiceBuild a short flashcard practice roundFor learners with ",
+      "left": 0,
+      "right": 408.09375,
+      "width": 408.09375
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "route-status visually-hidden",
+      "text": "",
+      "left": -1,
+      "right": 0,
+      "width": 1
+    }
+  ]
+}
+{
+  "path": "/demo",
+  "scrollWidth": 469,
+  "offenders": [
+    {
+      "tag": "SECTION",
+      "id": "",
+      "cls": "import-zone",
+      "text": "01Add prompts\n        Import CSVColumns: prompt, answer, tags. For Anki, export ",
+      "left": 18,
+      "right": 469,
+      "width": 451
+    },
+    {
+      "tag": "SECTION",
+      "id": "",
+      "cls": "round-builder",
+      "text": "02Choose the mix\n        Use prompts taggedShow all promptsShow warm-up promptsS",
+      "left": 18,
+      "right": 469,
+      "width": 451
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "text": "01Add prompts",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "P",
+      "id": "",
+      "cls": "",
+      "text": "Columns: prompt, answer, tags. For Anki, export a front, back, tags CSV first (e",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "DETAILS",
+      "id": "",
+      "cls": "",
+      "text": "Add one promptPromptAnswerAdd prompt",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "SUMMARY",
+      "id": "",
+      "cls": "",
+      "text": "Add one prompt",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "FORM",
+      "id": "prompt-form",
+      "cls": "",
+      "text": "PromptAnswerAdd prompt",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "LABEL",
+      "id": "",
+      "cls": "",
+      "text": "Prompt",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "TEXTAREA",
+      "id": "new-prompt",
+      "cls": "",
+      "text": "",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "LABEL",
+      "id": "",
+      "cls": "",
+      "text": "Answer",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "TEXTAREA",
+      "id": "new-answer",
+      "cls": "",
+      "text": "",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "cls": "button secondary",
+      "text": "Add prompt",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "P",
+      "id": "import-status",
+      "cls": "form-status",
+      "text": "",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "",
+      "text": "02Choose the mix",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "FIELDSET",
+      "id": "",
+      "cls": "",
+      "text": "Use prompts taggedShow all promptsShow warm-up promptsShow weak promptsShow toda",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "segmented",
+      "text": "Show all promptsShow warm-up promptsShow weak promptsShow today’s prompts",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "cls": "settings-row",
+      "text": "Prompt count35812Seconds each153060120",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "LABEL",
+      "id": "",
+      "cls": "",
+      "text": "Prompt count35812",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "SELECT",
+      "id": "round-count",
+      "cls": "",
+      "text": "35812",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    },
+    {
+      "tag": "LABEL",
+      "id": "",
+      "cls": "",
+      "text": "Seconds each153060120",
+      "left": 38,
+      "right": 449,
+      "width": 411
+    }
+  ]
+}

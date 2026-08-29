@@ -1,0 +1,39 @@
+{
+  "fetchTime": "2026-08-29T12:18:23.811Z",
+  "categories": {
+    "performance": 91,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "FCP": 1029.48,
+    "LCP": 1629.48,
+    "SI": 1029.48,
+    "TBT": 364,
+    "CLS": 0,
+    "TTI": 1629.48
+  },
+  "warnings": [],
+  "errors": [
+    {
+      "id": "uses-responsive-images",
+      "title": "Properly size images",
+      "displayValue": "Est savings of 87 KiB"
+    },
+    {
+      "id": "cache-insight",
+      "title": "Use efficient cache lifetimes",
+      "displayValue": "Est savings of 41 KiB"
+    },
+    {
+      "id": "image-delivery-insight",
+      "title": "Improve image delivery",
+      "displayValue": "Est savings of 98 KiB"
+    },
+    {
+      "id": "network-dependency-tree-insight",
+      "title": "Network dependency tree"
+    }
+  ]
+}

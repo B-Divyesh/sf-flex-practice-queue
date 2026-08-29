@@ -1,0 +1,11 @@
+{
+  "offOrigin": [
+    {
+      "method": "GET",
+      "url": "https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=verify%205%20%2F%20invalid",
+      "body": null
+    }
+  ],
+  "status": "License no longer active. Buy again or paste another license.",
+  "stored": "verify 5 / invalid"
+}

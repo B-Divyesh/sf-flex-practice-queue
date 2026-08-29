@@ -1,0 +1,21 @@
+{
+  "registration": {
+    "scope": "https://flex-practice-queue.sociobot.in/",
+    "active": "https://flex-practice-queue.sociobot.in/sw.js",
+    "installing": false,
+    "waiting": false
+  },
+  "controlled": "https://flex-practice-queue.sociobot.in/sw.js",
+  "before": 8,
+  "offline": {
+    "title": "Demo — Flex Practice Queue",
+    "url": "https://flex-practice-queue.sociobot.in/demo",
+    "count": 8,
+    "heading": "Try a mixed practice round",
+    "controller": "https://flex-practice-queue.sociobot.in/sw.js",
+    "cacheKeys": [
+      "flex-practice-queue-v1"
+    ],
+    "errors": []
+  }
+}

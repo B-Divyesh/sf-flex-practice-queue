@@ -1,0 +1,9 @@
+{
+  "updateNotice": "An update is ready. Reload to use it.",
+  "promptCountAfterReload": 8,
+  "controller": "http://127.0.0.1:4190/sw.js",
+  "cacheKeys": [
+    "flex-practice-queue-v1"
+  ],
+  "errors": []
+}

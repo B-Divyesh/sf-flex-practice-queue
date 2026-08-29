@@ -1,0 +1,87 @@
+{
+  "url": "https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=verification-5-invalid",
+  "method": "GET",
+  "counts": {
+    "200": 30,
+    "429": 10
+  },
+  "rateLimited": [
+    {
+      "request": 2,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 3,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 11,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 13,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 14,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 17,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 20,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 26,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 39,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    },
+    {
+      "request": 40,
+      "status": 429,
+      "retryAfter": "4",
+      "contentType": null,
+      "body": "Too Many Requests! Wait for 4s"
+    }
+  ],
+  "sampleSuccess": {
+    "request": 1,
+    "status": 200,
+    "retryAfter": null,
+    "contentType": "application/json",
+    "body": "{\"expires_at\":null,\"reason\":\"invalid\",\"valid\":false}"
+  }
+}

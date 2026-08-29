@@ -1,0 +1,4 @@
+initial_js_bytes=30010
+css_bytes=18530
+hero_bytes=105772
+fonts_bytes=0
