@@ -134,7 +134,7 @@ class PracticeApp {
     </div>
     <section class="library" aria-labelledby="library-heading"><div class="library-head"><div><span class="step-number">03</span><h3 id="library-heading">Prompt queue <span>${this.items.length}</span></h3></div><div class="library-actions"><button id="export-csv" class="text-button" ${this.items.length ? '' : 'disabled'}>Export CSV</button><button id="clear-data" class="text-button danger" ${this.items.length ? '' : 'disabled'}>Delete local data</button></div></div>
       ${this.items.length ? `<ol class="prompt-list">${this.items.map(item => `<li data-id="${item.id}"><div class="prompt-copy"><b>${escapeHtml(item.prompt)}</b><span>${escapeHtml(item.answer || 'No answer supplied')}</span></div><fieldset><legend class="visually-hidden">Tags for ${escapeHtml(item.prompt)}</legend>${tags.map(tag => `<label class="tag ${tag}"><input type="checkbox" data-tag="${tag}" ${item.tags.includes(tag) ? 'checked' : ''}><span>${tag}</span></label>`).join('')}</fieldset><button class="icon-button delete-prompt" aria-label="Delete ${escapeHtml(item.prompt)}">×</button></li>`).join('')}</ol>` : `<div class="empty-state"><div class="empty-dial" aria-hidden="true">0</div><div><h4>Your queue is empty</h4><p>Import a CSV or add one prompt. Your tagged prompts will appear here.</p>${!this.demo ? '<a class="route-link" href="/demo">See the sample queue</a>' : ''}</div></div>`}
-      ${this.plans.length ? `<section class="saved-plans" aria-labelledby="plans-heading"><h4 id="plans-heading">Saved round plans</h4><ul>${this.plans.map(plan => `<li data-plan="${plan.id}"><span><b>${escapeHtml(plan.name)}</b><small>${plan.filter === 'all' ? 'Any tag' : plan.filter} · ${plan.count} prompts · ${plan.seconds} seconds</small></span><button class="text-button use-plan">Load plan settings</button><button class="icon-button delete-plan" aria-label="Delete ${escapeHtml(plan.name)}">×</button></li>`).join('')}</ul></section>` : ''}
+      ${this.canSavePlans && this.plans.length ? `<section class="saved-plans" aria-labelledby="plans-heading"><h4 id="plans-heading">Saved round plans</h4><ul>${this.plans.map(plan => `<li data-plan="${plan.id}"><span><b>${escapeHtml(plan.name)}</b><small>${plan.filter === 'all' ? 'Any tag' : plan.filter} · ${plan.count} prompts · ${plan.seconds} seconds</small></span><button class="text-button use-plan">Load plan settings</button><button class="icon-button delete-plan" aria-label="Delete ${escapeHtml(plan.name)}">×</button></li>`).join('')}</ul></section>` : ''}
       ${this.rounds.length ? `<p class="round-note">Last round: ${this.rounds.at(-1)?.count} prompts · ${this.rounds.at(-1)?.again} marked again</p>` : ''}
     </section>`;
     this.bindBuilder();
@@ -214,7 +214,7 @@ class PracticeApp {
   private next(markAgain: boolean) { if (markAgain) this.again++; this.current++; if (this.current >= this.queue.length) this.finishRound(); else { this.remaining = this.seconds; this.revealed = false; this.renderRound(); this.startTimer(); } }
   private async finishRound() {
     clearInterval(this.timer); this.root.onkeydown = null; const completed = Math.min(this.current + 1, this.queue.length); const record: RoundRecord = { id: crypto.randomUUID(), finishedAt: Date.now(), count: completed, again: this.again, seconds: Math.round((Date.now() - this.startedAt) / 1000) }; await this.store.saveRound(record); this.rounds.push(record); this.queue = []; this.current = 0;
-    this.root.innerHTML = `<section class="round-result"><p class="drawing-label">Round complete</p><h3>${completed} prompts practiced</h3><div class="result-measure"><span>${this.again}</span><small>marked “try again”</small></div><p>Your imported prompt data and flashcard schedule were not changed.</p><button id="back-builder" class="button primary">Build another round</button></section>`;
+    this.root.innerHTML = `<section class="round-result"><p class="drawing-label">Round complete</p><h3>${completed} ${completed === 1 ? 'prompt' : 'prompts'} practiced</h3><div class="result-measure"><span>${this.again}</span><small>marked “try again”</small></div><p>Your imported prompt data and flashcard schedule were not changed.</p><button id="back-builder" class="button primary">Build another round</button></section>`;
     this.root.querySelector('#back-builder')?.addEventListener('click', () => this.render());
   }
 }
@@ -263,6 +263,10 @@ async function renderCurrentWorkspace(push = false): Promise<void> {
   if (verdict.valid) {
     await renderRoute();
     toast('License verified. Saved round plans are ready.');
+  } else {
+    await renderRoute();
+    const status = app.querySelector<HTMLElement>('#license-status');
+    if (status) status.textContent = verdict.message;
   }
 }
 
@@ -311,8 +315,10 @@ function bindShell() {
     const status = app.querySelector<HTMLElement>('#license-status')!;
     status.textContent = 'Checking license…';
     const verdict = await verifyLicense(true);
-    if (verdict.valid) { await renderRoute(); toast('License verified. Saved round plans are ready.'); }
-    else status.textContent = verdict.message;
+    await renderRoute();
+    const updatedStatus = app.querySelector<HTMLElement>('#license-status');
+    if (updatedStatus) updatedStatus.textContent = verdict.message;
+    if (verdict.valid) toast('License verified. Saved round plans are ready.');
   });
 }
 

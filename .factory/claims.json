@@ -53,7 +53,7 @@
     "claim": "Exports every prompt as CSV",
     "where": "workbench, privacy page, README",
     "test": "npm test -- --grep @claim:csv-export",
-    "sandbox": "fresh /demo data; download CSV and assert its heading, filename, row count, and a sample prompt"
+    "sandbox": "fresh /demo data; add multiline prompt and answer text, download CSV, assert its heading, filename, and sample prompt, clear demo data, then import the untouched download and assert all nine records and multiline fields are restored"
   },
   {
     "id": "mixed-round",

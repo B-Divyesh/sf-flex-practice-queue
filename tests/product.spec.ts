@@ -374,8 +374,14 @@ test('@claim:anki-apkg-not-supported keeps packages out and gives CSV export gui
   await expect(page.locator('.prompt-list > li')).toHaveCount(8);
 });
 
-test('@claim:csv-export exports every prompt with CSV headings', async ({ page }) => {
+test('@claim:csv-export F-7V-1 exports every prompt and reimports multiline fields unchanged', async ({ page }) => {
+  const prompt = 'Name two phases\nof water, "briefly".';
+  const answer = 'Liquid: water\nSolid: ice';
   await page.goto('/demo');
+  await page.locator('summary').click();
+  await page.getByLabel('Prompt', { exact: true }).fill(prompt);
+  await page.getByLabel('Answer', { exact: true }).fill(answer);
+  await page.getByRole('button', { name: 'Add prompt' }).click();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export CSV' }).click();
   const download = await downloadPromise;
@@ -384,9 +390,21 @@ test('@claim:csv-export exports every prompt with CSV headings', async ({ page }
   for await (const chunk of stream) chunks.push(Buffer.from(chunk));
   const csv = Buffer.concat(chunks).toString('utf8');
   expect(download.suggestedFilename()).toBe('flex-practice-prompts.csv');
-  expect(csv.split('\n')).toHaveLength(9);
   expect(csv).toMatch(/^prompt,answer,tags\n/);
   expect(csv).toContain('Explain why seasons occur.');
+  const exportedPath = await download.path();
+  expect(exportedPath).not.toBeNull();
+
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'Delete local data' }).click();
+  await expect(page.locator('.prompt-list > li')).toHaveCount(0);
+  await page.locator('#csv-file').setInputFiles(exportedPath!);
+
+  await expect(page.getByText('9 prompts imported. The source file was not changed.')).toBeVisible();
+  await expect(page.locator('.prompt-list > li')).toHaveCount(9);
+  const restored = page.locator('.prompt-list > li').filter({ hasText: 'Name two phases' });
+  await expect(restored.locator('.prompt-copy > b')).toHaveText(prompt);
+  await expect(restored.locator('.prompt-copy > span')).toHaveText(answer);
 });
 
 test('@claim:mixed-round runs a timed round with keyboard controls', async ({ page }) => {
@@ -403,6 +421,20 @@ test('@claim:mixed-round runs a timed round with keyboard controls', async ({ pa
   }
   await expect(page.getByRole('heading', { name: '3 prompts practiced' })).toBeVisible();
   await expect(page.getByText('1', { exact: true })).toBeVisible();
+});
+
+test('F-7V-3 uses singular grammar after a one-prompt round', async ({ page }) => {
+  await page.goto('/demo');
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'Delete local data' }).click();
+  await page.locator('summary').click();
+  await page.getByLabel('Prompt', { exact: true }).fill('Only prompt');
+  await page.getByLabel('Answer', { exact: true }).fill('Only answer');
+  await page.getByRole('button', { name: 'Add prompt' }).click();
+  await page.getByRole('button', { name: 'Start mixed round' }).click();
+  await page.keyboard.press('Space');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('heading', { name: '1 prompt practiced', exact: true })).toBeVisible();
 });
 
 test('@claim:saved-plans saves and reloads a named round plan in demo', async ({ page }) => {
@@ -454,7 +486,9 @@ test('@claim:paid-price starts a hosted Sociobot checkout for the one-time price
 
 test('routes, mobile layout, metadata, and accessibility pass', async ({ page }) => {
   const consoleErrors: string[] = [];
+  const pageErrors: string[] = [];
   page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  page.on('pageerror', error => pageErrors.push(error.message));
   const routes = [
     { path: '/', title: 'Flex Practice Queue — Short flashcard practice rounds', canonical: '/' },
     { path: '/demo', title: 'Demo — Flex Practice Queue', canonical: '/demo' },
@@ -493,6 +527,12 @@ test('routes, mobile layout, metadata, and accessibility pass', async ({ page })
   await expect(page.getByRole('heading', { level: 1, name: 'Build a short flashcard practice round' })).toBeFocused();
 
   await page.setViewportSize({ width: 390, height: 844 });
+  for (const route of routes) {
+    await page.goto(route.path);
+    expect(await page.locator('html').evaluate(node => node.scrollWidth), `${route.path} mobile width`).toBe(390);
+    const results = await new AxeBuilder({ page: page as never }).analyze();
+    expect(results.violations.filter(item => ['serious', 'critical'].includes(item.impact || '')), `${route.path} mobile Axe`).toEqual([]);
+  }
   await page.goto('/demo');
   await expect(page.locator('body')).toHaveJSProperty('scrollWidth', 390);
   await page.keyboard.press('Tab');
@@ -500,6 +540,8 @@ test('routes, mobile layout, metadata, and accessibility pass', async ({ page })
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   expect(await page.locator('html').evaluate(node => getComputedStyle(node).scrollBehavior)).toBe('auto');
+  expect(consoleErrors).toEqual([]);
+  expect(pageErrors).toEqual([]);
 });
 
 test('@claim:license-check stores and checks a returned license at most daily', async ({ page }) => {
@@ -537,6 +579,29 @@ test('@claim:license-data-minimization sends only the license token during verif
     url: 'https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=only-this-token',
     body: null
   });
+});
+
+test('F-7V-2 immediately removes paid controls when a fresh check rejects a cached license', async ({ page }) => {
+  let checks = 0;
+  await page.route('https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=revoked-license', async route => {
+    checks++;
+    await route.fulfill({ json: { valid: false, reason: 'revoked', expires_at: null } });
+  });
+  await page.goto('/');
+  await page.evaluate(() => {
+    localStorage.setItem('sb_license:flex-practice-queue', 'revoked-license');
+    localStorage.setItem('sb_license:flex-practice-queue:verdict', JSON.stringify({ valid: true, checkedAt: Date.now() - 86_400_001 }));
+    localStorage.setItem('fpq:plans', JSON.stringify([{ id: 'saved-plan', name: 'Saved weak cards', filter: 'weak', count: 3, seconds: 30 }]));
+  });
+
+  await page.reload();
+  await expect.poll(() => checks).toBe(1);
+  await expect(page.getByRole('status', { name: 'License verification status' })).toHaveText('License no longer active. Buy again or paste another license.');
+  await expect(page.getByLabel('Plan name')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Save round plan' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Load plan settings' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'View $9 saved plans' })).toBeVisible();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('sb_license:flex-practice-queue:verdict') || 'null').valid)).toBe(false);
 });
 
 test('a pasted license enables saved plans without a reload', async ({ page }) => {
