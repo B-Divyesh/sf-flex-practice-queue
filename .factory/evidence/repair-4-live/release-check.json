@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-08-29T15:43:06Z",
+  "workOrder": "flex-practice-queue-repair-4",
+  "candidate": "106d0cd511ff6697431dbe4700fb237f48d071e9",
+  "deployedProductCommit": "dd3713ca1cadd9b64ed808cb46d2f58e495af285",
+  "deploymentId": "9dff46db-a35b-46c3-8e06-95811460ecaf",
+  "url": "https://flex-practice-queue.sociobot.in",
+  "regressions": {
+    "F-7V-1-multiline-csv-roundtrip": "passed",
+    "F-7V-2-revoked-license-ui": "passed",
+    "F-7V-3-singular-round-result": "passed"
+  },
+  "claims": { "passed": 15, "failed": 0, "runSeparately": true },
+  "tests": { "local": { "passed": 28, "failed": 0 }, "live": { "passed": 28, "failed": 0 } },
+  "artifactParity": { "matched": 17, "mismatched": 0 },
+  "routes": { "/": 200, "/demo": 200, "/privacy": 200, "/terms": 200, "/repair-4-missing": 404 },
+  "cachePolicy": { "hashedAssets": "public, max-age=31536000, immutable", "serviceWorker": "no-cache", "html": "public, must-revalidate, max-age=30" },
+  "checkout": { "status": 303, "destination": "https hosted checkout" },
+  "rateLimit": { "accepted": 30, "limited": 1, "retryAfterSeconds": 3 },
+  "lighthouseMobile": { "performance": 100, "accessibility": 100, "bestPractices": 100, "seo": 100, "fcpMs": 919.359, "lcpMs": 1519.359, "cls": 0, "tbtMs": 31, "totalBytes": 124981 }
+}

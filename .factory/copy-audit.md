@@ -1,4 +1,4 @@
-# Copy audit — 2026-08-29
+# Copy audit — 2026-08-29 repair 4
 
 The landing copy was audited after polish round 6. Counts use whitespace-delimited visible words. No entry exceeds 22 words or uses a banned marketing term. The drafting identity remains in layout, grid rules, type, and artwork; visitor-facing labels name the task directly.
 
@@ -56,6 +56,8 @@ The landing copy was audited after polish round 6. Counts use whitespace-delimit
 | Privacy policy · updated 28 August 2026 / Terms · updated 28 August 2026 | 6 / 5 | Pass |
 | Page not found · 404 / This practice page is missing | 5 / 5 | Pass |
 | This app is offline | 4 | Pass |
+| 1 prompt practiced / 3 prompts practiced | 3 / 3 | Pass |
+| License no longer active. Buy again or paste another license. | 10 | Pass |
 
 ## README audit
 

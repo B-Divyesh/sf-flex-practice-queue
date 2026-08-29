@@ -10,6 +10,7 @@ const staticConfigPath = fileURLToPath(new URL('../public/staticwebapp.config.js
 const static404Path = fileURLToPath(new URL('../public/404.html', import.meta.url));
 const builtServiceWorkerPath = fileURLToPath(new URL('../dist/sw.js', import.meta.url));
 const checkoutUrl = 'https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout';
+const productOrigin = new URL(process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:4173').origin;
 
 test('static deployment keeps known app routes, a real 404, immutable assets, and an updateable service worker', async () => {
   const config = JSON.parse(await readFile(staticConfigPath, 'utf8')) as { navigationFallback?: unknown; responseOverrides?: Record<string, { rewrite?: string }>; routes: Array<{ route: string; rewrite?: string; headers?: Record<string, string> }> };
@@ -76,7 +77,7 @@ test('@claim:demo-sandbox keeps every real storage namespace untouched through r
   });
   const offOriginRequests: string[] = [];
   page.on('request', request => {
-    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173') offOriginRequests.push(request.url());
+    if (new URL(request.url()).origin !== productOrigin) offOriginRequests.push(request.url());
   });
   await page.goto('/demo');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
@@ -312,7 +313,7 @@ test('@claim:offline-reload works offline after the first visit', async ({ page,
 test('@claim:local-privacy sends no study data off-site', async ({ page }) => {
   const crossOrigin: string[] = [];
   page.on('request', request => {
-    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173') crossOrigin.push(request.url());
+    if (new URL(request.url()).origin !== productOrigin) crossOrigin.push(request.url());
   });
   await page.goto('/demo');
   await page.getByRole('button', { name: 'Start mixed round' }).click();
@@ -335,7 +336,7 @@ test('@claim:source-schedule-untouched imports, tags, practices, and exports wit
   const before = await readFile(fixturePath, 'utf8');
   const offOriginRequests: string[] = [];
   page.on('request', request => {
-    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173') offOriginRequests.push(request.url());
+    if (new URL(request.url()).origin !== productOrigin) offOriginRequests.push(request.url());
   });
   await page.goto('/demo');
   await page.locator('#csv-file').setInputFiles(fixturePath);
