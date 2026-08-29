@@ -1,1 +1,1 @@
-Build short flashcard practice rounds without changing your flashcard schedule.
+Build short flashcard rounds without changing your flashcard schedule.

@@ -1,10 +1,10 @@
 [
   {
     "id": "demo-sandbox",
-    "claim": "Try it with eight sample prompts without changing real data",
+    "claim": "Try eight sample prompts without reading or changing real data",
     "where": "landing action, demo banner, README",
     "test": "npm test -- --grep @claim:demo-sandbox",
-    "sandbox": "fresh browser context; seed a real prompt, round, and fpq:plans value, enter /demo, mutate and reset it, select Start for real, then assert exact real IndexedDB and plans values remain, sample data is absent, and demo storage is deleted"
+    "sandbox": "fresh browser context; seed real prompt, round, plan, license, and verdict values; open /demo and /demo?license=fixture; mutate, reset, and Start for real; assert exact real values, no license-key access, no off-origin request while demo is shown, and deletion of demo storage"
   },
   {
     "id": "offline-reload",
@@ -95,13 +95,13 @@
     "claim": "A returned license is stored locally and checked at most once each day",
     "where": "privacy page, README",
     "test": "npm test -- --grep @claim:license-check",
-    "sandbox": "fresh /demo URL with a fixture license response; assert token capture, URL cleanup, unlocked control, reload, and one verification request"
+    "sandbox": "fresh real workspace URL with a fixture license response; assert token capture, URL cleanup, unlocked control, reload, and one verification request"
   },
   {
     "id": "license-data-minimization",
     "claim": "License checks send only the license token to Sociobot",
     "where": "privacy page, README",
     "test": "npm test -- --grep @claim:license-data-minimization",
-    "sandbox": "fresh /demo data with a recorded verification response; seed a plan and license, reload, and assert exactly one GET to the documented verify URL with only the encoded license query and no body"
+    "sandbox": "fresh real workspace data with a recorded verification response; seed a plan and license, reload, and assert exactly one GET to the documented verify URL with only the encoded license query and no body"
   }
 ]

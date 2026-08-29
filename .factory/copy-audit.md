@@ -67,7 +67,9 @@ The landing copy was audited after polish round 6. Counts use whitespace-delimit
 | The app never writes to the selected CSV or your flashcard schedule. | 12 | Pass |
 | Anki .apkg packages are not imported. Export a front,back,tags CSV from Anki first. | 13 | Pass |
 | A $9 one-time license adds named round plans. Checkout and license checks use the Sociobot billing API. | 16 | Pass |
-| Demo data uses separate demo: storage. Resetting or leaving the demo deletes that sample workspace. | 15 | Pass |
+| Demo data uses separate demo: storage. | 5 | Pass |
+| It never reads, sends, or changes real prompts, plans, or license storage. | 12 | Pass |
+| Resetting or leaving the demo deletes that sample workspace. | 9 | Pass |
 | License checks send only the license token to Sociobot. They run at most once each day. | 17 | Pass |
 
 ## Terminology
@@ -80,4 +82,4 @@ The landing copy was audited after polish round 6. Counts use whitespace-delimit
 | Reusable configuration | round plan |
 | Paid credential | license |
 
-Catalog description: “Build short flashcard practice rounds without changing your flashcard schedule.” It is verb-first and 79 characters.
+Catalog description: “Build short flashcard rounds without changing your flashcard schedule.” It is verb-first and 63 characters.

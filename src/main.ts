@@ -240,6 +240,32 @@ async function renderRoute(push = false) {
   if (push) { const heading = app.querySelector<HTMLElement>('h1'); heading?.setAttribute('tabindex', '-1'); heading?.focus(); app.querySelector('.route-status')!.textContent = document.title; scrollTo(0, 0); }
 }
 
+function isDemoRoute(url = new URL(location.href)): boolean {
+  return url.pathname.replace(/\/$/, '') === '/demo' || url.searchParams.get('demo') === '1';
+}
+
+/**
+ * License state belongs to the real workspace. Keep this separate from
+ * renderRoute so a demo URL cannot even inspect a real license key.
+ */
+async function renderCurrentWorkspace(push = false): Promise<void> {
+  if (isDemoRoute()) {
+    await renderRoute(push);
+    return;
+  }
+
+  await renderRoute(push);
+  // The real shell replaces the demo banner before any license key is read.
+  const receivedLicense = captureLicense();
+  if (!receivedLicense && !hasSavedLicense()) return;
+
+  const verdict = await verifyLicense(receivedLicense);
+  if (verdict.valid) {
+    await renderRoute();
+    toast('License verified. Saved round plans are ready.');
+  }
+}
+
 async function focusHashDestination(): Promise<boolean> {
   if (!location.hash) return false;
   let id: string;
@@ -259,9 +285,25 @@ async function focusHashDestination(): Promise<boolean> {
 }
 
 function bindShell() {
-  app.querySelectorAll<HTMLAnchorElement>('a.route-link').forEach(link => link.addEventListener('click', event => { if (link.origin !== location.origin) return; event.preventDefault(); history.pushState({}, '', link.href); renderRoute(true); }));
+  app.querySelectorAll<HTMLAnchorElement>('a.route-link').forEach(link => link.addEventListener('click', async event => {
+    if (link.origin !== location.origin) return;
+    event.preventDefault();
+    const destination = new URL(link.href);
+    if (isDemoRoute() && !isDemoRoute(destination)) {
+      activePractice?.destroy();
+      await deleteDemo();
+    }
+    history.pushState({}, '', `${destination.pathname}${destination.search}${destination.hash}`);
+    void renderCurrentWorkspace(true);
+  }));
   app.querySelector('#reset-demo')?.addEventListener('click', async () => { activePractice?.destroy(); await deleteDemo(); renderRoute(); toast('Demo reset to its original 8 prompts.'); });
-  app.querySelector('#leave-demo')?.addEventListener('click', async () => { activePractice?.destroy(); await deleteDemo(); history.pushState({}, '', '/'); renderRoute(true); });
+  app.querySelector('#leave-demo')?.addEventListener('click', async () => {
+    const pendingLicense = new URL(location.href).searchParams.get('license');
+    activePractice?.destroy();
+    await deleteDemo();
+    history.pushState({}, '', pendingLicense ? `/?license=${encodeURIComponent(pendingLicense)}` : '/');
+    await renderCurrentWorkspace(true);
+  });
   app.querySelector<HTMLFormElement>('#license-form')?.addEventListener('submit', async event => {
     event.preventDefault();
     const input = app.querySelector<HTMLInputElement>('#license-token')!;
@@ -274,13 +316,8 @@ function bindShell() {
   });
 }
 
-const receivedLicense = captureLicense();
-renderRoute().then(async () => {
-  if (!receivedLicense && !hasSavedLicense()) return;
-  const verdict = await verifyLicense(receivedLicense);
-  if (verdict.valid) { await renderRoute(); toast('License verified. Saved round plans are ready.'); }
-});
-addEventListener('popstate', () => renderRoute(true));
+void renderCurrentWorkspace();
+addEventListener('popstate', () => { void renderCurrentWorkspace(true); });
 addEventListener('hashchange', () => { void focusHashDestination(); });
 addEventListener('offline', () => toast('You are offline. Saved prompts and practice still work.'));
 addEventListener('online', () => toast('Back online.'));

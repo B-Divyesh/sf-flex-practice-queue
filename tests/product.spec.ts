@@ -29,7 +29,7 @@ test('static deployment keeps known app routes, a real 404, immutable assets, an
   expect(await readFile(builtServiceWorkerPath, 'utf8')).not.toContain('"/staticwebapp.config.json"');
 });
 
-test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched through reset and start-for-real', async ({ page }) => {
+test('@claim:demo-sandbox keeps every real storage namespace untouched through reset and start-for-real', async ({ page }) => {
   await page.goto('/');
   await page.locator('summary').click();
   await page.locator('#new-prompt').fill('Real workspace sentinel');
@@ -39,7 +39,13 @@ test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched throug
   await page.getByRole('button', { name: 'Stop round' }).click();
   await page.getByRole('button', { name: 'Build another round' }).click();
   const realPlan = '[{"id":"real-plan","name":"Real plan","filter":"today","count":3,"seconds":30}]';
+  const realLicense = 'real-license-token';
+  const realVerdict = JSON.stringify({ valid: true, checkedAt: Date.now() });
   await page.evaluate(value => localStorage.setItem('fpq:plans', value), realPlan);
+  await page.evaluate(({ license, verdict }) => {
+    localStorage.setItem('sb_license:flex-practice-queue', license);
+    localStorage.setItem('sb_license:flex-practice-queue:verdict', verdict);
+  }, { license: realLicense, verdict: realVerdict });
   const realSnapshot = await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {
       const request = indexedDB.open('flex-practice-queue');
@@ -55,6 +61,23 @@ test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched throug
     database.close();
     return snapshot;
   });
+  await page.addInitScript(() => {
+    const touches: string[] = [];
+    const getItem = Storage.prototype.getItem;
+    const setItem = Storage.prototype.setItem;
+    const removeItem = Storage.prototype.removeItem;
+    const record = (operation: string, key: string) => {
+      if (key.startsWith('sb_license:flex-practice-queue')) touches.push(`${operation}:${key}`);
+    };
+    Storage.prototype.getItem = function(key: string) { record('get', String(key)); return getItem.call(this, key); };
+    Storage.prototype.setItem = function(key: string, value: string) { record('set', String(key)); return setItem.call(this, key, value); };
+    Storage.prototype.removeItem = function(key: string) { record('remove', String(key)); return removeItem.call(this, key); };
+    Object.defineProperty(window, '__licenseTouches', { value: touches, configurable: true });
+  });
+  const offOriginRequests: string[] = [];
+  page.on('request', request => {
+    if (new URL(request.url()).origin !== 'http://127.0.0.1:4173') offOriginRequests.push(request.url());
+  });
   await page.goto('/demo');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   await expect(page.locator('.prompt-list > li')).toHaveCount(8);
@@ -69,11 +92,15 @@ test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched throug
   await page.getByRole('button', { name: 'Reset demo' }).click();
   await expect(page.locator('.prompt-list > li')).toHaveCount(8);
   await expect(page.getByText('Five-minute weak set')).toHaveCount(0);
+  expect(offOriginRequests).toEqual([]);
+  expect(await page.evaluate(() => (window as typeof window & { __licenseTouches?: string[] }).__licenseTouches || [])).toEqual([]);
   await page.getByRole('button', { name: 'Start for real' }).click();
   await expect(page.getByText('Demo — sample data, nothing is saved')).toHaveCount(0);
   await expect(page.locator('.prompt-list > li')).toHaveCount(1);
   await expect(page.getByText('Real workspace sentinel', { exact: true })).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem('fpq:plans'))).toBe(realPlan);
+  expect(await page.evaluate(() => localStorage.getItem('sb_license:flex-practice-queue'))).toBe(realLicense);
+  expect(await page.evaluate(() => localStorage.getItem('sb_license:flex-practice-queue:verdict'))).toBe(realVerdict);
   expect(await page.evaluate(() => Object.keys(localStorage).filter(key => key.startsWith('demo:')))).toEqual([]);
   const afterSnapshot = await page.evaluate(async () => {
     const database = await new Promise<IDBDatabase>((resolve, reject) => {
@@ -93,6 +120,23 @@ test('@claim:demo-sandbox keeps real prompts, rounds, and plans untouched throug
   expect(afterSnapshot).toBe(realSnapshot);
   const databaseNames = await page.evaluate(async () => (await indexedDB.databases()).map(database => database.name));
   expect(databaseNames).not.toContain('demo:flex-practice-queue');
+  expect(offOriginRequests).toEqual([]);
+
+  await page.goto('/demo?license=returned-demo-license');
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  expect(await page.evaluate(() => (window as typeof window & { __licenseTouches?: string[] }).__licenseTouches || [])).toEqual([]);
+  expect(offOriginRequests).toEqual([]);
+  expect(await page.evaluate(() => localStorage.getItem('sb_license:flex-practice-queue'))).toBe(realLicense);
+  expect(await page.evaluate(() => localStorage.getItem('sb_license:flex-practice-queue:verdict'))).toBe(realVerdict);
+  let returnedLicenseChecks = 0;
+  await page.route('https://api.sociobot.in/api/v1/products/flex-practice-queue/verify?license=returned-demo-license', async route => {
+    returnedLicenseChecks++;
+    await route.fulfill({ json: { valid: true, reason: 'ok', expires_at: null } });
+  });
+  await page.getByRole('button', { name: 'Start for real' }).click();
+  await expect.poll(() => returnedLicenseChecks).toBe(1);
+  await expect(page).toHaveURL(/\/$/);
+  expect(await page.evaluate(() => localStorage.getItem('sb_license:flex-practice-queue'))).toBe('returned-demo-license');
 });
 
 test('demo shows and starts the same fixed sample round in the first 390px viewport', async ({ page }) => {
@@ -464,11 +508,10 @@ test('@claim:license-check stores and checks a returned license at most daily', 
     checks++;
     await route.fulfill({ json: { valid: true, reason: 'ok', expires_at: null } });
   });
-  await page.goto('/demo?license=test-license');
+  await page.goto('/?license=test-license');
   await expect.poll(() => checks).toBe(1);
-  await expect(page).toHaveURL(/\/demo$/);
+  await expect(page).toHaveURL(/\/$/);
   expect(await page.evaluate(() => localStorage.getItem('sb_license:flex-practice-queue'))).toBe('test-license');
-  await page.getByRole('button', { name: 'Start for real' }).click();
   await expect(page.getByRole('button', { name: 'Save round plan' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('button', { name: 'Save round plan' })).toBeVisible();
@@ -481,9 +524,9 @@ test('@claim:license-data-minimization sends only the license token during verif
     calls.push({ method: route.request().method(), url: route.request().url(), body: route.request().postData() });
     await route.fulfill({ json: { valid: true, reason: 'ok', expires_at: null } });
   });
-  await page.goto('/demo');
+  await page.goto('/');
   await page.evaluate(() => {
-    localStorage.setItem('demo:fpq:plans', JSON.stringify([{ name: 'private plan' }]));
+    localStorage.setItem('fpq:plans', JSON.stringify([{ name: 'private plan' }]));
     localStorage.setItem('sb_license:flex-practice-queue', 'only-this-token');
     localStorage.removeItem('sb_license:flex-practice-queue:verdict');
   });

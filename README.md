@@ -47,7 +47,7 @@ Claim tests use the bundled demo and CSV fixture. The test suite also checks rou
 
 Prompts and round history use IndexedDB. Named plans and a purchased license use localStorage.
 
-Demo data uses separate `demo:` storage. Resetting or leaving the demo deletes that sample workspace.
+Demo data uses separate `demo:` storage. It never reads, sends, or changes real prompts, plans, or license storage. Resetting or leaving the demo deletes that sample workspace.
 
 License checks send only the license token to Sociobot. They run at most once each day.
 
