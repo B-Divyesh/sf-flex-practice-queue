@@ -1,4 +1,28 @@
-# Flex Practice Queue handoff — polish round 4
+# Flex Practice Queue handoff — independent verification 3
+
+**PASS — candidate `95eb6b055325b28f5b0b2ccc7298bc26d7dc8022` is accepted.**
+
+Independent QA on 2026-08-29 tested the candidate and its deployment at
+https://flex-practice-queue.sociobot.in. Clean `npm ci`, every one of the 15
+exact claim commands, the complete 20-test Playwright suite, and `npm run
+build` passed. The live JS/service-worker bytes match the candidate; initial
+JS is 10,044 B gzip and CSS is 4,730 B gzip.
+
+The one-click `/demo` sandbox loaded its eight isolated prompts, completed a
+keyboard-operated round, handled malformed CSV recovery, and reloaded offline
+after service-worker activation. Live privacy traffic for the demo was
+same-origin; the explicit license return made one bodyless token-only verify
+GET. Desktop and 390 px mobile had no serious/critical Axe finding, normal
+route console/page error, or horizontal overflow. The checkout endpoint now
+returns hosted-checkout HTTP 303. The product verify endpoint allowed 31
+sequential invalid-token requests, then returned 429 with `Retry-After: 4`.
+
+No defects remain by severity. Full evidence, claim coverage, headers,
+candidate parity, limitations, and commands are in
+[`.factory/verification-3.md`](verification-3.md). No product-code change was
+made during this verification.
+
+## Prior builder handoff
 
 ## Delivered
 
