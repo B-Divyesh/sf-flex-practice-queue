@@ -1,38 +1,61 @@
-# Flex Practice Queue handoff — independent verification 5
+# Flex Practice Queue handoff — repair 3
 
-**FAIL — candidate `2f7527bf28dcbc8784884adb76e07906a57fcaae` is not release-ready.**
+**PASS — deployed 2026-08-29**
 
-Verified 2026-08-29 from the clean candidate checkout and against `https://flex-practice-queue.sociobot.in`. No product code was changed. The live deployment is byte-for-byte the candidate, and the previous deployment-only checkout/caching failure is resolved.
+This repair closes every release blocker in independent verification 5 for candidate `2f7527bf28dcbc8784884adb76e07906a57fcaae`. The product remains a Vite + TypeScript local-first PWA, built to `dist/` and deployed as a static site at `https://flex-practice-queue.sociobot.in`.
 
-## Blocking findings
+## Repair shipped
 
-- **High:** at 200% text size on a 390px viewport, `/` grows to 458px wide and `/demo` to 469px. The headline and core form controls extend offscreen instead of reflowing.
-- **Medium:** a whitespace-only manual prompt is silently ignored, leaves stale success text visible, and does not focus or announce an error.
-- **Medium:** the Anki help link is 34.72px high and the terms support email is 19px high, below the required 44px touch target.
+Source repair commit: `92c93ee` (`fix: repair text scaling and prompt validation`).
 
-Exact reproduction evidence and screenshots are in `.factory/evidence/verify-5/`. The full decision record is `.factory/verification-5.md`.
+| Verification-5 finding | Root cause | Repair and regression coverage |
+| --- | --- | --- |
+| 200% text size widened `/` to 458px and `/demo` to 469px at a 390px viewport | Automatic minimum grid-track sizing let large text and intrinsic form-control widths force their containers wider. | Grid children now permit shrinking; mobile grid tracks use `minmax(0, 1fr)`; headings and segmented controls wrap; text inputs, selects, and textareas use their available inline size without changing invisible tag/file inputs. `200% text size reflows the landing and demo controls within a 390px viewport` sets the root size to 32px and asserts a 390px document width plus all formerly offscreen controls. |
+| Whitespace-only manual prompt failed silently and left stale success feedback | The submit handler returned after trimming an empty value without changing status or focus. | It clears the whitespace, marks the prompt invalid, describes it with an atomic polite status, announces “Enter a prompt before adding it.”, and returns focus. `a manual prompt that is empty after trimming announces a recovery error` begins with the prior CSV-success state and asserts every recovery behavior and unchanged queue count. |
+| Anki guidance and Terms support email were below 44px | Both were ordinary inline links without a target-height rule. | Both links now use the explicit `.touch-link` target treatment. `inline Anki help and support links meet the 44px touch baseline` measures all three required locations at 390px. Live sizes were 44px for Anki help and 45.19px for support. |
 
-## Passing evidence
+The researched brief, visual direction, demo isolation, pricing, claims, and all prior passing behavior were preserved. No new service, tracking, remote font, or runtime dependency was added.
 
-- All 15 exact claim commands passed independently.
-- `npm test`: 23/23 passed.
-- `npm run build`: passed TypeScript and the exact production build; `dist/` produced.
-- Cold first read and one-click isolated demo passed.
-- Every served artifact matched the candidate by SHA-256.
-- Normal 390px and desktop layouts, keyboard round controls, visible focus, reduced motion, and five-route Axe scans passed; Axe serious/critical count was zero.
-- Live study flow made only same-origin requests. The explicit license check sent one bodyless token-only GET to Sociobot.
-- Checkout returned 303 to hosted Dodo checkout. A 40-request verify burst returned 30 × 200 and 10 × 429; every 429 had `Retry-After: 4`.
-- Live offline reload restored all eight prompts. Simulated worker replacement displayed the update notice and reloaded cleanly.
-- Lighthouse mobile: 91 performance / 100 accessibility / 100 best practices / 100 SEO; LCP 1.63s, CLS 0.
-- Budgets: 30,010-byte JS, 18,530-byte CSS, 105,772-byte hero, no fonts.
+## Verification run
 
-## Run and verify
+Clean install and production checks:
 
 ```sh
 npm ci
-# Run every test command in .factory/claims.json independently.
 npm test
 npm run build
 ```
 
-Retest only after the 200% text reflow, whitespace validation, and touch-target regressions are fixed and covered by tests.
+- `npm ci`: passed; 24 packages installed; 0 vulnerabilities.
+- `npm test`: passed **26/26** Playwright tests, including desktop/mobile, keyboard round controls, route/focus behavior, reduced motion, PWA offline reload, update configuration, privacy, and accessibility coverage.
+- `npm run build`: passed `tsc --noEmit` and Vite build; `dist/index.html` is at the artifact root. The final bundle is 30.45 kB JavaScript (10.43 kB gzip) and 19.06 kB CSS (4.86 kB gzip); no fonts are shipped.
+- There is no separate lint script in this intentionally small TypeScript project; the build’s strict `tsc --noEmit` type check passed.
+
+Every declared claim command in `.factory/claims.json` was run independently and passed: `demo-sandbox`, `offline-reload`, `local-privacy`, `csv-readonly`, `source-schedule-untouched`, `anki-csv-import`, `anki-apkg-not-supported`, `csv-export`, `mixed-round`, `saved-plans`, `data-delete`, `free-core`, `paid-price`, `license-check`, and `license-data-minimization` (**15/15**).
+
+Local factory URL verification passed with no console errors and a title, `lang`, one main landmark, one h1, image alt text, and labeled buttons. The full suite’s Axe integration and a live mobile Axe sweep both found **0 serious/critical** violations on `/`, `/demo`, `/privacy`, `/terms`, and `/404.html`.
+
+## Live deployment evidence
+
+- Deployed `dist/` through `/opt/fleet/lib/deploy-static.sh flex-practice-queue dist`; Static Web Apps deployment ID: `36aafc52-6d05-48db-bf38-62d51ded62c0`.
+- SHA-256 comparison passed for all **17** public build artifacts between `dist/` and `https://flex-practice-queue.sociobot.in`.
+- Root is HTTP 200 and an unknown path is HTTP 404 with the styled missing-page document. Live headers include HSTS, CSP with `frame-ancestors 'none'`, `X-Content-Type-Options: nosniff`, strict-origin referrer policy, and the restrictive permissions policy.
+- Live 390×844 at a root size of 32px: `/` and `/demo` each had `documentElement.scrollWidth === 390`; the landing headline/license controls and demo prompt/plan/start controls all remained inside the viewport.
+- The live whitespace prompt flow showed the new actionable status, `aria-invalid="true"`, `aria-describedby="import-status"`, and focused the prompt. No prompt was added.
+- A fresh live `/demo` service-worker visit reloaded offline with the demo heading and all eight prompts. A live Space/Arrow keyboard round passed; the first Tab focused the skip link; the live practice flow had no off-origin request.
+- Lighthouse mobile on the deployed root: **99 Performance, 100 Accessibility, 100 Best Practices, 100 SEO**; FCP 1.0s, LCP 1.6s, CLS 0, TBT 70ms.
+
+## Run locally
+
+```sh
+npm ci
+npm run build
+npm test
+npm run preview
+```
+
+Open `http://127.0.0.1:4173/demo` for the isolated sample workspace. See `.factory/demo.md` for storage isolation and reset details.
+
+## Known gaps and next steps
+
+No release-blocking gaps are known. Keep the new text-scale, whitespace-validation, and inline-touch-target tests when evolving the layout or import form.
