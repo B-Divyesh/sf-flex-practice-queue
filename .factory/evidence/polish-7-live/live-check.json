@@ -1,0 +1,87 @@
+{
+  "base": "https://flex-practice-queue.sociobot.in",
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Flex Practice Queue — Short flashcard practice rounds",
+      "h1": 1,
+      "main": 1,
+      "serious": [],
+      "errors": []
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Flex Practice Queue",
+      "h1": 1,
+      "main": 1,
+      "serious": [],
+      "errors": []
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Flex Practice Queue",
+      "h1": 1,
+      "main": 1,
+      "serious": [],
+      "errors": []
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Flex Practice Queue",
+      "h1": 1,
+      "main": 1,
+      "serious": [],
+      "errors": []
+    },
+    "/missing-polish-7": {
+      "status": 404,
+      "title": "Page not found — Flex Practice Queue",
+      "h1": 1,
+      "main": 1,
+      "serious": [],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ]
+    }
+  },
+  "demoIsolation": {
+    "regular": {
+      "preview": {
+        "top": 405.6875,
+        "bottom": 432.359375
+      },
+      "button": {
+        "top": 489.078125,
+        "bottom": 537.078125
+      },
+      "touches": [],
+      "license": "live-real-license",
+      "verdict": "{\"valid\":true,\"checkedAt\":1788011652390}",
+      "prompts": 8
+    },
+    "directDemo": {
+      "touches": [],
+      "license": "live-real-license",
+      "verdict": "{\"valid\":true,\"checkedAt\":1788011652959}",
+      "banner": "Demo — sample data, nothing is savedReset demoStart for real"
+    },
+    "offOrigin": []
+  },
+  "sampleRound": {
+    "previewText": "Explain why seasons occur.",
+    "startedText": "Explain why seasons occur."
+  },
+  "hash": {
+    "top": 64.40625,
+    "bottom": 165.1875,
+    "focused": "how-heading"
+  },
+  "mobileTargets": {
+    "count": 14,
+    "minimumWidth": 44,
+    "minimumHeight": 44
+  },
+  "checks": [
+    "all live route, demo, sample, hash, touch-target, metadata, and axe checks passed"
+  ]
+}
