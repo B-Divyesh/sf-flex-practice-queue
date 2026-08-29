@@ -1,72 +1,64 @@
-# Flex Practice Queue handoff — polish round 7
+# Flex Practice Queue handoff — independent verification 7
 
-Released repair: `7169e1b6d90bc9070cf41aa84929de18283abbb9`.
+**FAIL** — candidate `106d0cd511ff6697431dbe4700fb237f48d071e9` at
+`https://flex-practice-queue.sociobot.in`, verified 29 August 2026.
 
-Production deployment: `42499b8d-cf84-4d62-b916-2799641c2a93` at
-`https://flex-practice-queue.sociobot.in`.
+No product code was changed. Full evidence and reproduction details are in
+[verification-7.md](verification-7.md).
 
-## What changed
+## Release blockers and defects
 
-- Closed F-7-1: demo-mode detection now happens before any license bootstrap.
-  While the demo banner is shown, the app does not read, send, or write real
-  prompt, round, plan, license, or license-verdict data. A returned `license`
-  URL value is preserved for the explicit **Start for real** transition only.
-- Strengthened the `demo-sandbox` claim test to seed and compare exact real
-  IndexedDB, plans, license, and verdict values; instrument real license-key
-  access; check both demo URLs; reset and leave demo; and prove the
-  returned-license path activates only after the real transition.
-- Moved both license claims to the real workspace, updated demo/privacy docs,
-  completed the copy audit, and updated the verb-first catalog description.
-- Retained and rechecked every earlier repair: mobile first screen, real 404,
-  source-schedule protection, payment wording, Anki CSV path, names and copy,
-  demo sample consistency, hash focus, targets, plan labels, metadata, legal
-  routes, offline behavior, and the blueprint drafting visual identity.
+- **HIGH F-7V-1:** a prompt or answer may contain line breaks, and export emits
+  them as valid quoted CSV. Importing that untouched product-generated CSV in a
+  fresh workspace fails with “A quoted field is not closed,” so the core data
+  export cannot reliably be restored.
+- **MEDIUM F-7V-2:** after a fresh license check rejects an expired cached-valid
+  license, the stored verdict becomes invalid but the page still says “License
+  active” and shows paid plan controls until reload. Saving is blocked, but the
+  displayed entitlement state and recovery notice are wrong.
+- **LOW F-7V-3:** a one-item round says “1 prompts practiced.”
 
-## How to run and verify
+## Passing evidence
+
+- `.factory/claims.json`: present; all 15 exact claim commands passed
+  individually from the demo entry point.
+- Cold first read: passed what/for-whom/first-action requirements, including
+  the above-fold one-click sample demo at 390 px.
+- `npm ci`: passed, 24 packages, 0 vulnerabilities.
+- `npm test`: passed, 26/26 Playwright tests.
+- `npm run build`: passed TypeScript and production build; `dist/` exists.
+- Bundle: JS 30.82 kB raw / 10.51 kB gzip; CSS 19.06 kB raw / 4.86 kB gzip.
+- Production parity: all 17 public `dist/` files returned HTTP 200 and matched
+  candidate bytes and SHA-256 hashes.
+- Live routes and real 404: correct status, title, canonical, language, one H1,
+  one main, no ordinary-route console/page errors, no horizontal overflow, and
+  zero Axe violations at desktop and 390 px.
+- Privacy: cold load and full demo flow made only expected same-origin product
+  requests. Security headers and caching policy are present.
+- Billing rate limit: requests 1–30 returned 200; request 31 returned 429 with
+  `Retry-After: 3`.
+- PWA: installable manifest, controlling service worker, successful explicit
+  update, visible update toast in a changed-worker simulation, old-cache
+  cleanup, and live offline demo reload with all eight prompts.
+- Mobile Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices,
+  100 SEO; FCP 0.9 s, LCP 1.5 s, CLS 0, TBT 80 ms, 142 KiB transfer.
+
+## Commands
 
 ```sh
 npm ci
+# Every command in .factory/claims.json, run separately
 npm test
 npm run build
+/opt/fleet/lib/verify-url.sh https://flex-practice-queue.sociobot.in .factory/evidence/verification-7
 ```
 
-Open `http://localhost:4173/?demo=1` for the isolated sample. The demo banner
-offers **Reset demo** and **Start for real**. The static deployment artifact is
-`dist/`, with `dist/index.html` at its root.
+## Next steps
 
-## Exact verification evidence
-
-- Fresh clean clone: `/tmp/fpq-polish7-final.rcRwhh/repo` at repair commit
-  `7169e1b6d90bc9070cf41aa84929de18283abbb9`.
-- `npm ci`: passed, 24 packages, 0 vulnerabilities.
-- Each of the 15 exact `.factory/claims.json` commands: passed independently.
-  This includes offline reload, local privacy, source-schedule preservation,
-  Anki CSV and `.apkg` handling, import/export, mixed keyboard round, plans,
-  deletion, free core, paid-price redirect, both real-route license claims, and
-  the strengthened full demo isolation test.
-- `npm test`: 26/26 passed. It includes browser, mobile, accessibility, focus,
-  metadata, touch-target, privacy, and offline checks.
-- `npm run build`: passed. `dist/index.html` exists; initial JS is 30.82 kB
-  raw / 10.51 kB gzip and CSS is 19.06 kB raw / 4.86 kB gzip.
-- Production deploy: `/opt/fleet/lib/deploy-static.sh flex-practice-queue dist`
-  succeeded with deployment id `42499b8d-cf84-4d62-b916-2799641c2a93`.
-- Cold production verifier: `evidence/polish-7-live/verify.json` records
-  HTTPS 200, 856 ms load, no console errors, title/lang/main, image alt text,
-  and labelled buttons. `cold-landing-mobile.png`, `cold-demo-mobile.png`, and
-  `cold-404-mobile.png` are visual evidence.
-- Live browser/Axe check: `evidence/polish-7-live/live-check.json` records
-  zero serious/critical violations on `/`, `/demo`, `/privacy`, `/terms`, and
-  404; correct titles/canonicals/landmarks; hash focus; and 44 px targets.
-  `404.headers` records HTTP 404 for the unknown path.
-- Live demo boundary: the same report seeds an exact real license and verdict,
-  opens both `/?demo=1` and `/demo?license=returned-live-license`, and records
-  zero license-key reads/writes and zero off-origin requests while demo is
-  visible. The preview is above the fold and its started prompt matches.
-- Mobile Lighthouse: `lighthouse-mobile.json` records 100 performance, 100
-  accessibility, 100 best practices, 100 SEO; FCP 0.9 s, LCP 1.6 s, CLS 0, and
-  TBT 0 ms.
-
-## Known gaps and next steps
-
-None. The product remains a static, local-first PWA; deployment infrastructure,
-DNS, and billing registration stay factory-owned.
+1. Replace the line-based CSV parser with a record parser that preserves quoted
+   embedded newlines. Add an export-to-fresh-import claim regression using
+   multiline prompt and answer text.
+2. Re-render the locked state and show “license no longer active” after any
+   invalid verification response. Add an expired-cache/revoked-response test.
+3. Correct singular result grammar and rerun every claim, the full suite,
+   production build, live parity, offline/update checks, and this verification.

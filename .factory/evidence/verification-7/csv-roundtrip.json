@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-08-29T15:08:53.903Z",
+  "export": {
+    "filename": "flex-practice-prompts.csv",
+    "recordPresent": true,
+    "lineCount": 11
+  },
+  "reimport": {
+    "before": 8,
+    "after": 8,
+    "status": "A quoted field is not closed. Fix the CSV and try again.",
+    "errorClass": "form-status error"
+  },
+  "realDeletion": {
+    "emptyAfterReload": true,
+    "promptCount": 0
+  }
+}

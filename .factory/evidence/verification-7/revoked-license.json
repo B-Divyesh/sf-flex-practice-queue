@@ -1,0 +1,13 @@
+{
+  "checks": 1,
+  "url": "https://flex-practice-queue.sociobot.in/",
+  "statusText": "License active.",
+  "planNameVisible": true,
+  "savePlanVisible": true,
+  "buyLinkVisible": true,
+  "storedVerdict": "{\"valid\":false,\"checkedAt\":1788016215961}",
+  "afterSaveAttempt": {
+    "toast": "A $9 license adds saved round plans.",
+    "storedPlans": null
+  }
+}

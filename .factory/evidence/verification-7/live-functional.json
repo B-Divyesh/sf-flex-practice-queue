@@ -1,0 +1,475 @@
+{
+  "checkedAt": "2026-08-29T15:04:53.154Z",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Flex Practice Queue — Short flashcard practice rounds",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/",
+      "horizontalOverflow": false,
+      "axeSeriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in",
+        "content-type": "text/html",
+        "date": "Sat, 29 Aug 2026 15:04:53 GMT",
+        "etag": "\"08570841\"",
+        "last-modified": "Sat, 29 Aug 2026 13:57:54 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    {
+      "path": "/demo",
+      "status": 200,
+      "title": "Demo — Flex Practice Queue",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/demo",
+      "horizontalOverflow": false,
+      "axeSeriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in",
+        "content-type": "text/html",
+        "date": "Sat, 29 Aug 2026 15:04:54 GMT",
+        "etag": "\"08570841\"",
+        "last-modified": "Sat, 29 Aug 2026 13:57:54 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "title": "Privacy — Flex Practice Queue",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/privacy",
+      "horizontalOverflow": false,
+      "axeSeriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in",
+        "content-type": "text/html",
+        "date": "Sat, 29 Aug 2026 15:04:56 GMT",
+        "etag": "\"08570841\"",
+        "last-modified": "Sat, 29 Aug 2026 13:57:54 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    {
+      "path": "/terms",
+      "status": 200,
+      "title": "Terms — Flex Practice Queue",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/terms",
+      "horizontalOverflow": false,
+      "axeSeriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-encoding": "br",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in",
+        "content-type": "text/html",
+        "date": "Sat, 29 Aug 2026 15:04:57 GMT",
+        "etag": "\"08570841\"",
+        "last-modified": "Sat, 29 Aug 2026 13:57:54 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    },
+    {
+      "path": "/definitely-missing-qa-106d0cd",
+      "status": 404,
+      "title": "Page not found — Flex Practice Queue",
+      "lang": "en",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/404",
+      "horizontalOverflow": false,
+      "axeSeriousCritical": [],
+      "headers": {
+        "cache-control": "public, must-revalidate, max-age=30",
+        "content-length": "5314",
+        "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://api.sociobot.in",
+        "content-type": "text/html",
+        "date": "Sat, 29 Aug 2026 15:04:58 GMT",
+        "etag": "\"08570841\"",
+        "last-modified": "Sat, 29 Aug 2026 13:57:54 GMT",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "strict-transport-security": "max-age=10886400; includeSubDomains; preload",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-xss-protection": "1; mode=block"
+      }
+    }
+  ],
+  "links": [
+    {
+      "url": "https://api.sociobot.in/api/v1/products/flex-practice-queue/checkout",
+      "status": 303,
+      "location": "https://checkout.dodopayments.com/session/cks_0NmS1OThtTlcrxRhjDksg"
+    },
+    {
+      "url": "https://docs.ankiweb.net/exporting.html",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/#how",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/#main",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/#price-heading",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/?demo=1",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/definitely-missing-qa-106d0cd#main",
+      "status": 404,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/demo",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/demo#main",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/privacy",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/privacy#main",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/terms",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://flex-practice-queue.sociobot.in/terms#main",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "https://sociobot.in/",
+      "status": 200,
+      "location": null
+    },
+    {
+      "url": "mailto:support@sociobot.in",
+      "status": "mailto"
+    }
+  ],
+  "desktop": {
+    "runtimeErrors": [
+      "console: Failed to load resource: the server responded with a status of 404 ()"
+    ]
+  },
+  "mobile": {
+    "targets": [
+      {
+        "name": "Skip to main content",
+        "tag": "A",
+        "width": 177,
+        "height": 48
+      },
+      {
+        "name": "Flex PracticeQueue",
+        "tag": "A",
+        "width": 163.5,
+        "height": 44
+      },
+      {
+        "name": "Demo",
+        "tag": "A",
+        "width": 44.5,
+        "height": 44
+      },
+      {
+        "name": "Privacy",
+        "tag": "A",
+        "width": 56.9,
+        "height": 44
+      },
+      {
+        "name": "Try it with sample data",
+        "tag": "A",
+        "width": 211.6,
+        "height": 48
+      },
+      {
+        "name": "Import CSV",
+        "tag": "LABEL",
+        "width": 118.4,
+        "height": 46
+      },
+      {
+        "name": "export a front, back, tags CSV first (external site)",
+        "tag": "A",
+        "width": 199.6,
+        "height": 44
+      },
+      {
+        "name": "Add one prompt",
+        "tag": "SUMMARY",
+        "width": 314,
+        "height": 44
+      },
+      {
+        "name": "TEXTAREA",
+        "tag": "TEXTAREA",
+        "width": 314,
+        "height": 66
+      },
+      {
+        "name": "TEXTAREA",
+        "tag": "TEXTAREA",
+        "width": 314,
+        "height": 66
+      },
+      {
+        "name": "Add prompt",
+        "tag": "BUTTON",
+        "width": 314,
+        "height": 48
+      },
+      {
+        "name": "Show all prompts",
+        "tag": "BUTTON",
+        "width": 166.3,
+        "height": 44
+      },
+      {
+        "name": "Show warm-up prompts",
+        "tag": "BUTTON",
+        "width": 217,
+        "height": 44
+      },
+      {
+        "name": "Show weak prompts",
+        "tag": "BUTTON",
+        "width": 188,
+        "height": 44
+      },
+      {
+        "name": "Show today’s prompts",
+        "tag": "BUTTON",
+        "width": 205.1,
+        "height": 44
+      },
+      {
+        "name": "35812",
+        "tag": "SELECT",
+        "width": 314,
+        "height": 44
+      },
+      {
+        "name": "153060120",
+        "tag": "SELECT",
+        "width": 314,
+        "height": 44
+      },
+      {
+        "name": "View $9 saved plans",
+        "tag": "A",
+        "width": 194.5,
+        "height": 48
+      },
+      {
+        "name": "See the sample queue",
+        "tag": "A",
+        "width": 160.1,
+        "height": 44
+      },
+      {
+        "name": "Buy a $9 license",
+        "tag": "A",
+        "width": 164.5,
+        "height": 48
+      },
+      {
+        "name": "INPUT",
+        "tag": "INPUT",
+        "width": 350,
+        "height": 44
+      },
+      {
+        "name": "Verify license",
+        "tag": "BUTTON",
+        "width": 350,
+        "height": 48
+      },
+      {
+        "name": "Privacy",
+        "tag": "A",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "name": "Terms",
+        "tag": "A",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "name": "Built by Param Factory (external site)",
+        "tag": "A",
+        "width": 132.6,
+        "height": 44
+      }
+    ],
+    "smallTargets": [],
+    "rootOverflow": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "demoOverflow": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    }
+  },
+  "keyboard": {
+    "firstFocus": {
+      "text": "Skip to main content",
+      "class": "skip-link"
+    },
+    "demoActionReached": true,
+    "sampleStartReached": true,
+    "roundPrompts": [
+      "Explain why seasons occur.",
+      "What does a pure function avoid?",
+      "Use “serendipity” in a sentence."
+    ],
+    "result": "3 prompts practiced",
+    "focusOutline": {
+      "tag": "BODY",
+      "text": "Skip to main content\n    Demo — sample data, nothing is savedReset demoStart for real\n    Flex PracticeQueueDemoHow it worksPrivacy\n    Sample data · isolated demoTry a mixed practice roundEight sample prompts are ready. Start with this three-prompt round.Sample round · 1 of 3Explain why seasons occur.weaktoday30 secondsStart this sample roundRound complete3 prompts practiced1marked “try again”Your imported prompt data and flashcard schedule were not changed.Build another round\n    Flex Practice Queue — extra practice without changing your flashcard schedule.PrivacyTermsBuilt by Param Factory (external site)v1.0.0 · Original generated artwork\n    Demo — Flex Practice Queue",
+      "width": "0px",
+      "style": "none",
+      "color": "rgb(16, 42, 67)"
+    }
+  },
+  "flow": {
+    "demoBanner": true,
+    "initialPromptCount": 8,
+    "demoPreviewAboveFold": true,
+    "invalid": [
+      {
+        "name": "empty.csv",
+        "status": "The CSV is empty. Add a prompt column and try again.",
+        "matches": true,
+        "ariaLive": "polite"
+      },
+      {
+        "name": "missing.csv",
+        "status": "Row 2 has no prompt. Add one and try again.",
+        "matches": true,
+        "ariaLive": "polite"
+      },
+      {
+        "name": "quoted.csv",
+        "status": "A quoted field is not closed. Fix the CSV and try again.",
+        "matches": true,
+        "ariaLive": "polite"
+      },
+      {
+        "name": "deck.apkg",
+        "status": "This app cannot read .apkg packages. Export a front, back, tags CSV from Anki first.",
+        "matches": true,
+        "ariaLive": "polite"
+      }
+    ],
+    "boundary": {
+      "fit": "3 prompts fit this mix.",
+      "completed": "3 prompts practiced",
+      "unique": 3,
+      "total": 3
+    },
+    "export": {
+      "filename": "flex-practice-prompts.csv",
+      "lines": 9,
+      "heading": "prompt,answer,tags"
+    },
+    "offOriginRequests": [],
+    "runtimeErrors": []
+  },
+  "pwa": {
+    "before": {
+      "controller": true,
+      "active": "activated",
+      "scriptURL": "https://flex-practice-queue.sociobot.in/sw.js",
+      "caches": [
+        "flex-practice-queue-v1"
+      ]
+    },
+    "updateResult": {
+      "active": "activated",
+      "waiting": null,
+      "installing": null
+    },
+    "offline": {
+      "heading": "Try a mixed practice round",
+      "promptCount": 8,
+      "controller": true
+    },
+    "runtimeErrors": []
+  },
+  "errors": []
+}

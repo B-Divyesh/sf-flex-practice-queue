@@ -1,0 +1,178 @@
+{
+  "candidate": "106d0cd511ff6697431dbe4700fb237f48d071e9",
+  "checkedAt": "2026-08-29T15:03:42.569Z",
+  "allMatch": true,
+  "count": 17,
+  "results": [
+    {
+      "path": "404.html",
+      "status": 200,
+      "bytes": 5314,
+      "match": true,
+      "localSha256": "3981848de7a6fbad0ce7c78908313295ff1dc53cf5836dfbb01818bb7c0e8b55",
+      "remoteSha256": "3981848de7a6fbad0ce7c78908313295ff1dc53cf5836dfbb01818bb7c0e8b55",
+      "cacheControl": "public, must-revalidate, max-age=30",
+      "contentType": "text/html"
+    },
+    {
+      "path": "art/blueprint-practice.webp",
+      "status": 200,
+      "bytes": 105772,
+      "match": true,
+      "localSha256": "c1df3f8cd676bd54cf8cb197102e7323d50472e5ba4cfd95a3fe69371b7539b5",
+      "remoteSha256": "c1df3f8cd676bd54cf8cb197102e7323d50472e5ba4cfd95a3fe69371b7539b5",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/webp"
+    },
+    {
+      "path": "art/social-card.webp",
+      "status": 200,
+      "bytes": 56236,
+      "match": true,
+      "localSha256": "0759d649672be05898f03e71772a96a332d41afef728e3222496d6756236c98a",
+      "remoteSha256": "0759d649672be05898f03e71772a96a332d41afef728e3222496d6756236c98a",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/webp"
+    },
+    {
+      "path": "assets/index--jQaobrO.css",
+      "status": 200,
+      "bytes": 19063,
+      "match": true,
+      "localSha256": "d4069be72dcf09422cdffb43cd4ee73cda1d1173a3509393d94145e3770904d1",
+      "remoteSha256": "d4069be72dcf09422cdffb43cd4ee73cda1d1173a3509393d94145e3770904d1",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "contentType": "text/css"
+    },
+    {
+      "path": "assets/index-C1bd7laB.js",
+      "status": 200,
+      "bytes": 30818,
+      "match": true,
+      "localSha256": "1527a74ef68e59b767abb0f888f4157b718ebaa8c2eeeeae8ad8e6981bd4b561",
+      "remoteSha256": "1527a74ef68e59b767abb0f888f4157b718ebaa8c2eeeeae8ad8e6981bd4b561",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "contentType": "text/javascript"
+    },
+    {
+      "path": "assets/index-C1bd7laB.js.map",
+      "status": 200,
+      "bytes": 61749,
+      "match": true,
+      "localSha256": "eb6fa541d7c2823c69ba39e1181c7606518ab4318002611c015e7d88aed707d9",
+      "remoteSha256": "eb6fa541d7c2823c69ba39e1181c7606518ab4318002611c015e7d88aed707d9",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "contentType": "application/octet-stream"
+    },
+    {
+      "path": "icons/apple-touch-icon.png",
+      "status": 200,
+      "bytes": 19751,
+      "match": true,
+      "localSha256": "9979bffcddd92c8c091d19cb02c8dfa53a3518178a09c5f6e86326de72bd5cbf",
+      "remoteSha256": "9979bffcddd92c8c091d19cb02c8dfa53a3518178a09c5f6e86326de72bd5cbf",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/png"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "status": 200,
+      "bytes": 20903,
+      "match": true,
+      "localSha256": "e7d8ae67097334a899f96b569c9ccb150f784b871797d66c9b5c23d08710eb13",
+      "remoteSha256": "e7d8ae67097334a899f96b569c9ccb150f784b871797d66c9b5c23d08710eb13",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/png"
+    },
+    {
+      "path": "icons/icon-512.png",
+      "status": 200,
+      "bytes": 23863,
+      "match": true,
+      "localSha256": "841b0842a1b48ba93b8723a105ee5a90640f229d80957b87d5aa37bd92b0a200",
+      "remoteSha256": "841b0842a1b48ba93b8723a105ee5a90640f229d80957b87d5aa37bd92b0a200",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/png"
+    },
+    {
+      "path": "icons/icon-maskable-512.png",
+      "status": 200,
+      "bytes": 57456,
+      "match": true,
+      "localSha256": "3e895502857918a0eb25c639951e7c2b21b6138e7e747b3d2a31ce1b8d5da205",
+      "remoteSha256": "3e895502857918a0eb25c639951e7c2b21b6138e7e747b3d2a31ce1b8d5da205",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/png"
+    },
+    {
+      "path": "icons/icon.svg",
+      "status": 200,
+      "bytes": 479,
+      "match": true,
+      "localSha256": "14b94dbd17e7c977271b02095a7075b6c6878eb9df2ebcb70dcb6a910d61e9c3",
+      "remoteSha256": "14b94dbd17e7c977271b02095a7075b6c6878eb9df2ebcb70dcb6a910d61e9c3",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "image/svg+xml"
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "bytes": 1664,
+      "match": true,
+      "localSha256": "72c3edf3aa9ac33146911bfb7b15fc2984aebc3bb0bd3d7f584938077ccd3ecb",
+      "remoteSha256": "72c3edf3aa9ac33146911bfb7b15fc2984aebc3bb0bd3d7f584938077ccd3ecb",
+      "cacheControl": "public, must-revalidate, max-age=30",
+      "contentType": "text/html"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "status": 200,
+      "bytes": 578,
+      "match": true,
+      "localSha256": "c13191aaa38167b8dea5c2a7230284b53d9bdf03ce4d5d0d6a9f6a0f4644ea7b",
+      "remoteSha256": "c13191aaa38167b8dea5c2a7230284b53d9bdf03ce4d5d0d6a9f6a0f4644ea7b",
+      "cacheControl": "public, max-age=86400",
+      "contentType": "application/manifest+json"
+    },
+    {
+      "path": "offline.html",
+      "status": 200,
+      "bytes": 733,
+      "match": true,
+      "localSha256": "874cd1acc29c4a8e0fcd67570bc3562595dcdfc6223efd6f754939cf758af516",
+      "remoteSha256": "874cd1acc29c4a8e0fcd67570bc3562595dcdfc6223efd6f754939cf758af516",
+      "cacheControl": "public, must-revalidate, max-age=30",
+      "contentType": "text/html"
+    },
+    {
+      "path": "robots.txt",
+      "status": 200,
+      "bytes": 84,
+      "match": true,
+      "localSha256": "2c9b01610cf9bfa245c8e09403d053365343ab119a53f164d832c3addcf44878",
+      "remoteSha256": "2c9b01610cf9bfa245c8e09403d053365343ab119a53f164d832c3addcf44878",
+      "cacheControl": "public, must-revalidate, max-age=30",
+      "contentType": "text/plain"
+    },
+    {
+      "path": "sitemap.xml",
+      "status": 200,
+      "bytes": 386,
+      "match": true,
+      "localSha256": "6d1f1b55678c137a758b971d9e5e873c088670e8658c0f921ef02f34bc3449f3",
+      "remoteSha256": "6d1f1b55678c137a758b971d9e5e873c088670e8658c0f921ef02f34bc3449f3",
+      "cacheControl": "public, must-revalidate, max-age=30",
+      "contentType": "text/xml"
+    },
+    {
+      "path": "sw.js",
+      "status": 200,
+      "bytes": 1549,
+      "match": true,
+      "localSha256": "e5a81107e93a1442003fa3b0ad65c2ec2ca85cffb617b3f04ff947df74914e97",
+      "remoteSha256": "e5a81107e93a1442003fa3b0ad65c2ec2ca85cffb617b3f04ff947df74914e97",
+      "cacheControl": "no-cache",
+      "contentType": "text/javascript"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "changedWorkerServed": true,
+  "update": {
+    "toast": "An update is ready. Reload to use it.",
+    "controller": "http://127.0.0.1:4199/sw.js",
+    "active": "activating",
+    "caches": [
+      "flex-practice-queue-v1",
+      "flex-practice-queue-v2"
+    ]
+  },
+  "after": {
+    "heading": "Try a mixed practice round",
+    "prompts": 8,
+    "cacheNames": [
+      "flex-practice-queue-v2"
+    ]
+  }
+}

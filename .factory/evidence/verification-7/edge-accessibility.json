@@ -1,0 +1,70 @@
+{
+  "checkedAt": "2026-08-29T15:08:21.160Z",
+  "mobileAxe": [
+    {
+      "path": "/",
+      "seriousCritical": [],
+      "all": []
+    },
+    {
+      "path": "/demo",
+      "seriousCritical": [],
+      "all": []
+    },
+    {
+      "path": "/privacy",
+      "seriousCritical": [],
+      "all": []
+    },
+    {
+      "path": "/terms",
+      "seriousCritical": [],
+      "all": []
+    },
+    {
+      "path": "/does-not-exist",
+      "seriousCritical": [],
+      "all": []
+    }
+  ],
+  "realWorkspace": {
+    "persisted": {
+      "count": 1,
+      "prompt": "What is 2 < 3?",
+      "weak": true
+    },
+    "resultHeading": "1 prompts practiced",
+    "activeAfterResult": {
+      "tag": "BODY",
+      "text": "Skip to main content\n    \n    Flex PracticeQueueDemoHow it worksPrivacy\n    \n   "
+    },
+    "firstTabAfterResult": {
+      "tag": "BUTTON",
+      "text": "Build another round"
+    },
+    "deleted": {
+      "emptyVisibleBeforeReload": true,
+      "emptyAfterReload": true,
+      "promptCountAfterReload": 0
+    },
+    "offOrigin": [],
+    "errors": []
+  },
+  "edgeCases": {
+    "multilineCsv": {
+      "before": 8,
+      "after": 8,
+      "status": "A quoted field is not closed. Fix the CSV and try again."
+    },
+    "stopImmediately": {
+      "result": "1 prompts practiced",
+      "note": "Your imported prompt data and flashcard schedule were not changed."
+    }
+  },
+  "routeConsole": {
+    "/": [],
+    "/demo": [],
+    "/privacy": [],
+    "/terms": []
+  }
+}

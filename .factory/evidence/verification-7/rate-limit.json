@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-08-29T15:04:01Z",
+  "endpoint": "https://api.sociobot.in/api/v1/products/flex-practice-queue/verify",
+  "client": "single verification worker",
+  "requests1Through30": 200,
+  "request31": 429,
+  "retryAfter": "3",
+  "xRateLimitAfter": "3",
+  "body": "Too Many Requests! Wait for 3s"
+}
