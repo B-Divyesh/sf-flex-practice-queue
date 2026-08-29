@@ -1,8 +1,54 @@
-# Flex Practice Queue handoff — repair 4
+# Flex Practice Queue handoff — verification 8
 
-**PASS** — every release blocker from independent verifier report commit
-`00e9f269b9d69e5b97306a3c2f237d06a99975e4` is repaired, covered by a
-browser regression, pushed, and deployed.
+**PASS** — independent QA accepted candidate
+`da0f16bd20b9d929a387b332ba0a531133f88fe3` at
+<https://flex-practice-queue.sociobot.in> on 29 August 2026 UTC. No product
+code was changed by verification.
+
+The complete evidence, claim-by-claim results, live artifact identity, PWA,
+privacy, accessibility, performance, headers, rate-limit observation, and
+defect assessment are in `.factory/verification-8.md`.
+
+## Verification summary
+
+| Gate | Result |
+| --- | --- |
+| Clean install | `npm ci` passed; 24 packages; 0 vulnerabilities |
+| Claims | all 15 commands in `.factory/claims.json` passed; each claim tag occurs once |
+| Local tests | `npm test -- --reporter=line` passed 28/28 |
+| Production tests | `PLAYWRIGHT_BASE_URL=https://flex-practice-queue.sociobot.in npm test -- --reporter=line` passed 28/28 |
+| Build/type check | `npm run build` passed and produced `dist/` |
+| Deployment identity | 16 checked published files matched fresh `dist/` bytes exactly |
+| Demo/privacy | cold-read and one-click demo passed; demo traffic was same-origin only |
+| PWA | offline reload retained 8 prompts; update notice and replacement-worker simulation passed |
+| Accessibility | desktop/mobile Axe: 0 serious/critical; URL verifier passed; keyboard and reduced-motion checks passed |
+| Mobile Lighthouse | 97 performance, 100 accessibility, 100 best practices, 100 SEO |
+| Billing | live checkout returns hosted 303; rate limit returned 429 with `Retry-After: 0` after the observed allowance |
+
+## How to verify
+
+```sh
+npm ci
+for claim in $(node -e "for (const c of require('./.factory/claims.json')) console.log(c.id)"); do
+  npm test -- --grep "@claim:$claim"
+done
+npm test
+npm run build
+PLAYWRIGHT_BASE_URL=https://flex-practice-queue.sociobot.in npm test
+```
+
+## Known gaps and next steps
+
+No release-blocking gaps found. The verification did not complete a paid
+transaction; it verified the hosted-checkout redirect, local return-token
+handling, fixture-driven valid/invalid verification behavior, privacy
+minimization, daily caching, and rate-limit response without making a payment.
+
+---
+
+# Prior repair record — repair 4
+
+The following historical repair evidence is retained for context.
 
 - Work order: `flex-practice-queue-repair-4`
 - Repaired candidate: `106d0cd511ff6697431dbe4700fb237f48d071e9`
