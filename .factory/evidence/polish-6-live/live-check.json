@@ -1,0 +1,89 @@
+{
+  "base": "https://flex-practice-queue.sociobot.in",
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Flex Practice Queue — Short flashcard practice rounds",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/",
+      "seriousOrCriticalAxe": []
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Flex Practice Queue",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/demo",
+      "seriousOrCriticalAxe": []
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Flex Practice Queue",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/privacy",
+      "seriousOrCriticalAxe": []
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Flex Practice Queue",
+      "lang": "en",
+      "h1": 1,
+      "main": 1,
+      "canonical": "https://flex-practice-queue.sociobot.in/terms",
+      "seriousOrCriticalAxe": []
+    },
+    "/missing-sheet-round-6": {
+      "status": 404,
+      "h1": "This practice page is missing",
+      "header": true,
+      "footer": true,
+      "home": true,
+      "seriousOrCriticalAxe": []
+    }
+  },
+  "demo": {
+    "banner": true,
+    "previewText": "Explain why seasons occur.",
+    "livePrompt": "Explain why seasons occur.",
+    "previewTop": 405.6875,
+    "tags": [
+      "weak",
+      "today"
+    ],
+    "filterControls": [],
+    "onlySameOrigin": true
+  },
+  "hash": {
+    "coldMobile": {
+      "top": 64.09375,
+      "active": true,
+      "announcement": "How optional practice works"
+    },
+    "fromPrivacyDesktop": {
+      "top": 88,
+      "active": true,
+      "announcement": "How optional practice works"
+    }
+  },
+  "plan": {
+    "href": "#price-heading",
+    "active": true,
+    "top": 98.8125
+  },
+  "touchTargets": {
+    "count": 14,
+    "minimumWidth": 44,
+    "minimumHeight": 44,
+    "noOverlap": true
+  },
+  "offline": {
+    "h1": "Try a mixed practice round",
+    "prompts": 8
+  },
+  "errors": []
+}

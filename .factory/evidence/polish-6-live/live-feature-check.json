@@ -1,0 +1,20 @@
+{
+  "filters": [
+    "Show all prompts",
+    "Show warm-up prompts",
+    "Show weak prompts",
+    "Show today’s prompts"
+  ],
+  "apkgGuidance": "This app cannot read .apkg packages. Export a front, back, tags CSV from Anki first.",
+  "apkgPromptCount": 8,
+  "loadPlanLabel": "Load plan settings",
+  "landing": {
+    "headline": "Build a short flashcard practice round",
+    "noUseful": true,
+    "hasFlashcardSchedule": true
+  },
+  "paidCopy": {
+    "noMerchantOrRefundPromise": true,
+    "checkout": true
+  }
+}
