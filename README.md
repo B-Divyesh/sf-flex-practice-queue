@@ -2,7 +2,7 @@
 
 Build short practice rounds without changing your flashcard schedule.
 
-Flex Practice Queue is for learners whose study time comes in short, irregular windows. It creates a separate lane for warm-ups and weak items.
+Flex Practice Queue is for learners whose study time comes in short, irregular windows. It creates separate rounds for warm-ups and weak items.
 
 Try the isolated sample at [https://flex-practice-queue.sociobot.in/demo](https://flex-practice-queue.sociobot.in/demo).
 

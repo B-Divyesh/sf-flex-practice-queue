@@ -110,6 +110,19 @@ test('demo shows a real sample prompt in the first 390px viewport and starts it 
   await expect(page.getByText('Live round · 1 of 3')).toBeVisible();
 });
 
+test('landing copy names the job, free tools, and paid feature in plain words', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByText('Extra flashcard practice', { exact: true })).toBeVisible();
+  await expect(page.getByText('Choose a few existing flashcards for extra practice.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Import, tag, practice, and export are free. Saved round plans cost $9 once.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Your practice queue', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'How optional practice works' })).toBeVisible();
+  await expect(page.getByText('Tag prompts.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Paid round plans', { exact: true })).toBeVisible();
+  const copy = await page.locator('main').innerText();
+  expect(copy).not.toMatch(/Drawing 01|Drawing 02|rehearsal lane|Assembly notes|Mark your intent|Scope boundary|Optional paid tool|Core tools/i);
+});
+
 test('@claim:offline-reload works offline after the first visit', async ({ page, context }) => {
   await page.goto('/demo');
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
